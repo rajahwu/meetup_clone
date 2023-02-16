@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth.js');
+const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const router = express.Router();
