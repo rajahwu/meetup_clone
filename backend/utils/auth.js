@@ -39,6 +39,7 @@ const restoreUser = (req, res, next) => {
             res.clearCookie('token');
             return next();
         }
+
         if (!req.user) res.clearCookie('token');
 
         return next();
@@ -51,7 +52,7 @@ const requireAuth = function (req, _res, next) {
     const err = new Error('Authentication required');
     err.title = 'Authentication required';
     err.errors = { message: 'Authentication required'};
-    err.status = 404;
+    err.status = 401;
     return next(err);
 };
 

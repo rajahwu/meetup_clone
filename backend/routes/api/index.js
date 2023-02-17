@@ -1,9 +1,15 @@
 const router = require('express').Router();
+
 const sessonRouter = require('./session.js');
 const usersRouter = require('./users.js');
-const { restoreUser } = require('../../utils/auth');
 
-router.use(restoreUser);
+const { restoreUser } = require('../../utils/auth');
+const { requireAuth } = require('../../utils/auth');
+
+
+router.get('test', requireAuth, (req, res) => {
+    res.json({message: 'success'})
+})
 
 router.use('/session', sessonRouter);
 
@@ -12,6 +18,8 @@ router.use('/users', usersRouter);
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body })
 });
+
+router.use(restoreUser);
 
 //GET /api/set-token-cookie
 const { setTokenCookie } = require('../../utils/auth')
@@ -28,13 +36,12 @@ router.get('/set-token-cookie', async (_req, res) => {
 
 
 // GET /api/restore-user
-router.get('/restore-user', (req, res) => {
+router.get('/restore-user', restoreUser, (req, res) => {
         return res.json(req.user)
     }
 );
 
 // GET /api/require-auth
-const { requireAuth } = require('../../utils/auth');
 router.get('/require-auth', requireAuth, (req, res) => {
     return res.json(req.user)
 })
