@@ -6,15 +6,14 @@ const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
-const { environment  } = require('./config');
-const isProduction = environment === 'production';
-
-const app = express();
 const routes = require('./routes');
 
 const { ValidationError } = require('sequelize');
 
+const { environment  } = require('./config');
+const isProduction = environment === 'production';
 
+const app = express();
 
 // Connect the morgan middleware for logging information about requests and responses:
 app.use(morgan('dev'));
@@ -48,7 +47,6 @@ if (!isProduction) {
 
 app.use(routes);
 
-
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
@@ -57,8 +55,6 @@ app.use((_req, _res, next) => {
   err.status = 404;
   next(err);
 });
-
-
 
 // Process sequelize errors
 app.use((err, _req, _res, next) => {
@@ -85,4 +81,5 @@ app.use((err, _req, res, _next) => {
     stack: isProduction ? null : err.stack
   });
 });
+
 module.exports = app;
