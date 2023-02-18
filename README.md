@@ -6,6 +6,12 @@
 
 [meetup-dbdiagram]: ./assets/meetup_dbdiagram.png
 
+![meetup-dbdiagram2]
+
+[meetup-dbdiagram2]: ./assets/meetup_dbdiagram2.png
+
+[Database Schema Link](https://dbdocs.io/rajahwu/Meetup)
+
 ## API Documentation
 
 ## USER AUTHENTICATION/AUTHORIZATION
