@@ -10,7 +10,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       venueId: {
-        type: Sequelize.INTEGER
+        type: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+        }
       },
       groupId: {
         type: Sequelize.INTEGER
@@ -19,7 +22,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       description: {
-        type: Sequelize.STRING
+        type: {
+          type: Sequelize.STRING,
+          allowNull: false
+        }
       },
       type: {
         type: Sequelize.STRING
@@ -38,11 +44,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
       }
     });
   },

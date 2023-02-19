@@ -14,15 +14,35 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Event.init({
-    venueId: DataTypes.INTEGER,
+    venueId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     groupId: DataTypes.INTEGER,
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        minLen: function(value) {
+          value.length >= 5
+        }
+      }
+    },
     description: DataTypes.STRING,
     type: DataTypes.STRING,
     capacity: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE
+    startDate: {
+      type: DataTypes.DATE,
+      validate: {
+        isAfter: Date.now()
+      }
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      validate: {
+        isAfter: this.startDate
+      }
+    }
   }, {
     sequelize,
     modelName: 'Event',
