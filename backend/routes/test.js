@@ -3,28 +3,30 @@ const { utils } = require('../db/data_generator');
 const router = express.Router();
 
 const dataGen = require('../db/data_generator')
-const { User } = require('../db/models')
+const { User, Group } = require('../db/models')
 
-function getIds(data) {
-  data = JSON.parse(JSON.stringify(data))
-  const ids = data.map(data => data.id)
-   return ids
-  }
-
-async function groups(num) {
-    const groups = []
+async function genMembership(num) {
+    const memberships = []
     const users = await User.findAll()
+    const groups = await Group.findAll()
     const userIds = dataGen.utils.getIds(users)
-    for(let i = 0; i < num; i++) {
-        const group = new dataGen.group(dataGen.utils, { organizerId: userIds[dataGen.utils.getRandom(userIds.length - 1)]})
-        groups.push(group)
+    const groupIds = dataGen.utils.getIds(groups)
+    for( let i = 0; i < num; i++ ) {
+        const membership = new dataGen.membership(dataGen.utils, {
+            userId: userIds[dataGen.utils.getRandom(userIds.length - 1)],
+            groupId: groupIds[dataGen.utils.getRandom(groupIds.length - 1)]
+        })
+        memberships.push(membership)
     }
-    return groups
+    return memberships
 }
 
+
+
+
 router.get('/', async (req, res) => {
-    const group = await groups(5)
-    res.json(group)
+    const memberships = await genMembership(5)
+    res.json(memberships)
 })
 
 module.exports = router
