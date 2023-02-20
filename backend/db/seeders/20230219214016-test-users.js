@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 const dataGen = require('../data_generator')
 
-const users = function(num) {
+const genUsers = function(num) {
   const users = []
   for(let i = 0; i < num; i++) {
     const user = new dataGen.user()
@@ -14,7 +14,8 @@ const users = function(num) {
 }
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Users', users(5) , {});
+    const users = genUsers(10)
+    await queryInterface.bulkInsert('Users', users , {});
   },
 
   async down (queryInterface, Sequelize) {

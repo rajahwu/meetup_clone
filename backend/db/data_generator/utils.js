@@ -7,6 +7,12 @@ const utils = {
         return Math.floor(Math.random() * num)
         },
 
+    getIds(data) {
+            data = JSON.parse(JSON.stringify(data))
+            const ids = data.map(data => data.id)
+             return ids
+            },
+
     getBool() {
         const bools = [false, true]
         return bools[this.getRandom(2)]
