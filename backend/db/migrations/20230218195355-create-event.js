@@ -10,13 +10,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       venueId: {
-        type: {
           type: Sequelize.INTEGER,
-          allowNull: false
-        }
+          allowNull: false,
+          references: { model: 'Venues' }
       },
       groupId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Groups' }
       },
       name: {
         type: Sequelize.STRING
