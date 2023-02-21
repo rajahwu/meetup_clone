@@ -5,7 +5,7 @@ const dataGen = require('../data_generator')
 const { Event, Group, User } = require('../models')
 let options = {}
 if(process.env.NODE_ENV === 'production') {
-  options.schema = procees.env.SCHEMA;
+  options.schema = process.env.SCHEMA;
 }
 
 async function genAttendances() {

@@ -4,7 +4,7 @@
 const dataGen = require('../data_generator')
 let options = {}
 if(process.env.NODE_ENV === 'production') {
-  options.schema = procees.env.SCHEMA;
+  options.schema = process.env.SCHEMA;
 }
 
 const genUsers = function(num) {
