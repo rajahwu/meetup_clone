@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
             attriubtes: ['url']
         })
         previewImage = JSON.parse(JSON.stringify(previewImage))
-        groups[i].count = users 
+        groups[i].numMembers = users 
         groups[i].previewImage = previewImage['url']
     }
     
