@@ -3,7 +3,7 @@ const router = require('express').Router();
 const sessonRouter = require('./session.js');
 const usersRouter = require('./users.js');
 
-const testRouter = require('../test.js')
+const testRouter = require('./test.js')
 
 const { restoreUser } = require('../../utils/auth');
 const { requireAuth } = require('../../utils/auth');
