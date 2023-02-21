@@ -8,6 +8,6 @@ module.exports = class GroupData {
         this.type = utils.getType();
         this.private = utils.getBool();
         this.city = faker.address.city();
-        this.state = faker.address.state();
+        this.state = faker.address.stateAbbr();
     }
 }
