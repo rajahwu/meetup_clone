@@ -3,6 +3,10 @@
 /** @type {import('sequelize-cli').Migration} */
 const dataGen = require('../data_generator')
 const { Group } = require('../models')
+let options = {}
+if(process.env.NODE_ENV === 'production') {
+  options.schema = procees.env.SCHEMA;
+}
 
 async function genGroupImages() {
   const images = []
@@ -17,11 +21,13 @@ async function genGroupImages() {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = 'GroupImages'
     const images = await genGroupImages()
-      await queryInterface.bulkInsert('GroupImages', images , {});
+      await queryInterface.bulkInsert(options, images , {});
   },
 
   async down (queryInterface, Sequelize) {
-      await queryInterface.bulkDelete('GroupImages', null, {});
+      options.tableName = 'GroupImages'
+      await queryInterface.bulkDelete(options, null, {});
   }
 };
