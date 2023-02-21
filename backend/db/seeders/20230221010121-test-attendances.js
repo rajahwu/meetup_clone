@@ -3,6 +3,10 @@
 /** @type {import('sequelize-cli').Migration} */
 const dataGen = require('../data_generator')
 const { Event, Group, User } = require('../models')
+let options = {}
+if(process.env.NODE_ENV === 'production') {
+  options.schema = procees.env.SCHEMA;
+}
 
 async function genAttendances() {
   const attendances = []
@@ -25,11 +29,13 @@ async function genAttendances() {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = 'Attendances'
     const attendees = await genAttendances()
-      await queryInterface.bulkInsert('Attendances', attendees, {});
+      await queryInterface.bulkInsert(options, attendees, {});
   },
 
   async down (queryInterface, Sequelize) {
-      await queryInterface.bulkDelete('Attendances', null, {});
+      options.tableName = 'Attendances'
+      await queryInterface.bulkDelete(options, null, {});
   }
 };

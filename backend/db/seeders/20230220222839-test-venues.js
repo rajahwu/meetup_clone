@@ -4,6 +4,11 @@
 const dataGen = require('../data_generator')
 const { Group } = require('../models')
 
+let options = {}
+if(process.env.NODE_ENV === 'production') {
+  options.schema = procees.env.SCHEMA;
+}
+
 async function genVenues() {
   const venues = []
   const groups = await Group.findAll()
@@ -16,11 +21,13 @@ async function genVenues() {
 }
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = 'Venues'
     const venues = await genVenues()
-      await queryInterface.bulkInsert('Venues', venues, {});
+      await queryInterface.bulkInsert(options, venues, {});
   },
 
   async down (queryInterface, Sequelize) {
-      await queryInterface.bulkDelete('Venues', null, {});
+      options.tableName = 'Venues'
+      await queryInterface.bulkDelete(options, null, {});
   }
 };

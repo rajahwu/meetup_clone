@@ -2,6 +2,10 @@
 
 /** @type {import('sequelize-cli').Migration} */
 const dataGen = require('../data_generator')
+let options = {}
+if(process.env.NODE_ENV === 'production') {
+  options.schema = procees.env.SCHEMA;
+}
 
 const genUsers = function(num) {
   const users = []
@@ -14,11 +18,13 @@ const genUsers = function(num) {
 }
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = 'Users'
     const users = genUsers(10)
-    await queryInterface.bulkInsert('Users', users , {});
+    await queryInterface.bulkInsert(options, users , {});
   },
 
   async down (queryInterface, Sequelize) {
-     await queryInterface.bulkDelete('Users', null, {});
+    options.tableName = 'Users'
+     await queryInterface.bulkDelete(options, null, {});
   }
 };

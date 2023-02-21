@@ -3,6 +3,10 @@
 /** @type {import('sequelize-cli').Migration} */
 const dataGen = require('../data_generator')
 const { Event } = require('../models')
+let options = {}
+if(process.env.NODE_ENV === 'production') {
+  options.schema = procees.env.SCHEMA;
+}
 
 async function genEventImages() {
   const eventImages = []
@@ -17,11 +21,13 @@ async function genEventImages() {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = 'EventImages'
     const eventImages = await genEventImages()
-      await queryInterface.bulkInsert('EventImages', eventImages, {});
+      await queryInterface.bulkInsert(options, eventImages, {});
   },
 
   async down (queryInterface, Sequelize) {
-      await queryInterface.bulkDelete('EventImages', null, {});
+      options.tableName = 'EventImages'
+      await queryInterface.bulkDelete(options, null, {});
   }
 };
