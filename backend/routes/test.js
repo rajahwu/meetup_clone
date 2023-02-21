@@ -2,29 +2,24 @@ const express = require('express');
 const { utils, group } = require('../db/data_generator');
 const router = express.Router();
 
-const dataGen = require('../db/data_generator')
-const { User, Group, GroupImage, Venue, Event } = require('../db/models')
+const dataGen = require('../db/data_generator');
+const EventImageData = require('../db/data_generator/EventImageData');
+const { User, Group, GroupImage, Venue, Event, EventImage } = require('../db/models')
 
+// async function genEventImages() {
+//   const eventImages = []
+//   const events = await Event.findAll()
+//   const ids = dataGen.utils.getIds(events)
+//   ids.forEach(id => {
+//     const event = eventImages.push(new dataGen.eventImage(dataGen.utils, {eventId: id}))
+//     eventImages.push(event)
+//   })
+//   return eventImages
+// }
 
-async function genEvents() {
-  const events = []
-  let groups = await Group.findAll({
-    include: { model: Venue }
-  })
-  groups = JSON.parse(JSON.stringify(groups))
-  for(let i = 0; i < groups.length - 1; i++) {
-    const foreginKeys = {
-      groupId: groups[i].id,
-      venueId: groups[i].Venues[0].id
-    }
-    const event = new dataGen.event(dataGen.utils, foreginKeys)
-    events.push(event)
-  }
-    return events
-}
 
 router.get('/', async (req, res) => {
- const events = await Event.findAll()
+ const events = await EventImage.findAll()
     res.json(events)
 })
 
