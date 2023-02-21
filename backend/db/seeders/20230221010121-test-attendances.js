@@ -1,11 +1,9 @@
-const express = require('express');
-const { ForeignKeyConstraintError } = require('sequelize');
-const { utils, group } = require('../db/data_generator');
-const router = express.Router();
+'use strict';
 
-const dataGen = require('../db/data_generator');
-const EventImageData = require('../db/data_generator/EventImageData');
-const { User, Group, GroupImage, Venue, Event, EventImage } = require('../db/models')
+/** @type {import('sequelize-cli').Migration} */
+const dataGen = require('../data_generator')
+const { Event, Group, User } = require('../models')
+
 
 async function genAttendances() {
   const attendances = []
@@ -43,10 +41,13 @@ groupUsers.forEach(group => {
   return attendances
 } 
 
-router.get('/', async (req, res) => {
-  const attendances = await genAttendances()
-  
-    res.json(attendances)
-})
+module.exports = {
+  async up (queryInterface, Sequelize) {
+    const attendees = await genAttendances()
+      await queryInterface.bulkInsert('Attendances', attendees, {});
+  },
 
-module.exports = router
+  async down (queryInterface, Sequelize) {
+      await queryInterface.bulkDelete('Attendances', null, {});
+  }
+};
