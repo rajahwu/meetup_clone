@@ -4,39 +4,21 @@
 const dataGen = require('../data_generator')
 const { Event, Group, User } = require('../models')
 
-
 async function genAttendances() {
   const attendances = []
-  const events = await Event.findAll({
-    include: {model: Group},
-  })
+  const events = await Event.findAll()
+  const users = await User.findAll()
+  const eventIds = dataGen.utils.getIds(events)
+  const userIds = dataGen.utils.getIds(users)
   
-  const ids = []
-  events.forEach(event => {
-    const eventId = event.id
-    const groupId = event.Group.id
-    ids.push({eventId, groupId})
-  })
 
-const groupUsers = []
- for(const id of ids) {
-   let groups = await Group.findAll({
-       where: {id: id.groupId},
-      include: [{ model: User, attributes: ['id']}],
-      attributes: ['id']
-     })
-    groupUsers.push(JSON.parse(JSON.stringify(groups)))
- }
-
-const attendancesIds = []
-groupUsers.forEach(group => {
-    attendancesIds.push([group[0].id, group[0].User.id])    
-})
-  for(const id of attendancesIds) {
-    const eventId = id[0]
-    const userId = id[1]
-    const attendee = new dataGen.attendance(dataGen.utils, {eventId, userId})
-    attendances.push(attendee)
+  for(const id of eventIds) {
+    for(let i = 0; i < 3; i++) {
+      const eventId = id
+      const userId = userIds[dataGen.utils.getRandom(userIds.length - 1)]
+      const attendee = new dataGen.attendance(dataGen.utils, {eventId, userId})
+      attendances.push(attendee)
+    }
   }
   return attendances
 } 

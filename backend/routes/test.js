@@ -5,48 +5,41 @@ const router = express.Router();
 
 const dataGen = require('../db/data_generator');
 const EventImageData = require('../db/data_generator/EventImageData');
-const { User, Group, GroupImage, Venue, Event, EventImage } = require('../db/models')
+const { User, Group, Membership, GroupImage, Venue, Event, EventImage, Attendance } = require('../db/models')
 
-async function genAttendances() {
-  const attendances = []
-  const events = await Event.findAll({
-    include: {model: Group},
-  })
-  
-  const ids = []
-  events.forEach(event => {
-    const eventId = event.id
-    const groupId = event.Group.id
-    ids.push({eventId, groupId})
-  })
 
-const groupUsers = []
- for(const id of ids) {
-   let groups = await Group.findAll({
-       where: {id: id.groupId},
-      include: [{ model: User, attributes: ['id']}],
-      attributes: ['id']
-     })
-    groupUsers.push(JSON.parse(JSON.stringify(groups)))
- }
 
-const attendancesIds = []
-groupUsers.forEach(group => {
-    attendancesIds.push([group[0].id, group[0].User.id])    
+router.get('/users', async (req, res) => {
+  const users = await User.findAll()
+  res.json(users)
 })
-  for(const id of attendancesIds) {
-    const eventId = id[0]
-    const userId = id[1]
-    const attendee = new dataGen.attendance(dataGen.utils, {eventId, userId})
-    attendances.push(attendee)
-  }
-  return attendances
-} 
-
-router.get('/', async (req, res) => {
-  const attendances = await genAttendances()
-  
-    res.json(attendances)
+router.get('/groups', async (req, res) => {
+  const groups = await Group.findAll()
+  res.json(groups)
+})
+router.get('/memberships', async (req, res) => {
+  const memberships = await Membership.findAll()
+  res.json(memberships)
+})
+router.get('/groupImages', async (req, res) => {
+  const groupImages = await GroupImage.findAll()
+  res.json(groupImages)
+})
+router.get('/venues', async (req, res) => {
+  const venues = await Venue.findAll()
+  res.json(venues)
+})
+router.get('/events', async (req, res) => {
+  const events = await Event.findAll()
+  res.json(events)
+})
+router.get('/eventImages', async (req, res) => {
+  const eventImages = await EventImage.findAll()
+  res.json(eventImages)
+})
+router.get('/attendees', async (req, res) => {
+  const attendees = await Attendance.findAll()
+  res.json(attendees)
 })
 
 module.exports = router
