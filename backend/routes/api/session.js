@@ -15,7 +15,6 @@ const parseCredential = (req, res, next) => {
     next()
 }
 
-
 const validateLogin = [
     check('credential')
         .exists({ checkFalsy: true })
