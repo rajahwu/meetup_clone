@@ -1,7 +1,33 @@
 const express = require('express')
 const router = express.Router()
 const dataGen = require('../../db/data_generator')
-const { Group, GroupImage, User, Membership } = require('../../db/models')
+const { Group, GroupImage, User, Membership, Venue } = require('../../db/models')
+
+router.get('/:groupId', async (req, res) => {
+    let group = await Group.findByPk(req.params.groupId, {
+        include: [
+            {model: GroupImage, attributes: ['id', 'url', 'preview']},
+            {model: Venue, attributes: { exclude: ['createdAt', 'updatedAt']} }
+        ]
+    })
+
+    const users = await Membership.count({
+        where: {
+            groupId: req.params.groupId
+        }
+    })
+
+    group = JSON.parse(JSON.stringify(group))
+    let organizer = await User.findByPk(group.organizerId, {
+        attributes: ['id', 'firstName', 'lastName']
+    })
+    organizer = JSON.parse(JSON.stringify(organizer))
+    
+    group.numMembers = users
+    group.Organizer = organizer
+    
+    res.json(group)
+})
 
 router.get('/', async (req, res) => {
     let groups = await Group.findAll()
