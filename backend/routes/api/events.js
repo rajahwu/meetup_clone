@@ -13,7 +13,31 @@ router.get('/:eventId/attendees', async (req, res) => {
 })
 
 router.get('/:eventId', async (req, res) => {
-    const event = await Event.findByPk(req.params.eventId)
+    const events = await Event.findAll()
+    const eventIds = dataGen.utils.getIds(events)
+
+    if(!eventIds.includes(+req.params.eventId)) {
+        const err = new Error('Event does not exist')
+        err.status = 404
+        throw err
+    }
+
+    let event = await Event.findByPk(req.params.eventId, {
+        attributes: {exclude: ['createdAt', 'updatedAt']},
+        include: [
+            {model: Group, attributes: ['id', 'name', 'private', 'city', 'state']}, 
+            {model: Venue, attributes: {exclude: ['createdAt', 'updatedAt', 'groupId']}}, 
+            {model: EventImage, attributes: ['id', 'url', 'preview']}
+        ]
+    })
+
+        const numAttending = await Attendance.count({
+            where: { eventId: req.params.eventId }
+        })
+
+    event = JSON.parse(JSON.stringify(event))
+    event.numAttending = numAttending
+
 
     res.json(event)
 })
@@ -43,7 +67,6 @@ router.get('/', async (req, res) => {
         previewImage = JSON.parse(JSON.stringify(previewImage))
         events[i].numAttending = numAttending
         events[i].previewImage = previewImage['url']
-
     }
 
     res.json(events)
