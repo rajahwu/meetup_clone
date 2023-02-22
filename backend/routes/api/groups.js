@@ -40,6 +40,14 @@ router.get('/:groupId/events', async (req, res) => {
     res.json(Events)
 })
 
+router.get('/:groupId/venues', async (req, res) => {
+    const venues = await Venue.findAll({
+        attributes: {exclude: ['createdAt', 'updatedAt']},
+        where: { groupId: req.params.groupId,  }
+    })
+    res.json(venues)
+})
+
 router.get('/:groupId', async (req, res) => {
     const groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
