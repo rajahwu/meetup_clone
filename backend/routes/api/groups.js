@@ -4,6 +4,14 @@ const dataGen = require('../../db/data_generator')
 const { Group, GroupImage, User, Membership, Venue } = require('../../db/models')
 
 router.get('/:groupId', async (req, res) => {
+    const groups = await Group.findAll()
+    const groupIds = dataGen.utils.getIds(groups)
+    if(!groupIds.includes(+req.params.groupId)) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
+
     let group = await Group.findByPk(req.params.groupId, {
         include: [
             {model: GroupImage, attributes: ['id', 'url', 'preview']},
@@ -48,8 +56,6 @@ router.get('/', async (req, res) => {
         groups[i].numMembers = users 
         groups[i].previewImage = previewImage['url']
     }
-    
-
     
     res.json(groups)
 })
