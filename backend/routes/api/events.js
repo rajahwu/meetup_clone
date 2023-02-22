@@ -85,6 +85,8 @@ router.get('/', async (req, res) => {
     })
 
     const eventIds = dataGen.utils.getIds(events)
+    const Events = { Events: [] }
+
     events = JSON.parse(JSON.stringify(events))
  
     for(let i = 0; i < eventIds.length; i++) {
@@ -101,7 +103,9 @@ router.get('/', async (req, res) => {
         events[i].previewImage = previewImage['url']
     }
 
-    res.json(events)
+    Events.Events = [...events]
+
+    res.json(Events)
 })
 
 
