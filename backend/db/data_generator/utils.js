@@ -3,15 +3,15 @@ const MembershipData = require('./MembershipData')
 const AttendanceData = require('./AttendanceData')
 
 const utils = {
-    getRandom(num) {
-        return Math.floor(Math.random() * num)
-        },
-
     getIds(data) {
             data = JSON.parse(JSON.stringify(data))
             const ids = data.map(data => data.id)
              return ids
             },
+
+    getRandom(num) {
+        return Math.floor(Math.random() * num)
+        },
 
     getBool() {
         const bools = [false, true]
