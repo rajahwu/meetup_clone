@@ -28,16 +28,27 @@ router.get('/:groupId/events', async (req, res) => {
         })
 
         const previewImage = await GroupImage.findOne({
-            where: {groupId: event.id}
+            attributes: ['url'],
+            where: {groupId: req.params.groupId}
         })
 
         event.numAttending = numAttending
-        event.previewImage = previewImage
+        event.previewImage = previewImage['url']
 
         Events.Events.push(event)
     }
 
     res.json(Events)
+})
+
+router.get('/:groupId/venues', async (req, res) => {
+    const Venues = { Venues: [] }
+    const venues = await Venue.findAll({
+        attributes: {exclude: ['createdAt', 'updatedAt']},
+        where: { groupId: req.params.groupId,  }
+    })
+    Venues.Venues = [...venues]
+    res.json(Venues)
 })
 
 router.get('/:groupId', async (req, res) => {
@@ -78,6 +89,8 @@ router.get('/:groupId', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
+    const Groups = { Groups: [] }
+
     let groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
     
@@ -98,8 +111,10 @@ router.get('/', async (req, res) => {
         groups[i].numMembers = users 
         groups[i].previewImage = previewImage['url']
     }
-    
-    res.json(groups)
+
+    Groups.Groups = [...groups]
+
+    res.json(Groups)
 })
 
 module.exports = router
