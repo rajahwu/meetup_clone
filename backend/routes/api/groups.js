@@ -28,11 +28,12 @@ router.get('/:groupId/events', async (req, res) => {
         })
 
         const previewImage = await GroupImage.findOne({
-            where: {groupId: event.id}
+            attributes: ['url'],
+            where: {groupId: req.params.groupId}
         })
 
         event.numAttending = numAttending
-        event.previewImage = previewImage
+        event.previewImage = previewImage['url']
 
         Events.Events.push(event)
     }
@@ -41,11 +42,13 @@ router.get('/:groupId/events', async (req, res) => {
 })
 
 router.get('/:groupId/venues', async (req, res) => {
+    const Venues = { Venues: [] }
     const venues = await Venue.findAll({
         attributes: {exclude: ['createdAt', 'updatedAt']},
         where: { groupId: req.params.groupId,  }
     })
-    res.json(venues)
+    Venues.Venues = [...venues]
+    res.json(Venues)
 })
 
 router.get('/:groupId', async (req, res) => {
