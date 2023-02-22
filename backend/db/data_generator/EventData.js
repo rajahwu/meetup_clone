@@ -1,4 +1,5 @@
 const {faker} = require('@faker-js/faker');
+const { utils } = require('.');
 
 module.exports = class EventData {
     constructor(utils, foreignKeys = {}) {
@@ -6,10 +7,10 @@ module.exports = class EventData {
         this.groupId = foreignKeys.groupId
         
         this.name = `${faker.company.name()}'s ${faker.company.bsAdjective()} ${faker.company.catchPhrase()}`
-        this.description = faker.lorem.sentence(35)
+        this.description = faker.lorem.sentence(5)
         this.type = utils.getType()
         this.capacity = utils.getRandom(50) + 10
-        this.price = faker.commerce.price()
+        this.price = parseInt(faker.commerce.price())
         
         const eventDates = utils.getEventDates()
         this.startDate = eventDates ? eventDates[0] : Date.now()
@@ -17,3 +18,4 @@ module.exports = class EventData {
     }
     
 }
+

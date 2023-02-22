@@ -29,10 +29,10 @@
     "per-env": "^1.0.2",
     "pg": "^8.9.0",
     "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "@faker-js/faker": "^7.6.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
     "dotenv-cli": "^7.0.0",
     "nodemon": "^2.0.20",
     "sqlite3": "^5.1.4"

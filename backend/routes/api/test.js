@@ -1,16 +1,14 @@
 const express = require('express');
-const { ForeignKeyConstraintError } = require('sequelize');
-const { utils, group } = require('../db/data_generator');
 const router = express.Router();
 
-const dataGen = require('../db/data_generator');
-const EventImageData = require('../db/data_generator/EventImageData');
-const { User, Group, Membership, GroupImage, Venue, Event, EventImage, Attendance } = require('../db/models')
+const { User, Group, Membership, GroupImage, Venue, Event, EventImage, Attendance } = require('../../db/models')
 
-
+router.get('/', (req, res) => {
+  res.send('testing route')
+})
 
 router.get('/users', async (req, res) => {
-  const users = await User.findAll()
+  const users = await User.scope('currentUser').findAll()
   res.json(users)
 })
 router.get('/groups', async (req, res) => {
