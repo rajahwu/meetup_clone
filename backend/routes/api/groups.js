@@ -6,6 +6,7 @@ const { Group, GroupImage, User, Membership, Venue } = require('../../db/models'
 router.get('/:groupId', async (req, res) => {
     const groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
+
     if(!groupIds.includes(+req.params.groupId)) {
         const err = new Error('Group does not exist')
         err.status = 404
@@ -26,9 +27,11 @@ router.get('/:groupId', async (req, res) => {
     })
 
     group = JSON.parse(JSON.stringify(group))
+
     let organizer = await User.findByPk(group.organizerId, {
         attributes: ['id', 'firstName', 'lastName']
     })
+
     organizer = JSON.parse(JSON.stringify(organizer))
     
     group.numMembers = users
@@ -48,10 +51,12 @@ router.get('/', async (req, res) => {
         const users = await Membership.count({
             where: {groupId: groupIds[i]}
         })
+
         let previewImage = await GroupImage.findOne({
             where: { groupId: groupIds[i] },
             attriubtes: ['url']
         })
+        
         previewImage = JSON.parse(JSON.stringify(previewImage))
         groups[i].numMembers = users 
         groups[i].previewImage = previewImage['url']
