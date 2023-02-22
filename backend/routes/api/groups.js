@@ -1,7 +1,44 @@
 const express = require('express')
 const router = express.Router()
 const dataGen = require('../../db/data_generator')
-const { Group, GroupImage, User, Membership, Venue } = require('../../db/models')
+const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models')
+
+router.get('/:groupId/events', async (req, res) => {
+    const groups = await Group.findAll()
+    const groupIds = dataGen.utils.getIds(groups)
+
+    if(!groupIds.includes(+req.params.groupId)) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
+    const Events = { Events: [] }
+
+    let events = await Event.findAll({
+        attributes: {exclude: ['description', 'capacity', 'price', 'createdAt', 'updatedAt']},
+        include: [{ model: Venue, attributes: ['id', 'city', 'state'] }, {model: Group, attributes: ['id', 'name', 'city', 'state']}],
+        where: {groupId: req.params.groupId}
+    })
+
+    events = JSON.parse(JSON.stringify(events))
+
+    for(let event of events) {
+        const numAttending = await Attendance.count({
+            where: { eventId: event.id }
+        })
+
+        const previewImage = await GroupImage.findOne({
+            where: {groupId: event.id}
+        })
+
+        event.numAttending = numAttending
+        event.previewImage = previewImage
+
+        Events.Events.push(event)
+    }
+
+    res.json(Events)
+})
 
 router.get('/:groupId', async (req, res) => {
     const groups = await Group.findAll()
