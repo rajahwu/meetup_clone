@@ -2,14 +2,37 @@ const express = require('express');
 const router = express.Router();
 
 const dataGen = require('../../db/data_generator')
-const { Event, Attendance, Venue, Group, EventImage } = require('../../db/models')
+const { Event, Attendance, Venue, Group, EventImage, User } = require('../../db/models')
 
 router.get('/:eventId/attendees', async (req, res) => {
-    const attendess = await Attendance.findAll({
+    const Attendees = { Attendees: [] }
+
+    let attendees = await Attendance.findAll({
+        attributes: {exclude: ['createdAt', 'updatedAt', 'eventId']},
         where: { eventId: req.params.eventId }
     })
 
-    res.json(attendess)
+    attendees = JSON.parse(JSON.stringify(attendees))
+
+    for(let attendee of attendees) {
+        const user = await User.findByPk(attendee.userId)
+        const { id, firstName, lastName } = user
+        attendee = Object.assign(attendee, {
+            id,
+            firstName,
+            lastName,
+            Attendance: {
+                status: attendee.status
+            }
+        })
+        delete attendee.userId
+        delete attendee.status
+
+        Attendees.Attendees.push(attendee)
+    }
+
+
+    res.json(Attendees)
 })
 
 router.get('/:eventId', async (req, res) => {
