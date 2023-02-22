@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/users', async (req, res) => {
-  const users = await User.findAll()
+  const users = await User.scope('currentUser').findAll()
   res.json(users)
 })
 router.get('/groups', async (req, res) => {

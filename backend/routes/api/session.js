@@ -6,6 +6,16 @@ const { User } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
+const parseCredential = (req, res, next) => {
+    if(req.body.email) {
+        req.body.credential = req.body.email
+    } else if (req.body.username) {
+        req.body.credential = req.body.username
+    }
+    next()
+}
+
+
 const validateLogin = [
     check('credential')
         .exists({ checkFalsy: true })
@@ -20,7 +30,9 @@ const validateLogin = [
 const router = express.Router();
 
 
-router.post('/', validateLogin, async (req, res, next) => {
+router.post('/', [parseCredential, validateLogin], async (req, res, next) => {
+
+ 
     const { credential, password } = req.body;
 
     const user = await User.login({ credential, password });
