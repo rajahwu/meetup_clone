@@ -1,7 +1,19 @@
 const express = require('express')
 const router = express.Router()
 const dataGen = require('../../db/data_generator')
+const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models')
+
+
+
+router.get('/current', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const groups = await Group.findAll({
+        where: { organizerId: user.id},
+        // include: {model: Membership, where: {userId: user.id}}
+    })
+    res.json(groups)
+})
 
 router.get('/:groupId/events', async (req, res) => {
     const groups = await Group.findAll()
@@ -51,6 +63,28 @@ router.get('/:groupId/venues', async (req, res) => {
     res.json(Venues)
 })
 
+router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => {
+    const group = await Group.findByPk(req.params.groupId)
+    if(!group) return res.json({
+       "message" :"Group couldn't be found",
+        "statusCode": 404
+    })
+    const { user } = req
+    if(group.organizerId !== user.id) {
+        return res.json({"message": "Group must be owned by user"})
+    }
+    const { url, preview } = req.body
+    
+    const newImage = {
+        url, preview,
+        groupId: req.params.groupId
+   }
+
+    const image = await GroupImage.create(newImage)
+
+    res.json(image)
+})
+
 router.get('/:groupId', async (req, res) => {
     const groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
@@ -88,6 +122,28 @@ router.get('/:groupId', async (req, res) => {
     res.json(group)
 })
 
+router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const group = await Group.findByPk(req.params.groupId)
+
+    if(!group) return res.status(404).json({
+        "message": "Groups couldn't be found",
+        "statuscode": 404
+    })
+    if(group.organizerId === user.id) {
+        await Group.destroy({
+            where: {id: req.params.groupId}
+        })
+        return res.json({
+            "message": "Successfully deleted",
+            "statusCode": 200
+        })
+    } else {
+        err = new Error('Group must belong to the user')
+    }
+})
+
+
 router.get('/', async (req, res) => {
     const Groups = { Groups: [] }
 
@@ -108,13 +164,33 @@ router.get('/', async (req, res) => {
         })
         
         previewImage = JSON.parse(JSON.stringify(previewImage))
-        groups[i].numMembers = users 
-        groups[i].previewImage = previewImage['url']
+        groups[i].numMembers = users
+        if(groups[i].previewImage) {
+            groups[i].previewImage = previewImage['url']
+        } else {
+            groups[i].previewImage = null
+        }
     }
 
     Groups.Groups = [...groups]
 
     res.json(Groups)
 })
+
+router.post('/', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const { name, about, type, private, city, state } = req.body
+
+    const newGroup = {
+        name, about, type, private, city, state,
+        organizerId: user.id 
+   }
+
+    const group = await Group.create(newGroup)
+
+    res.json(newGroup)
+})
+
+
 
 module.exports = router
