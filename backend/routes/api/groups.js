@@ -4,8 +4,6 @@ const dataGen = require('../../db/data_generator')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models')
 
-
-
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
     const groups = await Group.findAll({
@@ -177,9 +175,50 @@ router.get('/', async (req, res) => {
     res.json(Groups)
 })
 
-router.post('/', [restoreUser, requireAuth], async (req, res) => {
+const validateGroup = ((req, res, next) => {
+    const err = new Error('')
+    err.errors = {}
+    if(req.body.name.length > 60) {
+        err.errors.name = "Name must be 60 characters or less"
+    }
+
+    if(req.body.about.length < 50) {
+       err.errors.about = "About must be 50 characters or more"
+    }
+
+    if(req.body.type !== "Online" && req.body.type !== "In person") {
+        err.errors.type = "Type must be 'Online or 'In person"
+    }
+
+    if(typeof req.body.private !== "boolean") {
+        console.log(req.body.private, typeof req.body.private)
+        err.errors.type = "Private must be a boolean"
+    }
+
+    if(!req.body.city) {
+        err.errors.city = "City is required"
+    }
+
+    if(!req.body.state) {
+        err.errors.state = "State is required"
+    }
+
+    if(Object.keys(err.errors).length) {
+        err.message = "Validation Error"
+        err.statusCode = 400
+
+        // delete error.title
+        delete err.stack
+        throw err
+    } else {
+        next()
+    }
+})
+
+router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => {
     const { user } = req
     const { name, about, type, private, city, state } = req.body
+
 
     const newGroup = {
         name, about, type, private, city, state,
@@ -188,7 +227,7 @@ router.post('/', [restoreUser, requireAuth], async (req, res) => {
 
     const group = await Group.create(newGroup)
 
-    res.json(newGroup)
+    res.json(group)
 })
 
 
