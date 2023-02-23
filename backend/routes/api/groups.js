@@ -124,10 +124,13 @@ router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
     const group = await Group.findByPk(req.params.groupId)
 
-    if(!group) return res.status(404).json({
-        "message": "Groups couldn't be found",
-        "statuscode": 404
-    })
+    if(!group){
+        const err = new Error('')
+        err.message = "Groups couldn't be found",
+        err.statuscode = 404
+        throw err
+    }
+    
     if(group.organizerId === user.id) {
         await Group.destroy({
             where: {id: req.params.groupId}
@@ -176,21 +179,23 @@ router.get('/', async (req, res) => {
 })
 
 const validateGroup = ((req, res, next) => {
+    const { name, about, type, private, city, state } = req.body
     const err = new Error('')
     err.errors = {}
-    if(req.body.name.length > 60) {
+
+    if(name && name > 60) {
         err.errors.name = "Name must be 60 characters or less"
     }
 
-    if(req.body.about.length < 50) {
+    if(about && about.length < 50) {
        err.errors.about = "About must be 50 characters or more"
     }
 
-    if(req.body.type !== "Online" && req.body.type !== "In person") {
+    if(type && type !== "Online" && req.body.type !== "In person") {
         err.errors.type = "Type must be 'Online or 'In person"
     }
 
-    if(typeof req.body.private !== "boolean") {
+    if(private && typeof req.body.private !== "boolean") {
         console.log(req.body.private, typeof req.body.private)
         err.errors.type = "Private must be a boolean"
     }
@@ -208,12 +213,13 @@ const validateGroup = ((req, res, next) => {
         err.statusCode = 400
 
         // delete error.title
-        delete err.stack
+        // delete err.stack
         throw err
     } else {
         next()
     }
 })
+
 
 router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => {
     const { user } = req
@@ -227,6 +233,28 @@ router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => 
 
     const group = await Group.create(newGroup)
 
+    res.json(group)
+})
+
+const parseGroup = ( async (req, res, next) => {
+    let group = await Group.findByPk(req.params.groupId)
+    if(!group){
+        const err = new Error('')
+        err.message = "Groups couldn't be found",
+        err.statuscode = 404
+        throw err
+    }
+    group = JSON.parse(JSON.stringify(group))
+    req.body = Object.assign(group, req.body)
+    console.log(req.body)
+    next()
+})
+
+router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup], async (req, res) => {
+   
+    const group = await Group.findByPk(req.params.groupId)
+    if(!group) 
+    await group.update(req.body)
     res.json(group)
 })
 
