@@ -10,7 +10,7 @@ router.get('/:eventId/attendees', async (req, res) => {
 
     if(!eventIds.includes(+req.params.eventId)) {
         const err = new Error('Event does not exist')
-        err.status = 404
+        err.statusCode = 404
         throw err
     }
 

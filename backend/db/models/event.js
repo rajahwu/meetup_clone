@@ -24,6 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Event.init({
+    id : {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
     venueId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -40,18 +46,18 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     type: DataTypes.STRING,
     capacity: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
+    price: DataTypes.DECIMAL,
     startDate: {
       type: DataTypes.DATE,
-      validate: {
-        isAfter: Date.now()
-      }
+      // validate: {
+      //   isAfter: Date.now()
+      // }
     },
     endDate: {
       type: DataTypes.DATE,
-      validate: {
-        isAfter: this.startDate
-      }
+      // validate: {
+      //   isAfter: this.startDate
+      // }
     }
   }, {
     sequelize,
