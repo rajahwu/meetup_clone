@@ -149,6 +149,25 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
         res.json(event)
 })
 
+router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const group = await Group.findByPk(req.params.groupId)
+
+    const membershipStatus = await Membership.findOne({
+        where: { groupId: req.params.groupId, userId: user.id }
+    })
+
+    if(group.organizerId !== user.id) {
+        throw new Error('you cant do that')
+    }
+    
+
+    const memberships = await Membership.findAll({
+        where: { groupId: req.params.groupId }
+    })
+    res.json(memberships)
+})
+
 router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
     if(!group) {
@@ -185,6 +204,34 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
         status: newMembership.status
     })
 } )
+
+router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const group = await Group.findByPk(req.params.groupId)
+    const membershipStatus = Membership.findOne({
+        where: {groupId: req.params.groupId, status: "co-host"}
+    })
+    let isOrganizer = false;
+    let isCoHost = false;
+
+    const { memberId, status } = req.body
+
+    const membership = Membership.findOne({
+        where: { groupId: req.params.groupId, id:  memberId }
+    })
+
+    membership.update(status)
+
+    if(group.organizerId === user.id) {
+        isOrganizer = true
+    }
+    if(membershipStatus) {
+        isCoHost = true
+    }
+
+    res.json(membership)
+
+})
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
