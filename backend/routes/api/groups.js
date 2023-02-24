@@ -1,10 +1,28 @@
 const express = require('express')
 const router = express.Router()
 const dataGen = require('../../db/data_generator')
-const {handleValidationErrors } = require('../../utils/validation')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models');
-const { application } = require('express');
+
+router.get('/:groupId/venues', async (req, res) => {
+    const venues = await Venue.findAll({
+        where: {groupId: req.params.groupId}
+    })
+    res.json(venues)
+})
+
+router.post('/:groupId/venues', async (req, res) => {
+    const { address, city, state, lat, lng } = req.body
+    const venue = Venue.create({
+        address,
+        city,
+        state,
+        lat,
+        lng,
+        groupId: req.params.groupId
+    })
+    res.json(venue)
+} )
 
 router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => {
         const { user } = req
@@ -15,6 +33,8 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
                  userId: user.id }
         })
         if(group.organizerId === user.id || groupStatus.status === "co-host")
+
+
         res.json({
             group,
             groupStatus
