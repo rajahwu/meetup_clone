@@ -85,13 +85,56 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
                 groupId: req.params.getId || null,
                  userId: user.id }
         })
-        if (group.organizerId !== user.id || groupStatus.status !== "co-host") {
+        if (group.organizerId !== user.id && groupStatus.status !== "co-host") {
           throw new Error('You cant do this')
         }
 
         const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+        const err = new Error('Validation error')
+        err.errors = {}
 
-        const event = Event.create({
+        const venue = await Venue.findByPk(venueId)
+        if(!venue) {
+            err.errors.venue = "Venue does not exist"
+        }
+
+        if(name.length < 5) {
+            err.errors.name = "Name must be at least 5 characters"
+        }
+
+        if(!["Online", "In person"].includes(type)) {
+            err.errors.type = "Type must be Online or In person"
+        }
+
+        if(typeof capacity !== 'number') {
+            err.errors.capacity = "Capacity must be an integer"
+        }
+
+        if(!price) {
+            err.errors.price = "Price invalid -- fix check"
+        }
+
+        if(!description) {
+            err.errors.description = "Description is requried"
+        }
+
+        if(startDate < Date.now()) {
+            err.errors.startDate = "Start date must be in the future"
+        }
+
+        if(startDate > endDate) {
+            err.errors.endDate = "End date is less than start date"
+        }
+
+        if(Object.keys(err.errors).length) {
+            err.message = "Validation Error"
+            err.statusCode = 400
+            throw err
+        }
+
+        const {groupId} = req.params
+        console.log(groupId)
+        const event = await Event.create({
             venueId,
             name,
             type,
@@ -100,10 +143,10 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
             description,
             startDate,
             endDate,
-            groupId: req.body.groupId
+            groupId
         })
 
-        res.json({ event })
+        res.json(event)
 })
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
