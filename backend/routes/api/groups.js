@@ -11,9 +11,57 @@ router.get('/:groupId/venues', async (req, res) => {
     res.json(venues)
 })
 
-router.post('/:groupId/venues', async (req, res) => {
+router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const group = await Group.findByPk(req.params.groupId)
+
+    if(!group) {
+        const err = new Error('Group Couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+    const groupStatus = await Membership.findAll({
+        where: { 
+            groupId: req.params.getId || null,
+             userId: user.id }
+    })
+    if (group.organizerId !== user.id && groupStatus.status !== "co-host") {
+      throw new Error('You cant do this')
+    }
+
     const { address, city, state, lat, lng } = req.body
-    const venue = Venue.create({
+    console.log(lng)
+    const err = new Error('Validation Error')
+    err.errors = {}
+
+    if(!address) {
+        err.errors.address = "Street address is requried"
+    }
+
+    if(!city) {
+        err.errors.city = "City is required"
+    }
+
+    if(!state) {
+        err.errors.state = "State is required"
+    }
+
+    if(!lat) {
+        err.errors.lat = "lat is not valid - fix check"
+    }
+
+    if(!lng) {
+        err.errors.lng = "lng is not valid - fix check"
+    }
+
+
+    if(Object.keys(err.errors).length) {
+        err.message = "Validation Error"
+        err.statusCode = 400
+        throw err
+    }
+
+    let venue = await Venue.create({
         address,
         city,
         state,
@@ -21,6 +69,11 @@ router.post('/:groupId/venues', async (req, res) => {
         lng,
         groupId: req.params.groupId
     })
+
+    venue = JSON.parse(JSON.stringify(venue))
+    delete venue.createdAt
+    delete venue.updatedAt
+
     res.json(venue)
 })
 
@@ -32,13 +85,25 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
                 groupId: req.params.getId || null,
                  userId: user.id }
         })
-        if(group.organizerId === user.id || groupStatus.status === "co-host")
+        if (group.organizerId !== user.id || groupStatus.status !== "co-host") {
+          throw new Error('You cant do this')
+        }
 
+        const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
 
-        res.json({
-            group,
-            groupStatus
+        const event = Event.create({
+            venueId,
+            name,
+            type,
+            capacity,
+            price,
+            description,
+            startDate,
+            endDate,
+            groupId: req.body.groupId
         })
+
+        res.json({ event })
 })
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
