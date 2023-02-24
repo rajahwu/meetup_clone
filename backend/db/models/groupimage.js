@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      GroupImage.belongsTo(models.Group, { foreignKey: 'groupId' })
+      GroupImage.belongsTo(models.Group, { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true })
     }
   }
   GroupImage.init({
