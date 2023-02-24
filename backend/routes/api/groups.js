@@ -69,8 +69,10 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
     })
     const { user } = req
     if(group.organizerId !== user.id) {
-        return res.json({"message": "Group must be owned by user"})
+        const err = new Error('')
+        err.message = "Group must be owned by user"
     }
+
     const { url, preview } = req.body
     
     const newImage = {
@@ -78,9 +80,13 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
         groupId: req.params.groupId
    }
 
-    const image = await GroupImage.create(newImage)
-
-    res.json(image)
+    let image = await GroupImage.create(newImage)
+    image = JSON.parse(JSON.stringify(image))
+    res.json({ 
+        id: image.id,
+         url: image.url,
+          preview: image.preview 
+        })
 })
 
 router.get('/:groupId', async (req, res) => {
@@ -145,39 +151,6 @@ router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
 })
 
 
-router.get('/', async (req, res) => {
-    const Groups = { Groups: [] }
-
-    let groups = await Group.findAll()
-    const groupIds = dataGen.utils.getIds(groups)
-    
-    
-    groups = JSON.parse(JSON.stringify(groups))
-
-    for (let i = 0; i < groupIds.length; i++) {
-        const users = await Membership.count({
-            where: {groupId: groupIds[i]}
-        })
-
-        let previewImage = await GroupImage.findOne({
-            where: { groupId: groupIds[i] },
-            attriubtes: ['url']
-        })
-        
-        previewImage = JSON.parse(JSON.stringify(previewImage))
-        groups[i].numMembers = users
-        if(groups[i].previewImage) {
-            groups[i].previewImage = previewImage['url']
-        } else {
-            groups[i].previewImage = null
-        }
-    }
-
-    Groups.Groups = [...groups]
-
-    res.json(Groups)
-})
-
 const validateGroup = ((req, res, next) => {
     const { name, about, type, private, city, state } = req.body
     const err = new Error('')
@@ -221,21 +194,6 @@ const validateGroup = ((req, res, next) => {
 })
 
 
-router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => {
-    const { user } = req
-    const { name, about, type, private, city, state } = req.body
-
-
-    const newGroup = {
-        name, about, type, private, city, state,
-        organizerId: user.id 
-   }
-
-    const group = await Group.create(newGroup)
-
-    res.json(group)
-})
-
 const parseGroup = ( async (req, res, next) => {
     let group = await Group.findByPk(req.params.groupId)
     if(!group){
@@ -258,6 +216,58 @@ router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup], a
     res.json(group)
 })
 
+
+router.get('/', async (req, res) => {
+    const Groups = { Groups: [] }
+
+    let groups = await Group.findAll()
+    const groupIds = dataGen.utils.getIds(groups)
+    
+    
+    groups = JSON.parse(JSON.stringify(groups))
+
+    for (let i = 0; i < groupIds.length; i++) {
+        const users = await Membership.count({
+            where: {groupId: groupIds[i]}
+        })
+
+        let previewImage = await GroupImage.findOne({
+            where: { groupId: groupIds[i] },
+            attriubtes: ['url']
+        })
+        
+        previewImage = JSON.parse(JSON.stringify(previewImage))
+        groups[i].numMembers = users
+        if(groups[i].previewImage) {
+            groups[i].previewImage = previewImage['url']
+        } else {
+            groups[i].previewImage = null
+        }
+    }
+
+    Groups.Groups = [...groups]
+
+    res.json(Groups)
+})
+
+
+
+
+
+router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => {
+    const { user } = req
+    const { name, about, type, private, city, state } = req.body
+
+
+    const newGroup = {
+        name, about, type, private, city, state,
+        organizerId: user.id 
+   }
+
+    const group = await Group.create(newGroup)
+
+    res.json(group)
+})
 
 
 module.exports = router
