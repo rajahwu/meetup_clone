@@ -1,11 +1,24 @@
 const express = require('express')
 const router = express.Router()
 const dataGen = require('../../db/data_generator')
+const {handleValidationErrors } = require('../../utils/validation')
 const { restoreUser, requireAuth } = require('../../utils/auth');
-const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models')
+const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models');
+const { application } = require('express');
 
-router.get('/groups-images', (req, res) => {
-    res.send('yep')
+router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => {
+        const { user } = req
+        const group = await Group.findByPk(req.params.groupId)
+        const groupStatus = await Membership.findAll({
+            where: { 
+                groupId: req.params.getId || null,
+                 userId: user.id }
+        })
+        if(group.organizerId === user.id || groupStatus.status === "co-host")
+        res.json({
+            group,
+            groupStatus
+        })
 })
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
@@ -188,9 +201,6 @@ const validateGroup = ((req, res, next) => {
     if(Object.keys(err.errors).length) {
         err.message = "Validation Error"
         err.statusCode = 400
-
-        // delete error.title
-        // delete err.stack
         throw err
     } else {
         next()
@@ -212,10 +222,9 @@ const parseGroup = ( async (req, res, next) => {
     next()
 })
 
-router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup], async (req, res) => {
+router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup ], async (req, res) => {
    
     const group = await Group.findByPk(req.params.groupId)
-    if(!group) 
     await group.update(req.body)
     res.json(group)
 })
@@ -271,6 +280,14 @@ router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => 
     const group = await Group.create(newGroup)
 
     res.json(group)
+})
+
+router.use((err, req, res, next) => {
+    res.json({
+        message: err.message,
+        statusCode: err.statusCode,
+        errors: err.errors
+    })
 })
 
 
