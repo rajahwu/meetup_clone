@@ -83,9 +83,9 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
     let image = await GroupImage.create(newImage)
     image = JSON.parse(JSON.stringify(image))
     res.json({ 
-        id: image.id,
-         url: image.url,
-          preview: image.preview 
+            id: image.id,
+            url: image.url,
+            preview: image.preview 
         })
 })
 
@@ -173,11 +173,11 @@ const validateGroup = ((req, res, next) => {
         err.errors.type = "Private must be a boolean"
     }
 
-    if(!req.body.city) {
+    if(!city) {
         err.errors.city = "City is required"
     }
 
-    if(!req.body.state) {
+    if(!state) {
         err.errors.state = "State is required"
     }
 
