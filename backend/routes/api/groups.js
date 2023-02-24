@@ -22,7 +22,7 @@ router.post('/:groupId/venues', async (req, res) => {
         groupId: req.params.groupId
     })
     res.json(venue)
-} )
+})
 
 router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => {
         const { user } = req
