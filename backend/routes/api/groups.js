@@ -102,7 +102,7 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
             err.errors.name = "Name must be at least 5 characters"
         }
 
-        if(!["Online", "In person"].includes(type)) {
+        if(["Online", "In person"].includes(type)) {
             err.errors.type = "Type must be Online or In person"
         }
 
@@ -148,6 +148,43 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
 
         res.json(event)
 })
+
+router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
+    const group = await Group.findByPk(req.params.groupId)
+    if(!group) {
+        const err = Error('Group couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+    const { user } = req
+
+    let membershipStatus = await Membership.findOne({
+        where: { userId: user.id, groupId: req.params.groupId }
+    })
+
+    membershipStatus = JSON.parse(JSON.stringify(membershipStatus))
+
+
+    if(membershipStatus) {
+        const err = new Error('')
+        err.statusCode = 400
+        err.message = membershipStatus.status === "member" || membershipStatus.status === "co-host" ?
+        "User is already a member"
+        : "Membership has already been requested"
+        throw err
+    }
+    
+    const newMembership = await Membership.create({
+        userId: user.id,
+        groupId: req.params.groupId,
+        status: "pending"
+    })
+
+    res.json({
+        memberId: newMembership.id,
+        status: newMembership.status
+    })
+} )
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
@@ -208,14 +245,17 @@ router.get('/:groupId/venues', async (req, res) => {
 
 router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
-    if(!group) return res.json({
-       "message" :"Group couldn't be found",
-        "statusCode": 404
-    })
+    if(!group) {
+        const err = new Error()
+        err.message = "Group couldn't be found"
+        err.statusCode = 404
+        throw err
+    }
     const { user } = req
     if(group.organizerId !== user.id) {
         const err = new Error('')
         err.message = "Group must be owned by user"
+        throw err
     }
 
     const { url, preview } = req.body
@@ -301,26 +341,28 @@ const validateGroup = ((req, res, next) => {
     const err = new Error('')
     err.errors = {}
 
-    if(name && name > 60) {
+    if(name && name.length > 60) {
         err.errors.name = "Name must be 60 characters or less"
     }
 
     if(about && about.length < 50) {
        err.errors.about = "About must be 50 characters or more"
+
     }
 
-    if(type && type !== "Online" && req.body.type !== "In person") {
+    if(!["Online", "In person"].includes(type)) {
         err.errors.type = "Type must be 'Online or 'In person"
+
     }
 
     if(private && typeof req.body.private !== "boolean") {
         console.log(req.body.private, typeof req.body.private)
-        err.errors.type = "Private must be a boolean"
+        err.errors.private = "Private must be a boolean"
     }
 
     if(!city) {
         err.errors.city = "City is required"
-    }
+    }s
 
     if(!state) {
         err.errors.state = "State is required"
