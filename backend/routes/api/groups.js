@@ -4,6 +4,10 @@ const dataGen = require('../../db/data_generator')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models')
 
+router.get('/groups-images', (req, res) => {
+    res.send('yep')
+})
+
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
     const groups = await Group.findAll({
