@@ -162,10 +162,20 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
     }
     
 
-    const memberships = await Membership.findAll({
-        where: { groupId: req.params.groupId }
+    const memberships = await User.findAll({
+        attributes: ['id', 'firstName', 'lastName'],
+        include: [
+            {
+                model: Membership, 
+                where: { groupId: req.params.groupId },
+                attributes: ['status']
+            }
+        ],
     })
-    res.json(memberships)
+
+    const Members = [...memberships]
+
+    res.json({Members: Members})
 })
 
 router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
@@ -216,12 +226,10 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
 
     const { memberId, status } = req.body
 
-    const membership = Membership.findOne({
+    let membership = await Membership.findOne({
         where: { groupId: req.params.groupId, id:  memberId }
     })
-
-    membership.update(status)
-
+    
     if(group.organizerId === user.id) {
         isOrganizer = true
     }
@@ -229,7 +237,14 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         isCoHost = true
     }
 
-    res.json(membership)
+    membership = await membership.update({status})
+    
+    res.json({
+        id: membership.id,
+        groupId: membership.groupId,
+        memberId: membership.userId,
+        status: membership.status
+    })
 
 })
 
@@ -409,7 +424,7 @@ const validateGroup = ((req, res, next) => {
 
     if(!city) {
         err.errors.city = "City is required"
-    }s
+    }
 
     if(!state) {
         err.errors.state = "State is required"
