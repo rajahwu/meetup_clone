@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const dataGen = require('../../db/data_generator')
-const { Event, Attendance, Venue, Group, EventImage, User } = require('../../db/models')
+const { Event, Attendance, Venue, Group, EventImage, User } = require('../../db/models');
+const { restoreUser, requireAuth } = require('../../utils/auth');
 
 router.get('/:eventId/attendees', async (req, res) => {
     const events = await Event.findAll()
@@ -42,6 +43,46 @@ router.get('/:eventId/attendees', async (req, res) => {
 
 
     res.json(Attendees)
+})
+
+router.post('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) => {
+
+    const event = await Event.findByPk(req.params.eventId)
+
+    if(!event) {
+        const err = new Error('Event couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+
+    const { user } = req
+    const attendaceStatus = await Attendance.findOne({
+        where: {
+            userId: user.id,
+            eventId: req.params.eventId
+        }
+    })
+
+    if(attendaceStatus) {
+        const err = new Error('')
+        err.message = attendaceStatus.status === "pending" 
+        ? "Attendance has already been requested" 
+        : "User is already an attendee of the event"
+        err.statusCode = 400
+        throw err
+    }
+
+    const newAttendance = await Attendance.create({
+        eventId: req.params.eventId,
+        userId: user.id,
+        status: "pending"
+    })
+    const { userId, status } = newAttendance
+
+    res.json({
+        userId,
+        status
+    })
 })
 
 router.get('/:eventId', async (req, res) => {
@@ -108,8 +149,12 @@ router.get('/', async (req, res) => {
     res.json(Events)
 })
 
-
-
-
+router.use((err, req, res, next) => {
+    res.json({
+        message: err.message,
+        statusCode: err.statusCode,
+        errors: err.errors
+    })
+})
 
 module.exports = router

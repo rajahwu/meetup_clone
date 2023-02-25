@@ -102,7 +102,7 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
             err.errors.name = "Name must be at least 5 characters"
         }
 
-        if(["Online", "In person"].includes(type)) {
+        if(!["Online", "In person"].includes(type)) {
             err.errors.type = "Type must be Online or In person"
         }
 
@@ -287,7 +287,7 @@ router.get('/:groupId/events', async (req, res) => {
         })
 
         event.numAttending = numAttending
-        event.previewImage = previewImage['url']
+        event.previewImage = previewImage ?  previewImage['url'] : null
 
         Events.Events.push(event)
     }
