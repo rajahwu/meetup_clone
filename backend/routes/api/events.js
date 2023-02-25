@@ -1,8 +1,9 @@
 const express = require('express');
+const { attendance } = require('../../db/data_generator');
 const router = express.Router();
 
 const dataGen = require('../../db/data_generator')
-const { Event, Attendance, Venue, Group, EventImage, User } = require('../../db/models');
+const { Event, Attendance, Venue, Group, EventImage, User, Membership } = require('../../db/models');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 
 router.get('/:eventId/attendees', async (req, res) => {
@@ -82,6 +83,58 @@ router.post('/:eventId/attendance', [restoreUser, requireAuth], async (req, res)
     res.json({
         userId,
         status
+    })
+})
+
+router.put('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    
+    const event = await Event.findByPk(req.params.eventId)
+
+    if(!event) {
+        const err = new Error('Event couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+
+    const group = await Group.findOne({
+        where: {id: event.groupId}
+    })
+
+    const membershipStatus = Membership.findOne({
+        where: {groupId: group.id, status: "co-host"}
+    })
+   
+    if(group.organizerId !== user.id && !membershipStatus) {
+        throw new Error('Must be event owner')
+    }
+
+    const { userId, status } = req.body
+
+    if(status === 'pending') {
+        const err = new Error('Cannot change an attendance status to pending')
+        err.statusCode = 400
+        throw err
+    }
+
+    let attendance = await Attendance.findOne({
+        where: {userId: userId, eventId: req.params.eventId}
+    })
+    
+    if(!attendance) {
+        const err = new Error('Attendance between the user and the event does not exist')
+        err.statusCode = 404
+        throw err
+    }
+
+    attendance = await attendance.update({status})
+    console.log(attendance.id)
+
+    res.json({
+        id: attendance.id,
+        eventId: attendance.eventId,
+        userId: attendance.userId,
+        status: attendance.status
     })
 })
 
