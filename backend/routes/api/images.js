@@ -15,3 +15,5 @@ router.delete('/group-images/:imageId', [restoreUser, requireAuth], async (req, 
 
     image.destory()
 })
+
+module.exports = router

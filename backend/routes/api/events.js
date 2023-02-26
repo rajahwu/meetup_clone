@@ -198,7 +198,7 @@ router.get('/:eventId', async (req, res) => {
     res.json(event)
 })
 
-const validateEvent = ( async (req, res, next) => {
+const validateEvent = (async (req, res, next) => {
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
     const err = new Error()
     errors.err = {}

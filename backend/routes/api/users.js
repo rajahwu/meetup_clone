@@ -10,16 +10,16 @@ const { handleValidationErrors } = require('../../utils/validation');
 const validateSignup = [
     check('email')
         .exists({ checkFalsy: true })
-        .isEmail()
-        .withMessage('Please provide a vaild email.'),
-    check('username')
-        .exists({ checkFalsy:true })
-        .isLength({ min: 4 })
-        .withMessage('Please provide a username with at least 4 characters.'),
-    check('username')
-        .not()
-        .isEmail()
-        .withMessage('Password mush be 6 characters or more'),
+        .isEmail(),
+    //     .withMessage('Please provide a vaild email.'),
+    // check('username')
+    //     .exists({ checkFalsy:true })
+    //     .isLength({ min: 4 })
+    //     .withMessage('Please provide a username with at least 4 characters.'),
+    // check('username')
+    //     .not()
+    //     .isEmail()
+    //     .withMessage('Password mush be 6 characters or more'),
     check('password')
         .exists({ checkFalsy: true })
         .isLength({ min: 6 })
@@ -27,21 +27,50 @@ const validateSignup = [
     handleValidationErrors
 ]
 
-router.post('/', [validateSignup], async (req, res) => {
+const validateUser = ((req, res, next) => {
+   const { email, firstName, lastName} = req.body
+   const err = new Error('Validation Error')
+   err.errors = {}
+    const emailRegex= new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+   if(!email || !emailRegex.test(email)) {
+        err.errors.email = "Invalid Email"
+   }
+
+   if(!firstName) {
+    err.errors.firstName = "First Name is required"
+   }
+
+   if(!lastName) {
+    err.errors.lastName = "Last Name is required"
+   }
+   
+   if(Object.keys(err.errors).length) {
+    err.message = "Validation Error"
+    err.statusCode = 400
+    throw err
+} else {
+    next()
+}
+})
+
+router.post('/', [validateUser, validateSignup], async (req, res) => {
    
     const { email, password, username, firstName, lastName } = req.body;
     const checkEmail = await User.findOne({
         where: {email: email}
     })
 
-    const checkUserName = await User.findOne({
-        where: { username: username}
-    })
+    let checkUserName = null
+    if(username) {
+        checkUserName = await User.findOne({
+            where: { username: username}
+        })
+    }
 
     if(checkEmail || checkUserName) {
         const err = new Error('Validation Error')
         err.errors = {} 
-        err.statusCode = 400
+        err.statusCode = 403
         err.errors.email = checkEmail ?
         "User with this email already exist" 
         : "User with this username already exist"
@@ -54,14 +83,20 @@ router.post('/', [validateSignup], async (req, res) => {
 
     user = JSON.parse(JSON.stringify(user))
     user.token = ""
-    delete user.createdAt
-    delete user.updatedAt
 
-    return res.json( user );
+
+    return res.json({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        token: user.token
+    });
 })
 
 router.use((err, req, res, next) => {
-    res.json({
+    let status = err.statusCode || 400
+   return res.status(status).json({
         message: err.message,
         statusCode: err.statusCode,
         errors: err.errors
