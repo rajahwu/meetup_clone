@@ -7,6 +7,23 @@ const { User } = require('../../db/models');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const parseCredential = (req, res, next) => {
+    const err = new Error()
+    err.errors = {}
+    const { email, password } = req.body
+    if(!email) {
+        err.errors.email = 'Email is required'
+    }
+
+    if(!password) {
+        err.errors.password = 'Password is required'
+    }
+
+    if(Object.keys(err.errors).length) {
+        err.message = "Validation Error"
+        err.statusCode = 400
+        throw err
+    } 
+
     if(req.body.email) {
         req.body.credential = req.body.email
     } else if (req.body.username) {
@@ -30,24 +47,29 @@ const router = express.Router();
 
 
 router.post('/', [parseCredential, validateLogin], async (req, res, next) => {
-
- 
     const { credential, password } = req.body;
 
-    const user = await User.login({ credential, password });
+    let user = await User.login({ credential, password });
 
     if(!user) {
-        const err = new Error('Login failed');
-        err.status = 401;
-        err.title = 'Login failed';
-        err.errors = { credential: 'The provided credentials were invalid' };
+        const err = new Error('Invalid credentials');
+        err.statusCode = 401;
         return next(err);
     }
 
     await setTokenCookie(res, user);
 
+    const { id, firstName, lastName, email, username } = user
 
-    return res.json({ user })
+    user = {
+        id,
+        firstName,
+        lastName,
+        email,
+        username
+    }    
+
+    return res.json({user})
 })
 
 router.delete('/', (_req, res) => {
@@ -63,6 +85,14 @@ router.get('/', [restoreUser, requireAuth], (req, res) => {
         });
     } else return res.json({user: null}) 
     
+})
+
+router.use((err, req, res, next) => {
+    res.status(err.statusCode).json({
+       message: err.message,
+       status: err.statusCode,
+       errors: err.errors
+    })
 })
 
 module.exports = router;

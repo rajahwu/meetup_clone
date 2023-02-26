@@ -3,15 +3,17 @@ const router = express.Router()
 const dataGen = require('../../db/data_generator')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models');
+const { group } = require('../../db/data_generator');
 
-// router.get('/:groupId/venues', async (req, res) => {
-//     const venues = await Venue.findAll({
-//         where: {groupId: req.params.groupId}
-//     })
-//     res.json(venues)
-// })
 
 router.get('/:groupId/venues', async (req, res) => {
+    const group = await Group.findByPk(req.params.groupId)
+
+    if(!group) {
+        const err = new Error('Group Couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
     const Venues = { Venues: [] }
     const venues = await Venue.findAll({
         attributes: {exclude: ['createdAt', 'updatedAt']},
@@ -22,8 +24,9 @@ router.get('/:groupId/venues', async (req, res) => {
 })
 
 router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
-    const { user } = req
     const group = await Group.findByPk(req.params.groupId)
+
+    const { user } = req
 
     if(!group) {
         const err = new Error('Group Couldn\'t be found')
@@ -40,7 +43,6 @@ router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => 
     }
 
     const { address, city, state, lat, lng } = req.body
-    console.log(lng)
     const err = new Error('Validation Error')
     err.errors = {}
 
@@ -56,12 +58,12 @@ router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => 
         err.errors.state = "State is required"
     }
 
-    if(!lat) {
-        err.errors.lat = "lat is not valid - fix check"
+    if(!lat || (+lat > 90 || +lat < -90)) {
+        err.errors.lat = "Latitude is not valid"
     }
 
-    if(!lng) {
-        err.errors.lng = "lng is not valid - fix check"
+    if(!lng || (+lng > 180 || +lng < -180)) {
+        err.errors.lng = "Longitude is not valid"
     }
 
 
@@ -330,10 +332,30 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
-    const groups = await Group.findAll({
-        where: { organizerId: user.id},
-        // include: {model: Membership, where: {userId: user.id}}
+    let groups = await Group.findAll({
+        where: { organizerId: user.id}
     })
+
+    const groupIds = dataGen.utils.getIds(groups)
+    
+    groups = JSON.parse(JSON.stringify(groups))
+    console.log(groups)
+
+
+    for(let i = 0; i < groupIds.length; i++) {
+        const numMembers = await Membership.count({
+            where: { groupId: groups[i].id }
+        })
+        console.log(numMembers)
+        const previewImage = await GroupImage.findOne({
+            where: { groupId: groups[i].id }
+        })
+
+       groups[i] = Object.assign(groups[i], { numMembers, previewImage: previewImage['url'] || null })
+    }
+
+ 
+    console.log(groups)
     res.json(groups)
 })
 

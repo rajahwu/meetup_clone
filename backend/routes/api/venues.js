@@ -1,34 +1,37 @@
 const express = require('express');
 const router = express.Router()
 
-const { Venue, Membership } = require('../../db/models');
+const { Venue, Membership, Group } = require('../../db/models');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 
 const validateVenue = ((req, res, next) => {
     const err = new Error('');
     err.errors = {}
 
-    if(address && address == "") {
+    const venue = Venue.findByPk(req.params.venueId)
+
+    const { address, city, state, lat, lng } = req.body
+    if(!venue.address && address == "") {
         err.errors.address = "Street address is required"
     }
 
-    if(city && city == "") {
+    if(!venue.city && city == "") {
         err.errors.city = "City is required"
     }
 
-    if(state && state == "") {
+    if(!venue.state && state == "") {
         err.errors.state = "State is required"
     }
 
-    if(lat && lat == "") {
+    if((!venue.lat && lat == "") || (+lat > 90 || +lat < -90)) {
         err.errors.lat = "Latitude is not valid"
     }
 
-    if(lng && lat == "") {
+    if(!venue.lng && (lat == "" )|| (+lng > 180 || +lng < -180)) {
         err.errors.lng ="Latitude is not valid"
     }
 
-    if(Object,key(err.errors).length) {
+    if(Object.keys(err.errors).length) {
         err.message = "Validaton Error"
         err.statusCode = 400
         throw err
@@ -38,7 +41,7 @@ const validateVenue = ((req, res, next) => {
 })
 
 router.put('/:venueId', [restoreUser, requireAuth, validateVenue], async (req, res) => {
-    let venue = await Venue.findbyByPk(req.params.venueId)
+    let venue = await Venue.findByPk(req.params.venueId)
 
     if(!venue) {
         const err = new Error('')
@@ -49,21 +52,30 @@ router.put('/:venueId', [restoreUser, requireAuth, validateVenue], async (req, r
 
     const { user } = req
 
-    const group = findOne({
-        where: {groupId: venue.groupId}
-    })
-    const membershipStatus = Membership.findAll({
+    const group = await Group.findByPk(venue.groupId)
+
+    const membershipStatus = await Membership.findAll({
         where: { groupId: group.id, status: 'co-host' }
     })
 
-    if(group.orginizer.id !== user.id && !membershipStatus) {
+    if(group.orginizerId !== user.id && !membershipStatus) {
         const err = new Error()
         err.statusCode = 400
     }
 
-    venue.update(req.body)
 
-    res.json(venue)
+    venue = await venue.update(req.body)
+
+    const { id, groupId, address, city, state, lat, lng } = venue
+    res.json({
+        id,
+        groupId,
+        address,
+        city,
+        state,
+        lat,
+        lng
+    })
 
 
 })
