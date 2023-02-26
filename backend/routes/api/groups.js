@@ -388,7 +388,6 @@ const parseGroup = ( async (req, res, next) => {
     }
     group = JSON.parse(JSON.stringify(group))
     req.body = Object.assign(group, req.body)
-    console.log(req.body)
     next()
 })
 

@@ -3,7 +3,9 @@ const router = require('express').Router();
 const sessonRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const groupsRouter = require('./groups.js');
-const eventsRouter = require('./events.js')
+const eventsRouter = require('./events.js');
+const venuesRouter = require('./venues.js');
+const imagesRouter = require('./images.js');
 
 const testRouter = require('./test.js');
 
@@ -23,6 +25,10 @@ router.use('/users', usersRouter);
 router.use('/groups', groupsRouter);
 
 router.use('/events', eventsRouter);
+
+router.use('/venues', venuesRouter);
+
+router.use('/', imagesRouter);
 
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body })
