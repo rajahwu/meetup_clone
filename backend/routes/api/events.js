@@ -13,21 +13,27 @@ router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
     if(!event) {
         const err = new Error('Group couldn\'t be found')
         err.statusCode = 404
+        throw err
     }
 
-    const group = findOne({
-        where: {groupId: event.groupId}
+    const group = await Group.findOne({
+        where: {id: event.groupId}
     })
     const membershipStatus = Membership.findAll({
         where: { groupId: group.id, status: 'co-host' }
     })
 
-    if(group.orginizer.id !== user.id && !membershipStatus) {
+    if(group.orginizerId !== user.id && !membershipStatus) {
         const err = new Error()
         err.statusCode = 400
     }
-
-    const newEventImage = await EventImage.create(req.body)
+    
+    const { url, preview } = req.body
+    const newEventImage = await EventImage.create({
+        eventId: event.id,
+        url,
+        preview
+    })
 
     res.json({
         id: newEventImage.id,
@@ -187,21 +193,22 @@ router.get('/:eventId', async (req, res) => {
         ]
     })
 
-        const numAttending = await Attendance.count({
+    const numAttending = await Attendance.count({
             where: { eventId: req.params.eventId }
         })
 
     event = JSON.parse(JSON.stringify(event))
     event.numAttending = numAttending
 
-
+    event.price = event.price.toFixed(2)
+    
     res.json(event)
 })
 
 const validateEvent = (async (req, res, next) => {
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
     const err = new Error()
-    errors.err = {}
+    err.errors = {}
 
     if(venueId) {
         const venue = await Venue.findByPk(venueId)
@@ -218,17 +225,28 @@ const validateEvent = (async (req, res, next) => {
     if(capacity && typeof capacity !== "number") {
         err.errors.capacity = "Capacity must be an integer"
     }
-    if(price && price == "") {
-        err.errors.price = "Price is invalid -- fix check"
+
+    const priceRegex = new RegExp(/\d+\.\d{1,2}/)
+    if(price) {
+        if(typeof price !== 'number' || !priceRegex.test(price.toFixed(2).toString())) {
+            err.errors.price = "Price invalid"
+        }
     }
+
+    if(price === "") {
+        err.errors.price = "Price invaild"
+    }
+
     if(description && description == "") {
         err.errors.description = "Description is required"
     }
-    if(startDate && startDate == "") {
-        err.errors.startDate = "Start date must be in the future -- fix check"
+    
+    if(Date.parse(startDate) < Date.now()) {
+        err.errors.startDate = "Start date must be in the future"
     }
-    if(endDate && endDate == "") {
-        err.errors.endDate = "End date is less than start date -- fix check"
+
+    if(Date.parse(startDate) > Date.parse(endDate)) {
+        err.errors.endDate = "End date is less than start date"
     }
 
     if(Object.keys(err.errors).length) {
@@ -243,28 +261,43 @@ const validateEvent = (async (req, res, next) => {
 router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, res) => {
     const { user } = req
 
-    const event = await Event.findByPk(req.params.eventId)
+    let event = await Event.findByPk(req.params.eventId)
+    const venue = await Venue.findByPk(event.venueId)
     
-    if(!event) {
-        const err = new Error('Group couldn\'t be found')
+    if(!event || !venue) {
+        const err = new Error('')
+        err.message = !event ? 'Event couldn\'t be found' : 'Venue couldn\'t be found'
         err.statusCode = 404
+        throw err
     }
+    
+    const group = await Group.findByPk(event.groupId)
 
-    const group = findOne({
-        where: {groupId: event.groupId}
-    })
-    const membershipStatus = Membership.findAll({
+    const membershipStatus = await Membership.findAll({
         where: { groupId: group.id, status: 'co-host' }
     })
 
-    if(group.orginizer.id !== user.id && !membershipStatus) {
-        const err = new Error()
-        err.statusCode = 400
+    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
     }
 
-    event.update(req.body)
-
-    res.json()
+    event = await event.update(req.body)
+    let { id, groupId, venueId, name, type, capacity, price, description, startDate, endDate} = event
+    price = price.toFixed(2)
+   res.json({
+      id,
+      groupId,
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate
+    })
 })
 
 router.get('/', async (req, res) => {
@@ -293,7 +326,11 @@ router.get('/', async (req, res) => {
 
         previewImage = JSON.parse(JSON.stringify(previewImage))
         events[i].numAttending = numAttending
-        events[i].previewImage = previewImage['url']
+        events[i].previewImage = previewImage ? previewImage['url'] : null
+
+        if(events[i].type === "Online") {
+            events[i].Venue = null
+        }
     }
 
     Events.Events = [...events]
@@ -302,7 +339,7 @@ router.get('/', async (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-    res.json({
+    res.status(err.statusCode).json({
         message: err.message,
         statusCode: err.statusCode,
         errors: err.errors

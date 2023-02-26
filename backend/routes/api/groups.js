@@ -130,6 +130,13 @@ router.get('/:groupId/events', async (req, res) => {
 router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => {
         const { user } = req
         const group = await Group.findByPk(req.params.groupId)
+
+        if(!group) {
+            const err = new Error('Group couldn\'t be found')
+            err.statusCode = 404
+            throw err
+        }
+
         const groupStatus = await Membership.findAll({
             where: { 
                 groupId: req.params.getId || null,
@@ -139,7 +146,7 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
           throw new Error('You cant do this')
         }
 
-        const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+        let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
         const err = new Error('Validation error')
         err.errors = {}
 
@@ -160,19 +167,20 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
             err.errors.capacity = "Capacity must be an integer"
         }
 
-        if(!price) {
-            err.errors.price = "Price invalid -- fix check"
+        const priceRegex = new RegExp(/\d+\.\d{1,2}/)
+        if(typeof price !== 'number' || !priceRegex.test(price.toFixed(2).toString())) {
+            err.errors.price = "Price invalid"
         }
 
         if(!description) {
             err.errors.description = "Description is requried"
         }
-
-        if(startDate < Date.now()) {
+        
+        if(Date.parse(startDate) < Date.now()) {
             err.errors.startDate = "Start date must be in the future"
         }
 
-        if(startDate > endDate) {
+        if(Date.parse(startDate) > Date.parse(endDate)) {
             err.errors.endDate = "End date is less than start date"
         }
 
@@ -184,19 +192,33 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
 
         const {groupId} = req.params
         console.log(groupId)
+
+        price = price.toFixed(2)
         const event = await Event.create({
             venueId,
+            groupId,
             name,
             type,
             capacity,
             price,
             description,
             startDate,
-            endDate,
-            groupId
+            endDate
         })
 
-        res.json(event)
+
+        res.json({
+            id: event.id,
+            groupId: event.groupId,
+            venueId: event.venueId,
+            name: event.name,
+            type: event.type,
+            capacity: event.capacity,
+            price: event.price,
+            description: event.description,
+            startDate: event.startDate,
+            endDate: event.endDate
+        })
 })
 
 router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => {
