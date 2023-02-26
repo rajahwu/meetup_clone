@@ -24,8 +24,6 @@ router.use('/groups', groupsRouter);
 
 router.use('/events', eventsRouter);
 
-
-
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body })
 });

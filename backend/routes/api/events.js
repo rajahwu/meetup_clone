@@ -1,10 +1,16 @@
 const express = require('express');
-const { attendance } = require('../../db/data_generator');
 const router = express.Router();
 
 const dataGen = require('../../db/data_generator')
 const { Event, Attendance, Venue, Group, EventImage, User, Membership } = require('../../db/models');
 const { restoreUser, requireAuth } = require('../../utils/auth');
+
+router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const event = await Event.findByPk(req.params.eventId)
+
+    res.json(event)
+})
 
 router.get('/:eventId/attendees', async (req, res) => {
     const events = await Event.findAll()
@@ -166,6 +172,13 @@ router.get('/:eventId', async (req, res) => {
 
 
     res.json(event)
+})
+
+router.put('/:eventId', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const event = await Event.findByPk(req.params.eventId)
+
+    res.send(event)
 })
 
 router.get('/', async (req, res) => {

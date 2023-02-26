@@ -27,64 +27,7 @@ const validateSignup = [
     handleValidationErrors
 ]
 
-
-// const parseSignup = (async (req, res, next) => {
-//     let userEmails = await User.findAll({
-//         attributes: ['email']
-//     })
-
-//     userEmails = JSON.parse(JSON.stringify(userEmails))
-//     const emails = userEmails.filter(user => user.email === req.body.email)
-//     const err = new Error('Validation Error')
-//     err.errors = {}
-//     if(emails.length) {
-//         // const err = new Error('User already exists')
-//         err.statusCode = 403
-//         res.statusCode = 403
-//         err.errors = {
-//             email: "User with that email already exists"
-//         }
-//         // throw err
-//     }
-
-//     if(!req.body.firstName) {
-//         // const err = new Error('Validation Error')
-//         // err.errors = {}
-//         err.statusCode = 400
-//         res.statusCode = 400
-//         err.errors.firstName = "First Name is required"
-//         // throw err
-//     }
-
-//     if(!req.body.lastName) {
-//         // const err = new Error('Validation Error')
-//         // err.errors = {}
-//         err.statusCode = 400
-//         res.statusCode = 400
-//         err.errors.firstName = "Last Name is required"
-//         // throw err
-//     }
-
-//     const emailTest = new RegExp( /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
-//     if(!emailTest.test(req.body.email)) {
-//         // const err = new Error('Validation Error')
-//         // err.errors = {}
-//         err.statusCode = 400
-//         res.statusCode = 400
-//         err.errors.email = "Invalid Email"
-//         // throw err
-//     }
-
-//     if(Object.keys(err.errors).length) {
-//         err.message = "Validation Error"
-//         err.statusCode = 400
-//         throw err
-//     } 
-
-// })
-
 router.post('/', [validateSignup], async (req, res) => {
-
    
     const { email, password, username, firstName, lastName } = req.body;
     const checkEmail = await User.findOne({

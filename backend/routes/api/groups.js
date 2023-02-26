@@ -4,11 +4,21 @@ const dataGen = require('../../db/data_generator')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models');
 
+// router.get('/:groupId/venues', async (req, res) => {
+//     const venues = await Venue.findAll({
+//         where: {groupId: req.params.groupId}
+//     })
+//     res.json(venues)
+// })
+
 router.get('/:groupId/venues', async (req, res) => {
+    const Venues = { Venues: [] }
     const venues = await Venue.findAll({
-        where: {groupId: req.params.groupId}
+        attributes: {exclude: ['createdAt', 'updatedAt']},
+        where: { groupId: req.params.groupId,  }
     })
-    res.json(venues)
+    Venues.Venues = [...venues]
+    res.json(Venues)
 })
 
 router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
@@ -75,6 +85,44 @@ router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => 
     delete venue.updatedAt
 
     res.json(venue)
+})
+
+router.get('/:groupId/events', async (req, res) => {
+    const groups = await Group.findAll()
+    const groupIds = dataGen.utils.getIds(groups)
+
+    if(!groupIds.includes(+req.params.groupId)) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
+    const Events = { Events: [] }
+
+    let events = await Event.findAll({
+        attributes: {exclude: ['description', 'capacity', 'price', 'createdAt', 'updatedAt']},
+        include: [{ model: Venue, attributes: ['id', 'city', 'state'] }, {model: Group, attributes: ['id', 'name', 'city', 'state']}],
+        where: {groupId: req.params.groupId}
+    })
+
+    events = JSON.parse(JSON.stringify(events))
+
+    for(let event of events) {
+        const numAttending = await Attendance.count({
+            where: { eventId: event.id }
+        })
+
+        const previewImage = await GroupImage.findOne({
+            attributes: ['url'],
+            where: {groupId: req.params.groupId}
+        })
+
+        event.numAttending = numAttending
+        event.previewImage = previewImage ?  previewImage['url'] : null
+
+        Events.Events.push(event)
+    }
+
+    res.json(Events)
 })
 
 router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => {
@@ -219,8 +267,9 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     const { user } = req
     const group = await Group.findByPk(req.params.groupId)
     const membershipStatus = Membership.findOne({
-        where: {groupId: req.params.groupId, status: "co-host"}
+        where: { groupId: req.params.groupId, status: "co-host" }
     })
+    
     let isOrganizer = false;
     let isCoHost = false;
 
@@ -246,63 +295,6 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         status: membership.status
     })
 
-})
-
-router.get('/current', [restoreUser, requireAuth], async (req, res) => {
-    const { user } = req
-    const groups = await Group.findAll({
-        where: { organizerId: user.id},
-        // include: {model: Membership, where: {userId: user.id}}
-    })
-    res.json(groups)
-})
-
-router.get('/:groupId/events', async (req, res) => {
-    const groups = await Group.findAll()
-    const groupIds = dataGen.utils.getIds(groups)
-
-    if(!groupIds.includes(+req.params.groupId)) {
-        const err = new Error('Group does not exist')
-        err.status = 404
-        throw err
-    }
-    const Events = { Events: [] }
-
-    let events = await Event.findAll({
-        attributes: {exclude: ['description', 'capacity', 'price', 'createdAt', 'updatedAt']},
-        include: [{ model: Venue, attributes: ['id', 'city', 'state'] }, {model: Group, attributes: ['id', 'name', 'city', 'state']}],
-        where: {groupId: req.params.groupId}
-    })
-
-    events = JSON.parse(JSON.stringify(events))
-
-    for(let event of events) {
-        const numAttending = await Attendance.count({
-            where: { eventId: event.id }
-        })
-
-        const previewImage = await GroupImage.findOne({
-            attributes: ['url'],
-            where: {groupId: req.params.groupId}
-        })
-
-        event.numAttending = numAttending
-        event.previewImage = previewImage ?  previewImage['url'] : null
-
-        Events.Events.push(event)
-    }
-
-    res.json(Events)
-})
-
-router.get('/:groupId/venues', async (req, res) => {
-    const Venues = { Venues: [] }
-    const venues = await Venue.findAll({
-        attributes: {exclude: ['createdAt', 'updatedAt']},
-        where: { groupId: req.params.groupId,  }
-    })
-    Venues.Venues = [...venues]
-    res.json(Venues)
 })
 
 router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => {
@@ -336,67 +328,14 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
         })
 })
 
-router.get('/:groupId', async (req, res) => {
-    const groups = await Group.findAll()
-    const groupIds = dataGen.utils.getIds(groups)
-
-    if(!groupIds.includes(+req.params.groupId)) {
-        const err = new Error('Group does not exist')
-        err.status = 404
-        throw err
-    }
-
-    let group = await Group.findByPk(req.params.groupId, {
-        include: [
-            {model: GroupImage, attributes: ['id', 'url', 'preview']},
-            {model: Venue, attributes: { exclude: ['createdAt', 'updatedAt']} }
-        ]
-    })
-
-    const users = await Membership.count({
-        where: {
-            groupId: req.params.groupId
-        }
-    })
-
-    group = JSON.parse(JSON.stringify(group))
-
-    let organizer = await User.findByPk(group.organizerId, {
-        attributes: ['id', 'firstName', 'lastName']
-    })
-
-    organizer = JSON.parse(JSON.stringify(organizer))
-    
-    group.numMembers = users
-    group.Organizer = organizer
-    
-    res.json(group)
-})
-
-router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
+router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
-    const group = await Group.findByPk(req.params.groupId)
-
-    if(!group){
-        const err = new Error('')
-        err.message = "Groups couldn't be found",
-        err.statuscode = 404
-        throw err
-    }
-    
-    if(group.organizerId === user.id) {
-        await Group.destroy({
-            where: {id: req.params.groupId}
-        })
-        return res.json({
-            "message": "Successfully deleted",
-            "statusCode": 200
-        })
-    } else {
-        err = new Error('Group must belong to the user')
-    }
+    const groups = await Group.findAll({
+        where: { organizerId: user.id},
+        // include: {model: Membership, where: {userId: user.id}}
+    })
+    res.json(groups)
 })
-
 
 const validateGroup = ((req, res, next) => {
     const { name, about, type, private, city, state } = req.body
@@ -439,7 +378,6 @@ const validateGroup = ((req, res, next) => {
     }
 })
 
-
 const parseGroup = ( async (req, res, next) => {
     let group = await Group.findByPk(req.params.groupId)
     if(!group){
@@ -454,6 +392,43 @@ const parseGroup = ( async (req, res, next) => {
     next()
 })
 
+router.get('/:groupId', async (req, res) => {
+    const groups = await Group.findAll()
+    const groupIds = dataGen.utils.getIds(groups)
+
+    if(!groupIds.includes(+req.params.groupId)) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
+
+    let group = await Group.findByPk(req.params.groupId, {
+        include: [
+            {model: GroupImage, attributes: ['id', 'url', 'preview']},
+            {model: Venue, attributes: { exclude: ['createdAt', 'updatedAt']} }
+        ]
+    })
+
+    const users = await Membership.count({
+        where: {
+            groupId: req.params.groupId
+        }
+    })
+
+    group = JSON.parse(JSON.stringify(group))
+
+    let organizer = await User.findByPk(group.organizerId, {
+        attributes: ['id', 'firstName', 'lastName']
+    })
+
+    organizer = JSON.parse(JSON.stringify(organizer))
+    
+    group.numMembers = users
+    group.Organizer = organizer
+    
+    res.json(group)
+})
+
 router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup ], async (req, res) => {
    
     const group = await Group.findByPk(req.params.groupId)
@@ -461,6 +436,44 @@ router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup ], 
     res.json(group)
 })
 
+router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    const group = await Group.findByPk(req.params.groupId)
+
+    if(!group){
+        const err = new Error('')
+        err.message = "Groups couldn't be found",
+        err.statuscode = 404
+        throw err
+    }
+    
+    if(group.organizerId === user.id) {
+        await Group.destroy({
+            where: {id: req.params.groupId}
+        })
+        return res.json({
+            "message": "Successfully deleted",
+            "statusCode": 200
+        })
+    } else {
+        err = new Error('Group must belong to the user')
+    }
+})
+
+router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => {
+    const { user } = req
+    const { name, about, type, private, city, state } = req.body
+
+
+    const newGroup = {
+        name, about, type, private, city, state,
+        organizerId: user.id 
+   }
+
+    const group = await Group.create(newGroup)
+
+    res.json(group)
+})
 
 router.get('/', async (req, res) => {
     const Groups = { Groups: [] }
@@ -495,25 +508,6 @@ router.get('/', async (req, res) => {
     res.json(Groups)
 })
 
-
-
-
-
-router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => {
-    const { user } = req
-    const { name, about, type, private, city, state } = req.body
-
-
-    const newGroup = {
-        name, about, type, private, city, state,
-        organizerId: user.id 
-   }
-
-    const group = await Group.create(newGroup)
-
-    res.json(group)
-})
-
 router.use((err, req, res, next) => {
     res.json({
         message: err.message,
@@ -521,6 +515,5 @@ router.use((err, req, res, next) => {
         errors: err.errors
     })
 })
-
 
 module.exports = router
