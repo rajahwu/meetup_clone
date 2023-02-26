@@ -7,9 +7,33 @@ const { restoreUser, requireAuth } = require('../../utils/auth');
 
 router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
     const { user } = req
-    const event = await Event.findByPk(req.params.eventId)
 
-    res.json(event)
+    const event = await Event.findByPk(req.params.eventId)
+    
+    if(!event) {
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
+    }
+
+    const group = findOne({
+        where: {groupId: event.groupId}
+    })
+    const membershipStatus = Membership.findAll({
+        where: { groupId: group.id, status: 'co-host' }
+    })
+
+    if(group.orginizer.id !== user.id && !membershipStatus) {
+        const err = new Error()
+        err.statusCode = 400
+    }
+
+    const newEventImage = await EventImage.create(req.body)
+
+    res.json({
+        id: newEventImage.id,
+        url: newEventImage.url,
+        preview: newEventImage.preview
+    })
 })
 
 router.get('/:eventId/attendees', async (req, res) => {
@@ -174,11 +198,73 @@ router.get('/:eventId', async (req, res) => {
     res.json(event)
 })
 
-router.put('/:eventId', [restoreUser, requireAuth], async (req, res) => {
-    const { user } = req
-    const event = await Event.findByPk(req.params.eventId)
+const validateEvent = ( async (req, res, next) => {
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+    const err = new Error()
+    errors.err = {}
 
-    res.send(event)
+    if(venueId) {
+        const venue = await Venue.findByPk(venueId)
+        if(!venue) {
+            err.errors.venueId = "Venue does not exist"
+        }
+    }
+    if(name && name.length < 5) {
+        err.errors.name = "Name must be at least 5 characters" 
+    }
+    if(type && !["Online", "In person"].includes(type)) {
+        err.errors.type = "Type must be Online or In person"
+    }
+    if(capacity && typeof capacity !== "number") {
+        err.errors.capacity = "Capacity must be an integer"
+    }
+    if(price && price == "") {
+        err.errors.price = "Price is invalid -- fix check"
+    }
+    if(description && description == "") {
+        err.errors.description = "Description is required"
+    }
+    if(startDate && startDate == "") {
+        err.errors.startDate = "Start date must be in the future -- fix check"
+    }
+    if(endDate && endDate == "") {
+        err.errors.endDate = "End date is less than start date -- fix check"
+    }
+
+    if(Object.keys(err.errors).length) {
+        err.message = "Validation Error"
+        err.statusCode = 400
+        throw err
+    } else {
+        next()
+    }
+ })
+
+router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, res) => {
+    const { user } = req
+
+    const event = await Event.findByPk(req.params.eventId)
+    
+    if(!event) {
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
+    }
+
+    const group = findOne({
+        where: {groupId: event.groupId}
+    })
+    const membershipStatus = Membership.findAll({
+        where: { groupId: group.id, status: 'co-host' }
+    })
+
+    if(group.orginizer.id !== user.id && !membershipStatus) {
+        const err = new Error()
+        err.statusCode = 400
+    }
+
+    event.update(req.body)
+
+    res.json()
 })
 
 router.get('/', async (req, res) => {
