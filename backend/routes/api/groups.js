@@ -223,18 +223,20 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
 
 router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
+
     const group = await Group.findByPk(req.params.groupId)
 
     const membershipStatus = await Membership.findOne({
         where: { groupId: req.params.groupId, userId: user.id }
     })
 
-    if(group.organizerId !== user.id) {
-        throw new Error('you cant do that')
+    if(group.organizerId !== user.id && membershipStatus.userId !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
     }
-    
 
-    const memberships = await User.findAll({
+    let memberships = await User.findAll({
         attributes: ['id', 'firstName', 'lastName'],
         include: [
             {
@@ -245,8 +247,21 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
         ],
     })
 
-    const Members = [...memberships]
+    memberships = JSON.parse(JSON.stringify(memberships))
+    console.log(memberships)
 
+    const Members = []
+
+    for (let i = 0; i < memberships.length; i++) {
+        const { id, firstName, lastName, Memberships } = memberships[i]
+        Members.push({
+            id,
+            firstName,
+            lastName,
+            Membership: Memberships[0]
+        })
+        
+    }
     res.json({Members: Members})
 })
 
@@ -289,26 +304,59 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
 
 router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
+
     const group = await Group.findByPk(req.params.groupId)
+
+    if(!group) {
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
+    }
+    
     const membershipStatus = Membership.findOne({
         where: { groupId: req.params.groupId, status: "co-host" }
     })
-    
-    let isOrganizer = false;
-    let isCoHost = false;
+   
+    if(group.organizerId !== user.id && membershipStatus.userId !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
 
     const { memberId, status } = req.body
 
-    let membership = await Membership.findOne({
-        where: { groupId: req.params.groupId, id:  memberId }
-    })
     
-    if(group.organizerId === user.id) {
-        isOrganizer = true
+    const member = await User.findByPk(memberId)
+
+    if(!member) {
+        const err = new Error('Validation Error')
+        err.errors = {}
+        err.statusCode = 400
+        err.errors.memberId = 'User couldn\'t be found'
+        throw err
     }
-    if(membershipStatus) {
-        isCoHost = true
+
+    
+    let membership = await Membership.findOne({
+        where: {groupId: group.id, userId: memberId}
+    })
+
+    
+    if(!membership) {
+        const err = new Error('')
+        err.errors = {}
+        err.errors.memberId = 'Membership between the user and the group does not exits'
+        err.statusCode = 400
+        throw err
     }
+
+    if(status === "pending" ) {
+        const err = new Error('Validation Error')
+        err.errors = {}
+        err.statusCode = 400
+        err.errors = 'Cannot change a membership status to pending'
+        
+    }
+
 
     membership = await membership.update({status})
     
@@ -318,6 +366,7 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         memberId: membership.userId,
         status: membership.status
     })
+
 
 })
 
@@ -552,7 +601,7 @@ router.get('/', async (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-    res.json({
+    res.status(err.statusCode).json({
         message: err.message,
         statusCode: err.statusCode,
         errors: err.errors
