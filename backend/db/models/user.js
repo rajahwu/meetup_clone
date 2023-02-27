@@ -34,6 +34,9 @@ module.exports = (sequelize, DataTypes) => {
 
     static async signup({ username, email, password, firstName, lastName }) {
       const hashedPassword = bcrypt.hashSync(password);
+      if(!username) {
+        username = null
+      }
       const user = await User.create({
         username,
         email,
@@ -45,9 +48,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static associate(models) {
-      User.hasMany(models.Attendance, { foreignKey: 'userId' })
-      User.hasMany(models.Group, { foreignKey: 'organizerId' })
-      User.hasMany(models.Membership, { foreignKey: 'userId' })
+      User.hasMany(models.Attendance, { foreignKey: 'userId', onDelete: 'CASCADE', hook: true })
+      User.hasMany(models.Group, { foreignKey: 'organizerId', onDelete: 'CASCADE', hook: true  })
+      User.hasMany(models.Membership, { foreignKey: 'userId', onDelete: 'CASCADE', hook: true  })
       User.belongsToMany(models.Group, {
         through: models.Membership,
         foreignKey: 'userId',
@@ -62,13 +65,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init({
     username: {
+      allowNull: true,
       type: DataTypes.STRING(30),
-      allowNull: false,
       unique: true,
       validate: {
         len: [4, 30],
         isNotEmail(value) {
-          if(Validator.isEmail(value)) {
+          if(value && Validator.isEmail(value)) {
             throw new Error("Cannot be an email")
           }
         }

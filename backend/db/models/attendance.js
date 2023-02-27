@@ -10,11 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Attendance.belongsTo(models.User, { foreignKey: 'userId' })
-      Attendance.belongsTo(models.Event, { foreignKey: 'eventId' })
+      Attendance.belongsTo(models.User, { foreignKey: 'userId', })
+      Attendance.belongsTo(models.Event, { foreignKey: 'eventId',  })
     }
   }
   Attendance.init({
+    id : {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
     eventId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     status: DataTypes.STRING
