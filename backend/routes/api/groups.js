@@ -392,6 +392,8 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
 })
 
 router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
+
+    const { user } = req
     const group = await Group.findByPk(req.params.groupId)
     if(!group) {
         const err = new Error()
@@ -403,6 +405,13 @@ router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, re
     const membership = await Membership.findOne({
         where: { userId: req.body.memberId, groupId: group.id }
     })
+
+    if(group.organizerId !== user.id && req.body.memberId !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
+    
 
     if(membership) {
         membership.destroy() 

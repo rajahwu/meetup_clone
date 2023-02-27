@@ -204,6 +204,8 @@ router.put('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) 
 })
 
 router.delete('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
+    
     const event = await Event.findByPk(req.params.eventId)
     
     if(!event) {
@@ -211,11 +213,19 @@ router.delete('/:eventId/attendance', [restoreUser, requireAuth], async (req, re
         err.statusCode = 404
         throw err
     }
+
+    const group = await Group.findByPk(event.groupId)
     const { userId } = req.body
 
     const attendance = await Attendance.findOne({
         where: { userId: userId, eventId: req.params.eventId }
     })
+
+    if (group.organizerId !== user.id && userId !== userId) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
 
     if(attendance) {
         await attendance.destroy()
@@ -355,7 +365,21 @@ router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, r
 })
 
 router.delete('/:eventId', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req.body
+    
     const event = await Event.findByPk(req.params.eventId)
+
+    const group = await Group.findByPk(event.groupId)
+
+    const membershipStatus = await Membership.findAll({
+        where: { groupId: group.id, status: 'co-host', userId: user.id }
+    })
+
+    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
 
     if(event) {
         await event.destroy()
