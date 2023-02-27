@@ -30,6 +30,12 @@ const parseCredential = (req, res, next) => {
         req.body.credential = req.body.username
     }
     next()
+    // if(req.body.email) {
+    //     req.body.credential = req.body.email
+    // } else if (req.body.username) {
+    //     req.body.credential = req.body.username
+    // }
+    // next()
 }
 
 const validateLogin = [
@@ -53,21 +59,13 @@ router.post('/', [parseCredential, validateLogin], async (req, res, next) => {
 
     if(!user) {
         const err = new Error('Invalid credentials');
+        err.title = 'Login Failed'
         err.statusCode = 401;
+        err.errors = { credential: 'The provided credentials were invalid' };
         return next(err);
     }
 
     await setTokenCookie(res, user);
-
-    const { id, firstName, lastName, email, username } = user
-
-    user = {
-        id,
-        firstName,
-        lastName,
-        email,
-        username
-    }    
 
     return res.json({user})
 })
@@ -88,11 +86,12 @@ router.get('/', [restoreUser, requireAuth], (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode).json({
+    res.status(err.statusCode || 401).json({
        message: err.message,
-       status: err.statusCode,
+       status: err.statusCode || 401,
        errors: err.errors
     })
+
 })
 
 module.exports = router;

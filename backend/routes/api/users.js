@@ -10,8 +10,8 @@ const { handleValidationErrors } = require('../../utils/validation');
 const validateSignup = [
     check('email')
         .exists({ checkFalsy: true })
-        .isEmail(),
-    //     .withMessage('Please provide a vaild email.'),
+        .isEmail()
+        .withMessage('Please provide a vaild email.'),
     // check('username')
     //     .exists({ checkFalsy:true })
     //     .isLength({ min: 4 })
@@ -95,7 +95,7 @@ router.post('/', [validateUser, validateSignup], async (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-    let status = err.statusCode || 400
+    let status = err.statusCode || 401
    return res.status(status).json({
         message: err.message,
         statusCode: err.statusCode,

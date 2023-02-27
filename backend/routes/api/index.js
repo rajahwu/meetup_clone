@@ -39,6 +39,8 @@ router.use(restoreUser);
 //GET /api/set-token-cookie
 const { setTokenCookie } = require('../../utils/auth')
 const { User } = require('../../db/models');
+const { application } = require('express');
+
 router.get('/set-token-cookie', async (_req, res) => {
     const user = await User.findOne({
         where: {

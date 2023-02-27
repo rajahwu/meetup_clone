@@ -568,6 +568,7 @@ router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => 
 })
 
 router.get('/', async (req, res) => {
+    console.log('something')
     const Groups = { Groups: [] }
 
     let groups = await Group.findAll()
@@ -601,7 +602,7 @@ router.get('/', async (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode).json({
+    res.status(err.statusCode || 401).json({
         message: err.message,
         statusCode: err.statusCode,
         errors: err.errors

@@ -81,7 +81,7 @@ router.put('/:venueId', [restoreUser, requireAuth, validateVenue], async (req, r
 })
 
 router.use((err, req, res, next) => {
-    res.json({
+    res.status(err.statusCode || 401 ).json({
         message: err.message,
         statusCode: err.statusCode,
         errors: err.errors

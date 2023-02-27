@@ -91,7 +91,7 @@ router.post('/:eventId/attendance', [restoreUser, requireAuth], async (req, res)
         err.statusCode = 404
         throw err
     }
-
+    
     const { user } = req
     const attendaceStatus = await Attendance.findOne({
         where: {
@@ -99,6 +99,7 @@ router.post('/:eventId/attendance', [restoreUser, requireAuth], async (req, res)
             eventId: req.params.eventId
         }
     })
+    
 
     if(attendaceStatus) {
         const err = new Error('')
@@ -114,6 +115,7 @@ router.post('/:eventId/attendance', [restoreUser, requireAuth], async (req, res)
         userId: user.id,
         status: "pending"
     })
+
     const { userId, status } = newAttendance
 
     res.json({
@@ -339,7 +341,7 @@ router.get('/', async (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-    res.status(err.statusCode).json({
+    res.status(err.statusCode || 401).json({
         message: err.message,
         statusCode: err.statusCode,
         errors: err.errors
