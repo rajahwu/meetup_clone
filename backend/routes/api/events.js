@@ -43,15 +43,31 @@ router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
     })
 })
 
-router.get('/:eventId/attendees', async (req, res) => {
-    const events = await Event.findAll()
-    const eventIds = dataGen.utils.getIds(events)
+router.get('/:eventId/attendees', [restoreUser, requireAuth], async (req, res) => {
+    const { user } = req
 
-    if(!eventIds.includes(+req.params.eventId)) {
+    const event = await Event.findByPk(req.params.eventId)
+    if(!event) {
         const err = new Error('Event does not exist')
         err.statusCode = 404
         throw err
     }
+
+    console.log(event)
+    const group = await Group.findByPk(event.groupId)
+    
+    const membershipStatus = await Membership.findAll({
+        where: { groupId: group.id, status: 'co-host', userId: user.id }
+    })
+    
+    if(group.organizerId !== user.id && membershipStatus.userId !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
+    
+
+     
 
     const Attendees = { Attendees: [] }
 
@@ -94,13 +110,23 @@ router.post('/:eventId/attendance', [restoreUser, requireAuth], async (req, res)
     }
     
     const { user } = req
+
+    const membershipStatus = await Membership.findOne({
+        where: {groupId: event.groupId, userId: user.id}
+    })
+
+    if(!membershipStatus || membershipStatus.status === 'pending') {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
+
     const attendaceStatus = await Attendance.findOne({
         where: {
             userId: user.id,
             eventId: req.params.eventId
         }
     })
-    
 
     if(attendaceStatus) {
         const err = new Error('')
@@ -175,6 +201,31 @@ router.put('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) 
         userId: attendance.userId,
         status: attendance.status
     })
+})
+
+router.delete('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) => {
+    const event = await Event.findByPk(req.params.eventId)
+    
+    if(!event) {
+        const err = new Error('Event couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+    const { userId } = req.body
+
+    const attendance = await Attendance.findOne({
+        where: { userId: userId, eventId: req.params.eventId }
+    })
+
+    if(attendance) {
+        await attendance.destroy()
+        res.json({message: "Successfully deleted attendance from event"})
+    } else {
+        const err = new Error("Attendance does not exist for this User")
+        err.statusCode = 404
+        throw err
+    }
+
 })
 
 router.get('/:eventId', async (req, res) => {
@@ -303,6 +354,21 @@ router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, r
     })
 })
 
+router.delete('/:eventId', [restoreUser, requireAuth], async (req, res) => {
+    const event = await Event.findByPk(req.params.eventId)
+
+    if(event) {
+        await event.destroy()
+        res.json({message: "Successfully deleted"})
+    } else {
+        const err = new Error('Event couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+
+    
+})
+
 router.get('/', async (req, res) => {
 
     let events = await Event.findAll({
@@ -340,6 +406,7 @@ router.get('/', async (req, res) => {
 
     res.json(Events)
 })
+
 
 router.use((err, req, res, next) => {
     res.status(err.statusCode || 401).json({

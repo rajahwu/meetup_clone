@@ -3,7 +3,6 @@ const router = express.Router()
 const dataGen = require('../../db/data_generator')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models');
-const { group } = require('../../db/data_generator');
 
 
 router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
@@ -390,6 +389,29 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     })
 
 
+})
+
+router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
+    const group = await Group.findByPk(req.params.groupId)
+    if(!group) {
+        const err = new Error()
+        err.message = "Group couldn't be found"
+        err.statusCode = 404
+        throw err
+    }
+
+    const membership = await Membership.findOne({
+        where: { userId: req.body.memberId, groupId: group.id }
+    })
+
+    if(membership) {
+        membership.destroy() 
+        res.json({message: "Successfully deleted membership from group"})
+    } else {
+        const err = new Error('Membership does not exist for this User')
+        err.statusCode = 404
+        throw err
+    }
 })
 
 router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => {
