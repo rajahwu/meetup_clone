@@ -440,7 +440,6 @@ router.get('/', async (req, res) => {
         offset: +size * (+page - 1)
     }
 
-    console.log(pagination)
 
     let events = await Event.findAll({
         ...pagination,
