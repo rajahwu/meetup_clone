@@ -413,12 +413,47 @@ router.delete('/:eventId', [restoreUser, requireAuth], async (req, res) => {
 
 router.get('/', async (req, res) => {
 
+    const queryParams = {
+        where: {}
+    }
+    
+    if(req.query.name) {
+        queryParams.where.name = req.query.name
+    }
+
+    if(req.query.type) {
+        queryParams.where.type = req.query.type
+    }
+
+    if(req.query.startDate) {
+        queryParams.where.type = req.query.startDate
+    }
+
+    let { page, size, name, type, startDate } = req.query
+    // console.log(queryParams)
+
+    if (Number.isNaN(page) || page <= 0 || !size) page = 1;
+    if (Number.isNaN(size) || size <= 0 || !size) size = 4;
+
+    const pagination = {
+        limit: +size,
+        offset: +size * (+page - 1)
+    }
+
+    console.log(pagination)
+
     let events = await Event.findAll({
+        ...pagination,
         attributes: {exclude: ['createdAt', 'updatedAt', 'description', 'price', 'capacity']},
         include: [
             { model: Venue, attributes: ['id', 'city', 'state'] },
             { model: Group, attributes: ['id', 'name', 'city', 'state'] }
         ],
+        // limit: parseInt(size),
+        // offset: parseInt(size) * (parseInt(page)),
+        ... queryParams,
+        ...pagination
+
     })
 
     const eventIds = dataGen.utils.getIds(events)
