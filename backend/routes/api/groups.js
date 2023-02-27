@@ -394,12 +394,19 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
 router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
 
     const { user } = req
+
     const group = await Group.findByPk(req.params.groupId)
     if(!group) {
         const err = new Error()
         err.message = "Group couldn't be found"
         err.statusCode = 404
         throw err
+    }
+
+    if(!req.params.memberId) {
+            const err = new Error('Member Id requried')
+            err.statusCode = 400
+            throw err
     }
 
     const membership = await Membership.findOne({
@@ -412,7 +419,6 @@ router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, re
         throw err
     }
     
-
     if(membership) {
         membership.destroy() 
         res.json({message: "Successfully deleted membership from group"})

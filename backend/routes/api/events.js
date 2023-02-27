@@ -215,7 +215,14 @@ router.delete('/:eventId/attendance', [restoreUser, requireAuth], async (req, re
     }
 
     const group = await Group.findByPk(event.groupId)
+
     const { userId } = req.body
+
+    if(!userId) {
+        const err = new Error('User Id requried')
+        err.statusCode = 400
+        throw err
+    }
 
     const attendance = await Attendance.findOne({
         where: { userId: userId, eventId: req.params.eventId }
@@ -365,11 +372,22 @@ router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, r
 })
 
 router.delete('/:eventId', [restoreUser, requireAuth], async (req, res) => {
-    const { user } = req.body
+    const { user } = req
     
     const event = await Event.findByPk(req.params.eventId)
+    if(!event) {
+        const err = new Error('Event couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
 
     const group = await Group.findByPk(event.groupId)
+    console.log(user.id)
+    if(!group) {
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
 
     const membershipStatus = await Membership.findAll({
         where: { groupId: group.id, status: 'co-host', userId: user.id }
