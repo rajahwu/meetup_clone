@@ -111,7 +111,7 @@ router.get('/:groupId/events', async (req, res) => {
 
     if(!groupIds.includes(+req.params.groupId)) {
         const err = new Error('Group does not exist')
-        err.status = 404
+        err.statusCode = 404
         throw err
     }
     const Events = { Events: [] }
@@ -248,7 +248,7 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
         where: { groupId: req.params.groupId, userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.userId !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -345,7 +345,7 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
 
     const { memberId, status } = req.body
 
-    const member = await User.findByPk(memberId)
+    const member = await Membership.findByPk(memberId)
 
     if(!member) {
         const err = new Error('Validation Error')
@@ -357,7 +357,7 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
 
     
     let membership = await Membership.findOne({
-        where: {groupId: group.id, userId: memberId}
+        where: {groupId: group.id, userId: member.userId}
     })
 
     
@@ -396,6 +396,7 @@ router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, re
     const { user } = req
 
     const group = await Group.findByPk(req.params.groupId)
+
     if(!group) {
         const err = new Error()
         err.message = "Group couldn't be found"
@@ -403,7 +404,7 @@ router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, re
         throw err
     }
 
-    if(!req.params.memberId) {
+    if(!req.body.memberId) {
             const err = new Error('Member Id requried')
             err.statusCode = 400
             throw err
@@ -503,7 +504,7 @@ const validateGroup = ((req, res, next) => {
 
     }
 
-    if(!["Online", "In person"].includes(type)) {
+    if(type && !["Online", "In person"].includes(type)) {
         err.errors.type = "Type must be 'Online or 'In person"
 
     }
@@ -534,8 +535,8 @@ const parseGroup = ( async (req, res, next) => {
     let group = await Group.findByPk(req.params.groupId)
     if(!group){
         const err = new Error('')
-        err.message = "Groups couldn't be found",
-        err.statuscode = 404
+        err.message = "Group couldn't be found",
+        err.statusCode = 404
         throw err
     }
     group = JSON.parse(JSON.stringify(group))
@@ -548,8 +549,8 @@ router.get('/:groupId', async (req, res) => {
     const groupIds = dataGen.utils.getIds(groups)
 
     if(!groupIds.includes(+req.params.groupId)) {
-        const err = new Error('Group does not exist')
-        err.status = 404
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
         throw err
     }
 
@@ -581,10 +582,17 @@ router.get('/:groupId', async (req, res) => {
 })
 
 router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup ], async (req, res) => {
-   
+    const { user } = req
     const group = await Group.findByPk(req.params.groupId)
-    await group.update(req.body)
-    res.json(group)
+    if(group.organizerId !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    } else {
+        await group.update(req.body)
+        res.json(group)
+    }
+   
 })
 
 router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
@@ -594,7 +602,7 @@ router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
     if(!group){
         const err = new Error('')
         err.message = "Groups couldn't be found",
-        err.statuscode = 404
+        err.statusCode = 404
         throw err
     }
 
@@ -629,7 +637,6 @@ router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => 
 })
 
 router.get('/', async (req, res) => {
-    console.log('something')
     const Groups = { Groups: [] }
 
     let groups = await Group.findAll()

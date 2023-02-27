@@ -60,7 +60,7 @@ router.get('/:eventId/attendees', [restoreUser, requireAuth], async (req, res) =
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
     
-    if(group.organizerId !== user.id && membershipStatus.userId !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -250,8 +250,8 @@ router.get('/:eventId', async (req, res) => {
     const eventIds = dataGen.utils.getIds(events)
 
     if(!eventIds.includes(+req.params.eventId)) {
-        const err = new Error('Event does not exist')
-        err.status = 404
+        const err = new Error('Event couldn\'t be found')
+        err.statusCode = 404
         throw err
     }
 
