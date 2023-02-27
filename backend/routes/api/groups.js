@@ -6,7 +6,7 @@ const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = requir
 const { group } = require('../../db/data_generator');
 
 
-router.get('/:groupId/venues', async (req, res) => {
+router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
 
     if(!group) {
@@ -14,6 +14,21 @@ router.get('/:groupId/venues', async (req, res) => {
         err.statusCode = 404
         throw err
     }
+
+    const { user } = req
+
+    const groupStatus = await Membership.findAll({
+        where: { 
+            groupId: req.params.groupId,
+             userId: user.id }
+    })
+
+    if (group.organizerId !== user.id && groupStatus.status !== "co-host") {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
+
     const Venues = { Venues: [] }
     const venues = await Venue.findAll({
         attributes: {exclude: ['createdAt', 'updatedAt']},
@@ -35,11 +50,13 @@ router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => 
     }
     const groupStatus = await Membership.findAll({
         where: { 
-            groupId: req.params.getId || null,
-             userId: user.id }
+            groupId: req.params.groupId,
+            userId: user.id }
     })
     if (group.organizerId !== user.id && groupStatus.status !== "co-host") {
-      throw new Error('You cant do this')
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
     }
 
     const { address, city, state, lat, lng } = req.body
@@ -143,7 +160,9 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
                  userId: user.id }
         })
         if (group.organizerId !== user.id && groupStatus.status !== "co-host") {
-          throw new Error('You cant do this')
+            const err = new Error('Forbidden')
+            err.statusCode = 403
+            throw err
         }
 
         let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
@@ -278,18 +297,20 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
         where: { userId: user.id, groupId: req.params.groupId }
     })
 
-    membershipStatus = JSON.parse(JSON.stringify(membershipStatus))
-
 
     if(membershipStatus) {
         const err = new Error('')
         err.statusCode = 400
-        err.message = membershipStatus.status === "member" || membershipStatus.status === "co-host" ?
-        "User is already a member"
-        : "Membership has already been requested"
+        if(membershipStatus.status === "pending") {
+            err.message = "Membership has already been requested"
+            throw err
+        }
+
+        if(membershipStatus.status === "member" || membershipStatus.status === "co-host") {
+        err.message = "User is already a member of the group"
         throw err
     }
-    
+} 
     const newMembership = await Membership.create({
         userId: user.id,
         groupId: req.params.groupId,
@@ -310,10 +331,11 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     if(!group) {
         const err = new Error('Group couldn\'t be found')
         err.statusCode = 404
+        throw err
     }
     
     const membershipStatus = Membership.findOne({
-        where: { groupId: req.params.groupId, status: "co-host" }
+        where: { groupId: req.params.groupId, status: "co-host", userId: user.id }
     })
    
     if(group.organizerId !== user.id && membershipStatus.userId !== user.id) {
@@ -324,7 +346,6 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
 
     const { memberId, status } = req.body
 
-    
     const member = await User.findByPk(memberId)
 
     if(!member) {
@@ -344,8 +365,8 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     if(!membership) {
         const err = new Error('')
         err.errors = {}
-        err.errors.memberId = 'Membership between the user and the group does not exits'
         err.statusCode = 400
+        err.errors.memberId = 'Membership between the user and the group does not exits'
         throw err
     }
 
@@ -354,6 +375,7 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         err.errors = {}
         err.statusCode = 400
         err.errors = 'Cannot change a membership status to pending'
+        throw err
         
     }
 
@@ -380,8 +402,8 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
     }
     const { user } = req
     if(group.organizerId !== user.id) {
-        const err = new Error('')
-        err.message = "Group must be owned by user"
+        const err = new Error('Forbidden')
+        err.statusCode = 403
         throw err
     }
 
@@ -422,7 +444,7 @@ router.get('/current', [restoreUser, requireAuth], async (req, res) => {
             where: { groupId: groups[i].id }
         })
 
-       groups[i] = Object.assign(groups[i], { numMembers, previewImage: previewImage['url'] || null })
+       groups[i] = Object.assign(groups[i], { numMembers, previewImage: previewImage ? previewImage['url'] : null })
     }
 
  
@@ -538,7 +560,7 @@ router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
         err.statuscode = 404
         throw err
     }
-    
+
     if(group.organizerId === user.id) {
         await Group.destroy({
             where: {id: req.params.groupId}
@@ -548,7 +570,9 @@ router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
             "statusCode": 200
         })
     } else {
-        err = new Error('Group must belong to the user')
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
     }
 })
 

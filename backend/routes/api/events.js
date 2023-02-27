@@ -20,12 +20,13 @@ router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
         where: {id: event.groupId}
     })
     const membershipStatus = Membership.findAll({
-        where: { groupId: group.id, status: 'co-host' }
+        where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.orginizerId !== user.id && !membershipStatus) {
-        const err = new Error()
-        err.statusCode = 400
+    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
     }
     
     const { url, preview } = req.body
@@ -276,7 +277,7 @@ router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, r
     const group = await Group.findByPk(event.groupId)
 
     const membershipStatus = await Membership.findAll({
-        where: { groupId: group.id, status: 'co-host' }
+        where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
     if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
