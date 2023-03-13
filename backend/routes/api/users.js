@@ -84,7 +84,7 @@ router.post('/', [validateUser, validateSignup], async (req, res) => {
     user = JSON.parse(JSON.stringify(user))
     user.token = ""
 
-
+    console.log('login')
     return res.json({user: {
         id: user.id,
         firstName: user.firstName,
