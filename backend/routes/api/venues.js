@@ -54,11 +54,11 @@ router.put('/:venueId', [restoreUser, requireAuth, validateVenue], async (req, r
 
     const group = await Group.findByPk(venue.groupId)
 
-    const membershipStatus = await Membership.findAll({
+    const membershipStatus = await Membership.findOne({
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
