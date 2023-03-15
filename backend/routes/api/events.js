@@ -350,7 +350,7 @@ router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, r
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -395,7 +395,7 @@ router.delete('/:eventId', [restoreUser, requireAuth], async (req, res) => {
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err

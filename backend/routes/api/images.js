@@ -22,7 +22,7 @@ router.delete('/group-images/:imageId', [restoreUser, requireAuth], async (req, 
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -52,7 +52,7 @@ router.delete('/event-images/:imageId', [restoreUser, requireAuth], async(req, r
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+    if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
