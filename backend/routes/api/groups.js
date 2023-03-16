@@ -452,7 +452,6 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
     }
 
     const { url, preview } = req.body
-    console.log(preview)
     if(preview) {
         const images = await GroupImage.findAll({where: {groupId: group.id}})
         for(let i = 0; i < images.length; i++) {
