@@ -339,19 +339,17 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         err.statusCode = 404
         throw err
     }
-    
     const membershipStatus = await Membership.findOne({
         where: { groupId: req.params.groupId, status: "co-host", userId: user.id }
     })
    
-    if((group.organizerId !== user.id && !membershipStatus) || (req.body.status === 'co-host' && membershipStatus.status === "co-host")) {
+    if((group.organizerId !== user.id && !membershipStatus) || (req.body.status === 'co-host' && membershipStatus?.status === "co-host")) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
     }
 
     const { memberId, status } = req.body
-
     const member = await Membership.findByPk(memberId)
 
     if(!member) {
@@ -367,6 +365,7 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         where: {groupId: group.id, userId: member.userId}
     })
 
+    console.log([member.toJSON(), membership.toJSON()])
     
     if(!membership) {
         const err = new Error('')

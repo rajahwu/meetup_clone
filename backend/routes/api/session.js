@@ -9,7 +9,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 const parseCredential = (req, res, next) => {
     const err = new Error()
     err.errors = {}
-    const { email, password } = req.body
+    const { email, password, credential } = req.body
     if(!email) {
         err.errors.email = 'Email is required'
     }
@@ -30,12 +30,6 @@ const parseCredential = (req, res, next) => {
         req.body.credential = req.body.username
     }
     next()
-    // if(req.body.email) {
-    //     req.body.credential = req.body.email
-    // } else if (req.body.username) {
-    //     req.body.credential = req.body.username
-    // }
-    // next()
 }
 
 const validateLogin = [
