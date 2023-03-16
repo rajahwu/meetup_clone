@@ -158,7 +158,7 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
             throw err
         }
 
-        const membershipStatus = await Membership.findAll({
+        const membershipStatus = await Membership.findOne({
             where: { 
                 groupId: req.params.groupId,
                  userId: user.id,
@@ -324,7 +324,7 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
     })
 
     res.json({
-        memberId: newMembership.id,
+        memberId: newMembership.userId,
         status: newMembership.status
     })
 } )
@@ -388,9 +388,9 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     membership = await membership.update({status})
     
     res.json({
-        id: membership.userId,
+        id: membership.id,
         groupId: membership.groupId,
-        memberId: membership.id,
+        memberId: membership.userId,
         status: membership.status
     })
 

@@ -11,7 +11,7 @@ router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
     const event = await Event.findByPk(req.params.eventId)
     
     if(!event) {
-        const err = new Error('Group couldn\'t be found')
+        const err = new Error('Event couldn\'t be found')
         err.statusCode = 404
         throw err
     }
@@ -196,7 +196,6 @@ router.put('/:eventId/attendance', [restoreUser, requireAuth], async (req, res) 
     }
 
     attendance = await attendance.update({status})
-    console.log(attendance.id)
 
     res.json({
         id: attendance.id,
