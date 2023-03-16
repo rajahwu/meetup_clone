@@ -19,11 +19,15 @@ router.post('/:eventId/images',[restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findOne({
         where: {id: event.groupId}
     })
-    const membershipStatus = Membership.findAll({
+    const membershipStatus = await Membership.findOne({
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
 
-    if(group.organizerId !== user.id && membershipStatus.id !== user.id) {
+    const attendee = await Attendance.findOne({
+        where: {eventId: event.id, userId: user.id}
+    })
+
+    if(group.organizerId !== user.id && !membershipStatus && !attendee) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -53,10 +57,9 @@ router.get('/:eventId/attendees', [restoreUser, requireAuth], async (req, res) =
         throw err
     }
 
-    console.log(event)
     const group = await Group.findByPk(event.groupId)
     
-    const membershipStatus = await Membership.findAll({
+    const membershipStatus = await Membership.findOne({
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
     
@@ -333,9 +336,9 @@ const validateEvent = (async (req, res, next) => {
 
 router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, res) => {
     const { user } = req
-
+    
     let event = await Event.findByPk(req.params.eventId)
-    const venue = await Venue.findByPk(event.venueId)
+    const venue = await Venue.findByPk(event?.venueId)
     
     if(!event || !venue) {
         const err = new Error('')
@@ -343,13 +346,11 @@ router.put('/:eventId', [restoreUser, requireAuth, validateEvent], async (req, r
         err.statusCode = 404
         throw err
     }
-    
     const group = await Group.findByPk(event.groupId)
-
-    const membershipStatus = await Membership.findAll({
+    const membershipStatus = await Membership.findOne({
         where: { groupId: group.id, status: 'co-host', userId: user.id }
     })
-
+    
     if(group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
