@@ -161,7 +161,7 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
 
         const membershipStatus = await Membership.findAll({
             where: { 
-                groupId: req.params.getId,
+                groupId: req.params.groupId,
                  userId: user.id,
                 status: "co-host" }
         })
