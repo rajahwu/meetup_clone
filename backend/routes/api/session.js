@@ -46,7 +46,7 @@ const validateLogin = [
 const router = express.Router();
 
 
-router.post('/', [parseCredential, validateLogin], async (req, res, next) => {
+router.post('/', [validateLogin], async (req, res, next) => {
     const { credential, password } = req.body;
 
     let user = await User.login({ credential, password });

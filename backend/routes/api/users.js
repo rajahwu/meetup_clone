@@ -84,14 +84,14 @@ router.post('/', [validateUser, validateSignup], async (req, res) => {
     user = JSON.parse(JSON.stringify(user))
     user.token = ""
 
-
-    return res.json({
+    console.log('login')
+    return res.json({user: {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         token: user.token
-    });
+    }});
 })
 
 router.use((err, req, res, next) => {

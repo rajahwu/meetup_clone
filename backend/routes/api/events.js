@@ -273,8 +273,10 @@ router.get('/:eventId', async (req, res) => {
 
     event = JSON.parse(JSON.stringify(event))
     event.numAttending = numAttending
-
-    event.price = event.price.toFixed(2)
+    
+    if(event.price && typeof event.price === "number") {
+        event.price = parseInt(event.price).toFixed(2)
+    }
     
     res.json(event)
 })

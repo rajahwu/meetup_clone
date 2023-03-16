@@ -3,6 +3,7 @@ const router = express.Router()
 const dataGen = require('../../db/data_generator')
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Group, GroupImage, User, Membership, Venue, Event, Attendance } = require('../../db/models');
+const { groupImage } = require('../../db/data_generator');
 
 
 router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
@@ -670,8 +671,10 @@ router.get('/', async (req, res) => {
             attriubtes: ['url']
         })
         
+
         previewImage = JSON.parse(JSON.stringify(previewImage))
         groups[i].numMembers = users
+        
         if(previewImage && previewImage.preview) {
             groups[i].previewImage = previewImage['url']
         } else {
