@@ -159,7 +159,7 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
             throw err
         }
 
-        const membershipStatus = await Membership.findAll({
+        const membershipStatus = await Membership.findOne({
             where: { 
                 groupId: req.params.groupId,
                  userId: user.id,
@@ -325,7 +325,7 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
     })
 
     res.json({
-        memberId: newMembership.id,
+        memberId: newMembership.userId,
         status: newMembership.status
     })
 } )
@@ -389,9 +389,9 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     membership = await membership.update({status})
     
     res.json({
-        id: membership.userId,
+        id: membership.id,
         groupId: membership.groupId,
-        memberId: membership.id,
+        memberId: membership.userId,
         status: membership.status
     })
 
@@ -453,6 +453,16 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
     }
 
     const { url, preview } = req.body
+    console.log(preview)
+    if(preview) {
+        const images = await GroupImage.findAll({where: {groupId: group.id}})
+        for(let i = 0; i < images.length; i++) {
+            if(images[i].preview === true) {
+                const image = Object.assign(images[i].toJSON(), {preview: false})
+                await images[i].update(image)
+            }
+        }
+}
     
     const newImage = {
         url, preview,
@@ -665,10 +675,11 @@ router.get('/', async (req, res) => {
 
         previewImage = JSON.parse(JSON.stringify(previewImage))
         groups[i].numMembers = users
-        if(previewImage) {
+        
+        if(previewImage && previewImage.preview) {
             groups[i].previewImage = previewImage['url']
         } else {
-            groups[i].previewImage = null
+            groups[i].previewImage = 'no preview image'
         }
     }
 

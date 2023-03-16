@@ -10,13 +10,13 @@ const parseCredential = (req, res, next) => {
     const err = new Error()
     err.errors = {}
     const { email, password, credential } = req.body
-    if(!email) {
-        err.errors.email = 'Email is required'
-    }
+    // if(!email) {
+    //     err.errors.email = 'Email is required'
+    // }
 
-    if(!password) {
-        err.errors.password = 'Password is required'
-    }
+    // if(!password) {
+    //     err.errors.password = 'Password is required'
+    // }
 
     if(Object.keys(err.errors).length) {
         err.message = "Validation Error"
