@@ -452,6 +452,16 @@ router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => 
     }
 
     const { url, preview } = req.body
+    console.log(preview)
+    if(preview) {
+        const images = await GroupImage.findAll({where: {groupId: group.id}})
+        for(let i = 0; i < images.length; i++) {
+            if(images[i].preview === true) {
+                const image = Object.assign(images[i].toJSON(), {preview: false})
+                await images[i].update(image)
+            }
+        }
+}
     
     const newImage = {
         url, preview,
@@ -663,10 +673,10 @@ router.get('/', async (req, res) => {
         
         previewImage = JSON.parse(JSON.stringify(previewImage))
         groups[i].numMembers = users
-        if(groups[i].previewImage) {
+        if(previewImage && previewImage.preview) {
             groups[i].previewImage = previewImage['url']
         } else {
-            groups[i].previewImage = null
+            groups[i].previewImage = 'no preview image'
         }
     }
 
