@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const dataGen = require('../../db/data_generator')
+const {Op} = require("sequelize")
 const { Event, Attendance, Venue, Group, EventImage, User, Membership } = require('../../db/models');
 const { restoreUser, requireAuth } = require('../../utils/auth');
 
@@ -420,7 +421,7 @@ router.get('/', async (req, res) => {
     }
     
     if(req.query.name) {
-        queryParams.where.name = req.query.name
+        queryParams.where.name =  {[Op.substring]: req.query.name}
     }
 
     if(req.query.type) {
@@ -468,12 +469,12 @@ router.get('/', async (req, res) => {
         })
 
         let previewImage = await EventImage.findOne({
-            where: { eventId: eventIds[i]}
+            where: { eventId: eventIds[i], preview: true}
         })
 
         previewImage = JSON.parse(JSON.stringify(previewImage))
         events[i].numAttending = numAttending
-        events[i].previewImage = previewImage ? previewImage['url'] : null
+        events[i].previewImage = previewImage ? previewImage['url'] : 'no preview image'
 
         if(events[i].type === "Online") {
             events[i].Venue = null
