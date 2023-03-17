@@ -457,8 +457,10 @@ router.get('/', async (req, res) => {
         ...pagination
 
     })
+    console.log('something')
 
     const eventIds = dataGen.utils.getIds(events)
+    console.log(eventIds)
     const Events = { Events: [] }
 
     events = JSON.parse(JSON.stringify(events))
