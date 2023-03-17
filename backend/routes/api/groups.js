@@ -252,6 +252,12 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
 
     const group = await Group.findByPk(req.params.groupId)
 
+    if (!group) {
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+
     const membershipStatus = await Membership.findOne({
         where: { groupId: req.params.groupId, userId: user.id }
     })
