@@ -9,7 +9,7 @@ const { groupImage } = require('../../db/data_generator');
 router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
 
-    if(!group) {
+    if (!group) {
         const err = new Error('Group Couldn\'t be found')
         err.statusCode = 404
         throw err
@@ -18,11 +18,11 @@ router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
 
     const membershipStatus = await Membership.findOne({
-        where: { 
+        where: {
             groupId: req.params.groupId,
-             userId: user.id,
+            userId: user.id,
             status: "co-host"
-            }
+        }
     })
 
     if (group.organizerId !== user.id && !membershipStatus) {
@@ -33,8 +33,8 @@ router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
 
     const Venues = { Venues: [] }
     const venues = await Venue.findAll({
-        attributes: {exclude: ['createdAt', 'updatedAt']},
-        where: { groupId: req.params.groupId,  }
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        where: { groupId: req.params.groupId, }
     })
     Venues.Venues = [...venues]
     res.json(Venues)
@@ -43,20 +43,20 @@ router.get('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
 router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
     const { user } = req
-    if(!group) {
+    if (!group) {
         const err = new Error('Group Couldn\'t be found')
         err.statusCode = 404
         throw err
     }
-    
+
     const membershipStatus = await Membership.findOne({
-        where: { 
+        where: {
             groupId: req.params.groupId,
             userId: user.id,
             status: 'co-host'
         }
     })
-    
+
 
     if (group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
@@ -68,28 +68,28 @@ router.post('/:groupId/venues', [restoreUser, requireAuth], async (req, res) => 
     const err = new Error('Validation Error')
     err.errors = {}
 
-    if(!address) {
+    if (!address) {
         err.errors.address = "Street address is requried"
     }
 
-    if(!city) {
+    if (!city) {
         err.errors.city = "City is required"
     }
 
-    if(!state) {
+    if (!state) {
         err.errors.state = "State is required"
     }
 
-    if(!lat || (+lat > 90 || +lat < -90)) {
+    if (!lat || (+lat > 90 || +lat < -90)) {
         err.errors.lat = "Latitude is not valid"
     }
 
-    if(!lng || (+lng > 180 || +lng < -180)) {
+    if (!lng || (+lng > 180 || +lng < -180)) {
         err.errors.lng = "Longitude is not valid"
     }
 
 
-    if(Object.keys(err.errors).length) {
+    if (Object.keys(err.errors).length) {
         err.message = "Validation Error"
         err.statusCode = 400
         throw err
@@ -115,7 +115,7 @@ router.get('/:groupId/events', async (req, res) => {
     const groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
 
-    if(!groupIds.includes(+req.params.groupId)) {
+    if (!groupIds.includes(+req.params.groupId)) {
         const err = new Error('Group does not exist')
         err.statusCode = 404
         throw err
@@ -123,25 +123,25 @@ router.get('/:groupId/events', async (req, res) => {
     const Events = { Events: [] }
 
     let events = await Event.findAll({
-        attributes: {exclude: ['description', 'capacity', 'price', 'createdAt', 'updatedAt']},
-        include: [{ model: Venue, attributes: ['id', 'city', 'state'] }, {model: Group, attributes: ['id', 'name', 'city', 'state']}],
-        where: {groupId: req.params.groupId}
+        attributes: { exclude: ['description', 'capacity', 'price', 'createdAt', 'updatedAt'] },
+        include: [{ model: Venue, attributes: ['id', 'city', 'state'] }, { model: Group, attributes: ['id', 'name', 'city', 'state'] }],
+        where: { groupId: req.params.groupId }
     })
 
     events = JSON.parse(JSON.stringify(events))
 
-    for(let event of events) {
+    for (let event of events) {
         const numAttending = await Attendance.count({
             where: { eventId: event.id }
         })
 
         const previewImage = await GroupImage.findOne({
             attributes: ['url'],
-            where: {groupId: req.params.groupId}
+            where: { groupId: req.params.groupId, preview: true }
         })
 
         event.numAttending = numAttending
-        event.previewImage = previewImage ?  previewImage['url'] : null
+        event.previewImage = previewImage ? previewImage['url'] : 'no preview image'
 
         Events.Events.push(event)
     }
@@ -150,100 +150,101 @@ router.get('/:groupId/events', async (req, res) => {
 })
 
 router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => {
-        const { user } = req
-        const group = await Group.findByPk(req.params.groupId)
+    const { user } = req
+    const group = await Group.findByPk(req.params.groupId)
 
-        if(!group) {
-            const err = new Error('Group couldn\'t be found')
-            err.statusCode = 404
-            throw err
+    if (!group) {
+        const err = new Error('Group couldn\'t be found')
+        err.statusCode = 404
+        throw err
+    }
+
+    const membershipStatus = await Membership.findOne({
+        where: {
+            groupId: req.params.groupId,
+            userId: user.id,
+            status: "co-host"
         }
+    })
+    if (group.organizerId !== user.id && !membershipStatus) {
+        const err = new Error('Forbidden')
+        err.statusCode = 403
+        throw err
+    }
 
-        const membershipStatus = await Membership.findOne({
-            where: { 
-                groupId: req.params.groupId,
-                 userId: user.id,
-                status: "co-host" }
-        })
-        if (group.organizerId !== user.id && !membershipStatus) {
-            const err = new Error('Forbidden')
-            err.statusCode = 403
-            throw err
-        }
+    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+    const err = new Error('Validation error')
+    err.errors = {}
 
-        let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
-        const err = new Error('Validation error')
-        err.errors = {}
+    const venue = await Venue.findByPk(venueId)
+    if (!venue) {
+        err.errors.venue = "Venue does not exist"
+    }
 
-        const venue = await Venue.findByPk(venueId)
-        if(!venue) {
-            err.errors.venue = "Venue does not exist"
-        }
+    if (name.length < 5) {
+        err.errors.name = "Name must be at least 5 characters"
+    }
 
-        if(name.length < 5) {
-            err.errors.name = "Name must be at least 5 characters"
-        }
+    if (!["Online", "In person"].includes(type)) {
+        err.errors.type = "Type must be Online or In person"
+    }
 
-        if(!["Online", "In person"].includes(type)) {
-            err.errors.type = "Type must be Online or In person"
-        }
+    if (typeof capacity !== 'number') {
+        err.errors.capacity = "Capacity must be an integer"
+    }
 
-        if(typeof capacity !== 'number') {
-            err.errors.capacity = "Capacity must be an integer"
-        }
+    const priceRegex = new RegExp(/\d+\.\d{1,2}/)
+    if (typeof price !== 'number' || !priceRegex.test(price.toFixed(2).toString())) {
+        err.errors.price = "Price invalid"
+    }
 
-        const priceRegex = new RegExp(/\d+\.\d{1,2}/)
-        if(typeof price !== 'number' || !priceRegex.test(price.toFixed(2).toString())) {
-            err.errors.price = "Price invalid"
-        }
+    if (!description) {
+        err.errors.description = "Description is requried"
+    }
 
-        if(!description) {
-            err.errors.description = "Description is requried"
-        }
-        
-        if(Date.parse(startDate) < Date.now()) {
-            err.errors.startDate = "Start date must be in the future"
-        }
+    if (Date.parse(startDate) < Date.now()) {
+        err.errors.startDate = "Start date must be in the future"
+    }
 
-        if(Date.parse(startDate) > Date.parse(endDate)) {
-            err.errors.endDate = "End date is less than start date"
-        }
+    if (Date.parse(startDate) > Date.parse(endDate)) {
+        err.errors.endDate = "End date is less than start date"
+    }
 
-        if(Object.keys(err.errors).length) {
-            err.message = "Validation Error"
-            err.statusCode = 400
-            throw err
-        }
+    if (Object.keys(err.errors).length) {
+        err.message = "Validation Error"
+        err.statusCode = 400
+        throw err
+    }
 
-        const {groupId} = req.params
-        console.log(groupId)
+    const { groupId } = req.params
+    console.log(groupId)
 
-        price = price.toFixed(2)
-        const event = await Event.create({
-            venueId,
-            groupId,
-            name,
-            type,
-            capacity,
-            price,
-            description,
-            startDate,
-            endDate
-        })
+    price = price.toFixed(2)
+    const event = await Event.create({
+        venueId,
+        groupId,
+        name,
+        type,
+        capacity,
+        price,
+        description,
+        startDate,
+        endDate
+    })
 
 
-        res.json({
-            id: event.id,
-            groupId: event.groupId,
-            venueId: event.venueId,
-            name: event.name,
-            type: event.type,
-            capacity: event.capacity,
-            price: event.price,
-            description: event.description,
-            startDate: event.startDate,
-            endDate: event.endDate
-        })
+    res.json({
+        id: event.id,
+        groupId: event.groupId,
+        venueId: event.venueId,
+        name: event.name,
+        type: event.type,
+        capacity: event.capacity,
+        price: event.price,
+        description: event.description,
+        startDate: event.startDate,
+        endDate: event.endDate
+    })
 })
 
 router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => {
@@ -255,7 +256,7 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
         where: { groupId: req.params.groupId, userId: user.id }
     })
 
-    if(group.organizerId !== user.id && !membershipStatus) {
+    if (group.organizerId !== user.id && !membershipStatus) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -265,7 +266,7 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
         attributes: ['id', 'firstName', 'lastName'],
         include: [
             {
-                model: Membership, 
+                model: Membership,
                 where: { groupId: req.params.groupId },
                 attributes: ['status']
             }
@@ -285,14 +286,14 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
             lastName,
             Membership: Memberships[0]
         })
-        
+
     }
-    res.json({Members: Members})
+    res.json({ Members: Members })
 })
 
 router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
-    if(!group) {
+    if (!group) {
         const err = Error('Group couldn\'t be found')
         err.statusCode = 404
         throw err
@@ -305,19 +306,19 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
     })
 
 
-    if(membershipStatus) {
+    if (membershipStatus) {
         const err = new Error('')
         err.statusCode = 400
-        if(membershipStatus.status === "pending") {
+        if (membershipStatus.status === "pending") {
             err.message = "Membership has already been requested"
             throw err
         }
 
-        if(membershipStatus.status === "member" || membershipStatus.status === "co-host") {
-        err.message = "User is already a member of the group"
-        throw err
+        if (membershipStatus.status === "member" || membershipStatus.status === "co-host") {
+            err.message = "User is already a member of the group"
+            throw err
+        }
     }
-} 
     const newMembership = await Membership.create({
         userId: user.id,
         groupId: req.params.groupId,
@@ -328,14 +329,14 @@ router.post('/:groupId/membership', [restoreUser, requireAuth], async (req, res)
         memberId: newMembership.userId,
         status: newMembership.status
     })
-} )
+})
 
 router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
 
     const group = await Group.findByPk(req.params.groupId)
 
-    if(!group) {
+    if (!group) {
         const err = new Error('Group couldn\'t be found')
         err.statusCode = 404
         throw err
@@ -343,17 +344,19 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     const membershipStatus = await Membership.findOne({
         where: { groupId: req.params.groupId, status: "co-host", userId: user.id }
     })
-   
-    if((group.organizerId !== user.id && !membershipStatus) || (req.body.status === 'co-host' && membershipStatus?.status === "co-host")) {
+
+    if ((group.organizerId !== user.id && !membershipStatus) || (req.body.status === 'co-host' && membershipStatus?.status === "co-host")) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
     }
 
     const { memberId, status } = req.body
-    const member = await Membership.findByPk(memberId)
+    const member = await User.findOne({
+        where: { id: memberId }
+    })
 
-    if(!member) {
+    if (!member) {
         const err = new Error('Validation Error')
         err.errors = {}
         err.statusCode = 400
@@ -361,14 +364,14 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         throw err
     }
 
-    
+
     let membership = await Membership.findOne({
-        where: {groupId: group.id, userId: member.userId}
+        where: { groupId: group.id, userId: memberId }
     })
 
     console.log([member.toJSON(), membership.toJSON()])
-    
-    if(!membership) {
+
+    if (!membership) {
         const err = new Error('')
         err.errors = {}
         err.statusCode = 400
@@ -376,18 +379,18 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
         throw err
     }
 
-    if(status === "pending" ) {
+    if (status === "pending") {
         const err = new Error('Validation Error')
         err.errors = {}
         err.statusCode = 400
         err.errors = 'Cannot change a membership status to pending'
         throw err
-        
+
     }
 
 
-    membership = await membership.update({status})
-    
+    membership = await membership.update({ status })
+
     res.json({
         id: membership.id,
         groupId: membership.groupId,
@@ -404,32 +407,32 @@ router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, re
 
     const group = await Group.findByPk(req.params.groupId)
 
-    if(!group) {
+    if (!group) {
         const err = new Error()
         err.message = "Group couldn't be found"
         err.statusCode = 404
         throw err
     }
 
-    if(!req.body.memberId) {
-            const err = new Error('Member Id requried')
-            err.statusCode = 400
-            throw err
+    if (!req.body.memberId) {
+        const err = new Error('Member Id requried')
+        err.statusCode = 400
+        throw err
     }
 
     const membership = await Membership.findOne({
         where: { userId: req.body.memberId, groupId: group.id }
     })
 
-    if(group.organizerId !== user.id && req.body.memberId !== user.id) {
+    if (group.organizerId !== user.id && req.body.memberId !== user.id) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
     }
-    
-    if(membership) {
-        membership.destroy() 
-        res.json({message: "Successfully deleted membership from group"})
+
+    if (membership) {
+        membership.destroy()
+        res.json({ message: "Successfully deleted membership from group" })
     } else {
         const err = new Error('Membership does not exist for this User')
         err.statusCode = 404
@@ -439,69 +442,69 @@ router.delete('/:groupId/membership', [restoreUser, requireAuth], async (req, re
 
 router.post('/:groupId/images', [restoreUser, requireAuth], async (req, res) => {
     const group = await Group.findByPk(req.params.groupId)
-    if(!group) {
+    if (!group) {
         const err = new Error()
         err.message = "Group couldn't be found"
         err.statusCode = 404
         throw err
     }
     const { user } = req
-    if(group.organizerId !== user.id) {
+    if (group.organizerId !== user.id) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
     }
 
     const { url, preview } = req.body
-    if(preview) {
-        const images = await GroupImage.findAll({where: {groupId: group.id}})
-        for(let i = 0; i < images.length; i++) {
-            if(images[i].preview === true) {
-                const image = Object.assign(images[i].toJSON(), {preview: false})
+    if (preview) {
+        const images = await GroupImage.findAll({ where: { groupId: group.id } })
+        for (let i = 0; i < images.length; i++) {
+            if (images[i].preview === true) {
+                const image = Object.assign(images[i].toJSON(), { preview: false })
                 await images[i].update(image)
             }
         }
-}
-    
+    }
+
     const newImage = {
         url, preview,
         groupId: req.params.groupId
-   }
+    }
 
     let image = await GroupImage.create(newImage)
     image = JSON.parse(JSON.stringify(image))
-    res.json({ 
-            id: image.id,
-            url: image.url,
-            preview: image.preview 
-        })
+    res.json({
+        id: image.id,
+        url: image.url,
+        preview: image.preview
+    })
 })
 
 router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
     let groups = await Group.findAll({
-        where: { organizerId: user.id}
+        where: { organizerId: user.id }
     })
 
     const groupIds = dataGen.utils.getIds(groups)
-    
+
     groups = JSON.parse(JSON.stringify(groups))
     console.log(groups)
 
 
-    for(let i = 0; i < groupIds.length; i++) {
+    for (let i = 0; i < groupIds.length; i++) {
         const numMembers = await Membership.count({
             where: { groupId: groups[i].id }
         })
         console.log(numMembers)
         const previewImage = await GroupImage.findOne({
-            where: { groupId: groups[i].id }
+            where: { groupId: groups[i].id, preview: true }
         })
 
-       groups[i] = Object.assign(groups[i], { numMembers, previewImage: previewImage ? previewImage['url'] : null })
+        groups[i] = Object.assign(groups[i], { numMembers, previewImage: previewImage ? previewImage['url'] : 'no preview image' })
     }
 
- 
+
     console.log(groups)
     res.json(groups)
 })
@@ -511,34 +514,34 @@ const validateGroup = ((req, res, next) => {
     const err = new Error('')
     err.errors = {}
 
-    if(name && name.length > 60) {
+    if (name && name.length > 60) {
         err.errors.name = "Name must be 60 characters or less"
     }
 
-    if(about && about.length < 50) {
-       err.errors.about = "About must be 50 characters or more"
+    if (about && about.length < 50) {
+        err.errors.about = "About must be 50 characters or more"
 
     }
 
-    if(type && !["Online", "In person"].includes(type)) {
+    if (type && !["Online", "In person"].includes(type)) {
         err.errors.type = "Type must be 'Online or 'In person"
 
     }
 
-    if(private && typeof req.body.private !== "boolean") {
+    if (private && typeof req.body.private !== "boolean") {
         console.log(req.body.private, typeof req.body.private)
         err.errors.private = "Private must be a boolean"
     }
 
-    if(!city) {
+    if (!city) {
         err.errors.city = "City is required"
     }
 
-    if(!state) {
+    if (!state) {
         err.errors.state = "State is required"
     }
 
-    if(Object.keys(err.errors).length) {
+    if (Object.keys(err.errors).length) {
         err.message = "Validation Error"
         err.statusCode = 400
         throw err
@@ -547,12 +550,12 @@ const validateGroup = ((req, res, next) => {
     }
 })
 
-const parseGroup = ( async (req, res, next) => {
+const parseGroup = (async (req, res, next) => {
     let group = await Group.findByPk(req.params.groupId)
-    if(!group){
+    if (!group) {
         const err = new Error('')
         err.message = "Group couldn't be found",
-        err.statusCode = 404
+            err.statusCode = 404
         throw err
     }
     group = JSON.parse(JSON.stringify(group))
@@ -564,7 +567,7 @@ router.get('/:groupId', async (req, res) => {
     const groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
 
-    if(!groupIds.includes(+req.params.groupId)) {
+    if (!groupIds.includes(+req.params.groupId)) {
         const err = new Error('Group couldn\'t be found')
         err.statusCode = 404
         throw err
@@ -572,8 +575,8 @@ router.get('/:groupId', async (req, res) => {
 
     let group = await Group.findByPk(req.params.groupId, {
         include: [
-            {model: GroupImage, attributes: ['id', 'url', 'preview']},
-            {model: Venue, attributes: { exclude: ['createdAt', 'updatedAt']} }
+            { model: GroupImage, attributes: ['id', 'url', 'preview'] },
+            { model: Venue, attributes: { exclude: ['createdAt', 'updatedAt'] } }
         ]
     })
 
@@ -590,17 +593,17 @@ router.get('/:groupId', async (req, res) => {
     })
 
     organizer = JSON.parse(JSON.stringify(organizer))
-    
+
     group.numMembers = users
     group.Organizer = organizer
-    
+
     res.json(group)
 })
 
-router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup ], async (req, res) => {
+router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup], async (req, res) => {
     const { user } = req
     const group = await Group.findByPk(req.params.groupId)
-    if(group.organizerId !== user.id) {
+    if (group.organizerId !== user.id) {
         const err = new Error('Forbidden')
         err.statusCode = 403
         throw err
@@ -608,23 +611,23 @@ router.put('/:groupId', [restoreUser, requireAuth, parseGroup, validateGroup ], 
         await group.update(req.body)
         res.json(group)
     }
-   
+
 })
 
 router.delete('/:groupId', [restoreUser, requireAuth], async (req, res) => {
     const { user } = req
     const group = await Group.findByPk(req.params.groupId)
 
-    if(!group){
+    if (!group) {
         const err = new Error('')
         err.message = "Groups couldn't be found",
-        err.statusCode = 404
+            err.statusCode = 404
         throw err
     }
 
-    if(group.organizerId === user.id) {
+    if (group.organizerId === user.id) {
         await Group.destroy({
-            where: {id: req.params.groupId}
+            where: { id: req.params.groupId }
         })
         return res.json({
             "message": "Successfully deleted",
@@ -644,8 +647,8 @@ router.post('/', [restoreUser, requireAuth, validateGroup], async (req, res) => 
 
     const newGroup = {
         name, about, type, private, city, state,
-        organizerId: user.id 
-   }
+        organizerId: user.id
+    }
 
     const group = await Group.create(newGroup)
 
@@ -657,25 +660,25 @@ router.get('/', async (req, res) => {
 
     let groups = await Group.findAll()
     const groupIds = dataGen.utils.getIds(groups)
-    
-    
+
+
     groups = JSON.parse(JSON.stringify(groups))
 
     for (let i = 0; i < groupIds.length; i++) {
         const users = await Membership.count({
-            where: {groupId: groupIds[i]}
+            where: { groupId: groupIds[i] }
         })
 
         let previewImage = await GroupImage.findOne({
             where: { groupId: groupIds[i] },
             attriubtes: ['url']
         })
-        
+
 
         previewImage = JSON.parse(JSON.stringify(previewImage))
         groups[i].numMembers = users
-        
-        if(previewImage && previewImage.preview) {
+
+        if (previewImage && previewImage.preview) {
             groups[i].previewImage = previewImage['url']
         } else {
             groups[i].previewImage = 'no preview image'
