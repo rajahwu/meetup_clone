@@ -495,8 +495,6 @@ router.get('/current', [restoreUser, requireAuth], async (req, res) => {
     const groupIds = dataGen.utils.getIds(groups)
 
     groups = JSON.parse(JSON.stringify(groups))
-    console.log(groups)
-
 
     for (let i = 0; i < groupIds.length; i++) {
         const numMembers = await Membership.count({
@@ -510,9 +508,7 @@ router.get('/current', [restoreUser, requireAuth], async (req, res) => {
         groups[i] = Object.assign(groups[i], { numMembers, previewImage: previewImage ? previewImage['url'] : 'no preview image' })
     }
 
-
-    console.log(groups)
-    res.json(groups)
+    res.json({Groups: groups})
 })
 
 const validateGroup = ((req, res, next) => {
