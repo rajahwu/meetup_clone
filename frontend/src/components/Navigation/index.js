@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
-import OpenModelButton from "../OpenModalButton";
+import OpenModelButton from "./OpenModalButton";
 import {SignupFormModal, LoginFormModal } from "../session"
 
 export default function Navigation({ isLoaded }) {
