@@ -1,4 +1,4 @@
-import { useModal } from "../../../context/Modal";
+import { useModal } from "../../../context/Modal"
 
 export default function OpenModelButton({
   modalComponent,
