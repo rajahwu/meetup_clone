@@ -1,4 +1,3 @@
-import LoginFormModal from "./session/LoginFormModal";
-import SignupFormPage from "./session/SingupFormPage";
+import Navigation from "./Navigation";
 
-export { LoginFormModal, SignupFormPage };
+export { Navigation };
