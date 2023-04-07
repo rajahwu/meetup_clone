@@ -385,7 +385,7 @@ router.delete('/:eventId', [restoreUser, requireAuth], async (req, res) => {
     }
 
     const group = await Group.findByPk(event.groupId)
-    console.log(user.id)
+
     if(!group) {
         const err = new Error('Group couldn\'t be found')
         err.statusCode = 404
@@ -433,7 +433,6 @@ router.get('/', async (req, res) => {
     }
 
     let { page, size, name, type, startDate } = req.query
-    // console.log(queryParams)
 
     if (Number.isNaN(page) || page <= 0 || !size) page = 1;
     if (Number.isNaN(size) || size <= 0 || !size) size = 4;
@@ -457,10 +456,9 @@ router.get('/', async (req, res) => {
         ...pagination
 
     })
-    console.log('something')
 
     const eventIds = dataGen.utils.getIds(events)
-    console.log(eventIds)
+
     const Events = { Events: [] }
 
     events = JSON.parse(JSON.stringify(events))

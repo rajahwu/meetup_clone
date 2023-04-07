@@ -1,12 +1,11 @@
-import {useState} from "react"
-import {useDispatch, useSelector} from "react-redux"
-import {Redirect} from "react-router-dom"
-import * as sessionActions from "../../../store/session"
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../../context/Modal";
+import * as sessionActions from "../../../store/session";
+import SignupFormCSS from "./SignupForm.module.css";
 
-
-export default function SignupFormPage() {
-    const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
+export default function SignupFormModal() {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -14,8 +13,7 @@ export default function SignupFormPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
-
-  if (sessionUser) return <Redirect to="/" />;
+  const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,20 +27,23 @@ export default function SignupFormPage() {
           lastName,
           password,
         })
-      ).catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
-      });
+      )
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
     }
     return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
+      confirmPassword:
+        "Confirm Password field must be the same as the Password field",
     });
   };
 
   return (
-    <>
+    <div className={SignupFormCSS.container}>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -105,8 +106,8 @@ export default function SignupFormPage() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <button type="submit" className={SignupFormCSS.btn}>Sign Up</button>
       </form>
-    </>
+    </div>
   );
 }

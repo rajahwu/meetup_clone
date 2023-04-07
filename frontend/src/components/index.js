@@ -1,4 +1,3 @@
-import LoginFormPage from "./session/LoginFormPage";
-import SignupFormPage from "./session/SingupFormPage";
+import Navigation from "./Navigation";
 
-export { LoginFormPage, SignupFormPage };
+export { Navigation };

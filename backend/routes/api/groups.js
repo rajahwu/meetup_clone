@@ -217,7 +217,6 @@ router.post('/:groupId/events', [restoreUser, requireAuth], async (req, res) => 
     }
 
     const { groupId } = req.params
-    console.log(groupId)
 
     price = price.toFixed(2)
     const event = await Event.create({
@@ -280,7 +279,6 @@ router.get('/:groupId/members', [restoreUser, requireAuth], async (req, res) => 
     })
 
     memberships = JSON.parse(JSON.stringify(memberships))
-    console.log(memberships)
 
     const Members = []
 
@@ -374,8 +372,6 @@ router.put('/:groupId/membership', [restoreUser, requireAuth], async (req, res) 
     let membership = await Membership.findOne({
         where: { groupId: group.id, userId: memberId }
     })
-
-    console.log([member.toJSON(), membership.toJSON()])
 
     if (!membership) {
         const err = new Error('')
@@ -500,7 +496,7 @@ router.get('/current', [restoreUser, requireAuth], async (req, res) => {
         const numMembers = await Membership.count({
             where: { groupId: groups[i].id }
         })
-        console.log(numMembers)
+        
         const previewImage = await GroupImage.findOne({
             where: { groupId: groups[i].id, preview: true }
         })
@@ -531,7 +527,6 @@ const validateGroup = ((req, res, next) => {
     }
 
     if (private && typeof req.body.private !== "boolean") {
-        console.log(req.body.private, typeof req.body.private)
         err.errors.private = "Private must be a boolean"
     }
 
