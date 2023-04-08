@@ -6,23 +6,27 @@ import { useSetModalClass } from "../../../hooks";
 
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
   };
-  
+
   const UserIcon = () => <i className="fa-solid fa-user"></i>;
-  
+
   const UserMenu = ({ user }) => {
-    const {container, background, content} = ProfileButtonCSS
-    useSetModalClass({container, background, content})
+    const { container, background, content } = ProfileButtonCSS;
+    useSetModalClass({ container, background, content });
     return (
       <>
+        <div>
+          <UserIcon />
+          <i className="fa-solid fa-caret-up"></i>
+        </div>
         <div style={{ display: "flex" }}>
           <ul>
             <div>
-              <li>{user.username}</li>
+              <li>Hello, {user.username}</li>
               <li>{user.firstname}</li>
               <li>{user.email}</li>
               <li>
