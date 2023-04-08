@@ -1,9 +1,9 @@
-import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import OpenModelButton from "./OpenModalButton";
 import { SignupFormModal, LoginFormModal } from "../session";
 import NavigationCSS from "./Navigation.module.css";
+import ModalCSS from "../../context/Modal.module.css";
 
 export default function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
@@ -32,9 +32,7 @@ export default function Navigation({ isLoaded }) {
 
   return (
     <nav className={NavigationCSS["nav-bar"]}>
-      <ul className={NavigationCSS["nav-links"]}>
-        {isLoaded && sessionLinks}
-      </ul>
+      <ul className={NavigationCSS["nav-links"]}>{isLoaded && sessionLinks}</ul>
     </nav>
   );
 }
