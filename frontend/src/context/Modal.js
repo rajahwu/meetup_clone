@@ -41,9 +41,9 @@ export function Modal() {
   if (!modalRef || !modalRef.current || !modalContent) return null;
 
   return ReactDOM.createPortal(
-    <div id="modal" className={ModalCSS.modal}>
-      <div id="modal-background" className={ModalCSS.background} onClick={closeModel} />
-      <div id="modal-content" className={ModalCSS.content}>{modalContent}</div>
+    <div id="modal" className={ModalCSS["modal"]}>
+      <div id="modal-background" className={ModalCSS["background"]} onClick={closeModel} />
+      <div id="modal-content" className={ModalCSS["content"]}>{modalContent}</div>
     </div>,
     modalRef.current
   );

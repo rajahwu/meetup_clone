@@ -2,7 +2,7 @@ import { useState } from "react";
 import * as sessionActions from "../../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
-import LoginFormCSS from "./LoginForm.module.css";
+import ModalFormCSS from "../ModalForm.module.css"
 
 export default function LoginFormModel() {
   const dispatch = useDispatch();
@@ -26,9 +26,9 @@ export default function LoginFormModel() {
   };
 
   return (
-    <div className={LoginFormCSS.container}>
+    <div className={ModalFormCSS["container"]}>
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit} className={LoginFormCSS.form}>
+      <form onSubmit={handleSubmit}>
           <label htmlFor="credential">
             <input
               id="credential"
@@ -50,7 +50,7 @@ export default function LoginFormModel() {
             />
           </label>
         {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit" className={LoginFormCSS.btn} 
+        <button type="submit" className={ModalFormCSS["btn"]} 
         disabled={credential < 4 || password < 6}
         >
           Log In
