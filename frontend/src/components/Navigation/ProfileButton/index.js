@@ -7,7 +7,6 @@ import { useSetModalClass } from "../../../hooks";
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
   
-  
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());

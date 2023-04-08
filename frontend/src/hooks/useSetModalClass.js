@@ -3,18 +3,19 @@ import { useModal } from "../context/Modal";
 
 export default function useSetModalClass(classNames) {
   const { setModalClass } = useModal();
-  const {container, background, content} = classNames
- 
-  console.log(classNames.background)
+
   useEffect(() => {
-    if (container && background && content) {
-      setModalClass({
-        container,
-        background,
-        content
-      });
-    } else {
-        setModalClass({})
+    if (!classNames) {
+      setModalClass({});
+      return;
     }
-  }, [setModalClass, container, background, content]);
+
+    if (classNames) {
+      setModalClass({
+        container: classNames.container,
+        background: classNames.background,
+        content: classNames.content
+      });
+    }
+  }, [setModalClass]);
 }
