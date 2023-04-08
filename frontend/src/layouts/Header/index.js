@@ -2,6 +2,7 @@ import HeaderCSS from "./Header.module.css";
 import { useHistory } from "react-router-dom";
 
 export default function Header({ children }) {
+
   const Logo = () => {
     const history = useHistory();
     const handleClick = (e) => {
@@ -9,7 +10,7 @@ export default function Header({ children }) {
     };
     return (
       <img
-        className={HeaderCSS.logo}
+        className={HeaderCSS["logo"]}
         src="../../../assets/hiwdt-logo.png"
         alt="logo"
         width="100"
@@ -20,7 +21,7 @@ export default function Header({ children }) {
   };
 
   return (
-    <div id="header" className={HeaderCSS.container}>
+    <div id="header" className={HeaderCSS["container"]}>
       <Logo />
       {children}
     </div>

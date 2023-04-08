@@ -26,9 +26,9 @@ export default function LoginFormModel() {
   };
 
   return (
-    <div className={LoginFormCSS.container}>
+    <div className={LoginFormCSS["container"]}>
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit} className={LoginFormCSS.form}>
+      <form onSubmit={handleSubmit}>
           <label htmlFor="credential">
             <input
               id="credential"
@@ -50,7 +50,7 @@ export default function LoginFormModel() {
             />
           </label>
         {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit" className={LoginFormCSS.btn} 
+        <button type="submit" className={LoginFormCSS["btn"]} 
         disabled={credential < 4 || password < 6}
         >
           Log In

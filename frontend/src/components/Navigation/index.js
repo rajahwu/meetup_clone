@@ -32,7 +32,7 @@ export default function Navigation({ isLoaded }) {
 
   return (
     <nav>
-      <ul className={NavigationCSS.nav}>
+      <ul className={NavigationCSS["nav-links"]}>
         {isLoaded && sessionLinks}
       </ul>
     </nav>

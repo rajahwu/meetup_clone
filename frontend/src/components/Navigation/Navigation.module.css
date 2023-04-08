@@ -1,7 +1,3 @@
-ul {
-    list-style: none;
-}
-
-.nav {
+.nav-links {
     display: flex;
 }
