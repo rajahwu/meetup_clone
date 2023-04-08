@@ -56,7 +56,13 @@ export default function LoginFormModel() {
           Log In
         </button>
 
-        <button type="button">Demo User</button>
+        <button type="button" onClick={() => {
+          const demoUser = {
+            credential: "Demo-lition",
+            password: "password"
+          }
+          dispatch(sessionActions.login(demoUser))
+        }}>Demo User</button>
       </form>
     </div>
   );
