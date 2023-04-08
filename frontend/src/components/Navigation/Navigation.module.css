@@ -1,3 +1,7 @@
+.nav-bar {
+    align-self: center;
+}
+
 .nav-links {
     display: flex;
 }

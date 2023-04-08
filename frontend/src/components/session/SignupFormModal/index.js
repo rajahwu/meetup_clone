@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
 import * as sessionActions from "../../../store/session";
-import SignupFormCSS from "./SignupForm.module.css";
+import ModalFormCSS from "../ModalForm.module.css"
 
 export default function SignupFormModal() {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ export default function SignupFormModal() {
   };
 
   return (
-    <div className={SignupFormCSS.container}>
+    <div className={ModalFormCSS.container}>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -106,7 +106,7 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit" className={SignupFormCSS.btn}>Sign Up</button>
+        <button type="submit" className={ModalFormCSS.btn}>Sign Up</button>
       </form>
     </div>
   );
