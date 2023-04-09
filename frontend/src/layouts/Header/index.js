@@ -1,7 +1,10 @@
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import HeaderCSS from "./Header.module.css";
 
 export default function Header({ children }) {
+  const sessionUser = useSelector((state) => state.session.user);
 
   const Logo = () => {
     const history = useHistory();
@@ -23,7 +26,10 @@ export default function Header({ children }) {
   return (
     <div id="header" className={HeaderCSS["container"]}>
       <Logo />
-      {children}
+      <div style={{display: "flex"}}>
+        {sessionUser && <NavLink to="/groups/new">Start a new Group</NavLink>}
+        {children}
+      </div>
     </div>
   );
 }

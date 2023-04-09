@@ -29,17 +29,17 @@ function App() {
           <Route exact path="/">
             <LandingPage />
           </Route>
-          <EventGroupHeader>
-            <Route path="/groups">
-              <GroupsListPage />
-            </Route>
-            <Route path="/events">
-              <EventsListPage />
-            </Route>
-          </EventGroupHeader>
           <Route exact path="/groups/new">
             <CreateGroupPage />
           </Route>
+          <EventGroupHeader>
+            <Route exact path="/groups">
+              <GroupsListPage />
+            </Route>
+            <Route exact path="/events">
+              <EventsListPage />
+            </Route>
+          </EventGroupHeader>
         </Switch>
       )}
     </>

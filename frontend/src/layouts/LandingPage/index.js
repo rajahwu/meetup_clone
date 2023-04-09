@@ -55,7 +55,7 @@ export default function LandingPage() {
 
         <Card
           titleText="Start a group"
-          linkTo="/test"
+          linkTo="/groups/new"
           isLoggedIn={isLoggedIn()}
           textContent="
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim

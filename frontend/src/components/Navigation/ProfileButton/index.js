@@ -1,11 +1,12 @@
 import { useDispatch } from "react-redux";
-import * as sessionActions from "../../../store/session";
-import OpenModelButton from "../OpenModalButton";
-import ProfileButtonCSS from "./ProfileButton.module.css";
-import { useSetModalClass } from "../../../hooks";
-import { useModal } from "../../../context/Modal";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { useModal } from "../../../context/Modal";
+import { useSetModalClass } from "../../../hooks";
+import OpenModelButton from "../OpenModalButton";
+import ProfileButtonCSS from "./ProfileButton.module.css";
+
+import * as sessionActions from "../../../store/session";
 
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
