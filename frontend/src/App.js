@@ -3,7 +3,13 @@ import { useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import { Navigation } from "./components";
-import { Header, LandingPage } from "./layouts";
+import {
+  Header,
+  LandingPage,
+  EventGroupHeader,
+  GroupsListPage,
+  EventsListPage,
+} from "./layouts";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,14 +23,24 @@ function App() {
       <Header>
         <Navigation isLoaded={isLoaded} />
       </Header>
-      {isLoaded && <Switch>
-        <Route exact path="/">
-          <LandingPage />
-        </Route>
-        <Route path="/test">
-          <div>Test</div>
-        </Route>
-      </Switch>}
+      {isLoaded && (
+        <Switch>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
+          <Route path="/test">
+            <div>Test</div>
+          </Route>
+          <EventGroupHeader>
+            <Route path="/groups">
+              <GroupsListPage />
+            </Route>
+            <Route path="/events">
+              <EventsListPage />
+            </Route>
+          </EventGroupHeader>
+        </Switch>
+      )}
     </>
   );
 }

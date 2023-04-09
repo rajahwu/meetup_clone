@@ -4,18 +4,19 @@ import OpenModelButton from "../OpenModalButton";
 import ProfileButtonCSS from "./ProfileButton.module.css";
 import { useSetModalClass } from "../../../hooks";
 import { useModal } from "../../../context/Modal";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
   const { setModalContent } = useModal();
 
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     setModalContent(null);
-    history.push("/")
+    history.push("/");
   };
 
   const UserIcon = () => <i className="fa-solid fa-user"></i>;
@@ -35,6 +36,9 @@ export default function ProfileButton({ user }) {
               <li>Hello, {user.username}</li>
               <li>{user.firstname}</li>
               <li>{user.email}</li>
+              <li>
+                <NavLink to="/groups" onClick={() => setModalContent(null)}>View Groups</NavLink>
+              </li>
               <li>
                 <button onClick={logout}>Logout</button>
               </li>

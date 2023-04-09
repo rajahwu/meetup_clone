@@ -1,5 +1,12 @@
+import { useSelector } from "react-redux";
+import {
+  Card,
+  TitleSection,
+  SubTitleSection,
+  CallToAction,
+  CardImage,
+} from "../../components";
 import LandingPageCSS from "./LandingPage.module.css";
-import { Card, TitleSection, SubTitleSection, CallToAction } from "../../components";
 
 const LandingPageCardContainer = ({ styleClassName, children }) => (
   <>
@@ -8,6 +15,9 @@ const LandingPageCardContainer = ({ styleClassName, children }) => (
 );
 
 export default function LandingPage() {
+  const sessionUser = useSelector((state) => state.session.user)
+  const isLoggedIn = () => sessionUser ? true : false
+  
   return (
     <>
       <TitleSection styleClassName="title-container" />
@@ -16,35 +26,50 @@ export default function LandingPage() {
 
       <LandingPageCardContainer styleClassName="card-container">
         <Card
-          imageWidth="100"
-          imageHeight="100"
-          imageUrl="../../../assets/group_selfie.png"
-          altText="group"
-          titleText="eiusmod tempor incididunt"
+          titleText="See all groups"
+          linkTo="/groups"
           textContent="
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco"
-        />
+        >
+          <CardImage
+            imageWidth="100"
+            imageHeight="100"
+            imageUrl="../../../assets/group_selfie.png"
+            altText="group"
+          />
+        </Card>
+
         <Card
-          imageWidth="100"
-          imageHeight="100"
-          imageUrl="../../../assets/group_selfie.png"
-          altText="group"
-          titleText="eiusmod tempor incididunt"
+          titleText="Find an event"
+          linkTo="/test"
           textContent="
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco"
-        />
+        >
+          <CardImage
+            imageWidth="100"
+            imageHeight="100"
+            imageUrl="../../../assets/group_selfie.png"
+            altText="group"
+          />
+        </Card>
+
         <Card
-          imageWidth="100"
-          imageHeight="100"
-          imageUrl="../../../assets/group_selfie.png"
-          altText="group"
-          titleText="eiusmod tempor incididunt"
+          titleText="Start a group"
+          linkTo="/test"
+          isLoggedIn={isLoggedIn()}
           textContent="
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco"
-        />
+        >
+          <CardImage
+            imageWidth="100"
+            imageHeight="100"
+            imageUrl="../../../assets/group_selfie.png"
+            altText="group"
+          />
+        </Card>
       </LandingPageCardContainer>
 
       <CallToAction styleClassName="cta-container" />
