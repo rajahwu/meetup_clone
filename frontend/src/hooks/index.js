@@ -1,3 +1,4 @@
 import useSetModalClass from "./useSetModalClass";
+import useGetAll from "./useGetAll";
 
-export { useSetModalClass };
+export { useSetModalClass, useGetAll };

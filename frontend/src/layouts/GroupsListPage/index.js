@@ -1,16 +1,8 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAllGroups } from "../../store/groups";
 import { CardImage, GroupEventCard } from "../../components";
+import { useGetAll } from "../../hooks";
 
 export default function GroupsListPage() {
-  const dispatch = useDispatch();
-  const groups = useSelector((state) => state?.groups);
-  console.log(groups["1"]);
-
-  useEffect(() => {
-    dispatch(getAllGroups());
-  }, [dispatch]);
+  const groups = useGetAll("groups");
 
   return (
     <div>

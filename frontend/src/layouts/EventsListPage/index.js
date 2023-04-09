@@ -1,16 +1,8 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAllEvents } from "../../store/events";
 import { CardImage, GroupEventCard } from "../../components";
+import { useGetAll } from "../../hooks";
 
 export default function EventsListPage() {
-  const dispatch = useDispatch();
-  const events = useSelector((state) => state?.events);
-  console.log(events["1"]);
-
-  useEffect(() => {
-    dispatch(getAllEvents());
-  }, [dispatch]);
+  const events = useGetAll("events");
 
   return (
     <div>
