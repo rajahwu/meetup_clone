@@ -11,6 +11,14 @@ const LandingPageTitle = ({ styleClassName }) => (
         commodo consequat.{" "}
       </p>
     </div>
+    <div>
+      <img
+        width="250"
+        height="250"
+        src="../../../assets/group_selfie.png"
+        alt="title"
+      />
+    </div>
   </section>
 );
 
@@ -47,7 +55,7 @@ const Card = ({
   </div>
 );
 
-const CallToAction = ({styleClassName}) => (
+const CallToAction = ({ styleClassName }) => (
   <section className={LandingPageCSS[styleClassName]}>
     <button>Join Meetup</button>
   </section>
