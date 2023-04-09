@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import { Navigation } from "./components";
@@ -27,9 +27,6 @@ function App() {
         <Switch>
           <Route exact path="/">
             <LandingPage />
-          </Route>
-          <Route path="/test">
-            <div>Test</div>
           </Route>
           <EventGroupHeader>
             <Route path="/groups">
