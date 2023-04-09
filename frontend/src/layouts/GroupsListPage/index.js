@@ -34,7 +34,7 @@ export default function GroupsListPage() {
     <div>
       {Object.values(groups).map((group) => {
         return (
-          <>
+          <div key={group.id}>
             <GroupCard
               name={group.name}
               description={group.about}
@@ -43,7 +43,7 @@ export default function GroupsListPage() {
               type={group.type}
             />
             <hr />
-          </>
+          </div>
         );
       })}
     </div>
