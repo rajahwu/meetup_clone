@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
+import { useHistory } from "react-router-dom";
 import * as sessionActions from "../../../store/session";
 import { useSetModalClass } from "../../../hooks";
-import ModalFormCSS from "../ModalForm.module.css"
+import ModalFormCSS from "../ModalForm.module.css";
 
 export default function SignupFormModal() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -14,9 +16,27 @@ export default function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const {setModalContent } = useModal();
+  const { setModalContent } = useModal();
 
-  useSetModalClass()
+  useSetModalClass();
+
+  const isDisabled = () => {
+    const fields = [
+      email,
+      username,
+      firstName,
+      lastName,
+      password,
+      confirmPassword,
+    ];
+    const emptyFields = fields.filter((field) => field.length === 0).length > 0;
+    if (emptyFields) return true;
+    if (username.length < 4) return true;
+    if (password.length < 6) return true;
+    return false;
+  };
+
+  isDisabled();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,7 +51,8 @@ export default function SignupFormModal() {
           password,
         })
       )
-      .then(() => setModalContent(null))
+        .then(() => history.push("/"))
+        .then(() => setModalContent(null))
         .catch(async (res) => {
           const data = await res.json();
           if (data && data.errors) {
@@ -109,7 +130,13 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit" className={ModalFormCSS.btn}>Sign Up</button>
+        <button
+          type="submit"
+          className={ModalFormCSS.btn}
+          disabled={isDisabled()}
+        >
+          Sign Up
+        </button>
       </form>
     </div>
   );
