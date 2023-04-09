@@ -5,11 +5,15 @@ import { getAllGroups } from "../../store/groups";
 export default function GroupsListPage() {
   const dispatch = useDispatch();
   const groups = useSelector((state) => state?.groups);
-  console.log(groups["1"])
+  console.log(groups["1"]);
 
   useEffect(() => {
     dispatch(getAllGroups());
   }, [dispatch]);
 
-  return <div>Groups List Page</div>;
+  return (
+    <div>
+     Group List Page
+    </div>
+  );
 }
