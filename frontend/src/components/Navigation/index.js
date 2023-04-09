@@ -3,7 +3,6 @@ import ProfileButton from "./ProfileButton";
 import OpenModelButton from "./OpenModalButton";
 import { SignupFormModal, LoginFormModal } from "../session";
 import NavigationCSS from "./Navigation.module.css";
-import ModalCSS from "../../context/Modal.module.css";
 
 export default function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);

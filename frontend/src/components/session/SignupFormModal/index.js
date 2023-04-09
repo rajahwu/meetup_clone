@@ -14,7 +14,8 @@ export default function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const { closeModal } = useModal();
+  const {setModalContent } = useModal();
+
   useSetModalClass()
 
   const handleSubmit = (e) => {
@@ -30,7 +31,7 @@ export default function SignupFormModal() {
           password,
         })
       )
-        .then(closeModal)
+      .then(() => setModalContent(null))
         .catch(async (res) => {
           const data = await res.json();
           if (data && data.errors) {

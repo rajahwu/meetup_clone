@@ -10,9 +10,7 @@ export function ModalProvider({ children }) {
   const [onModalClose, setOnModalClose] = useState(null);
   const [modalClass, setModalClass] = useState({})
 
-  // console.log("context modal class", modalClass)
-
-  const closeModel = () => {
+const closeModel = () => {
     setModalContent(null);
     if (typeof onModalClose === "function") {
       setOnModalClose(null);
@@ -47,11 +45,13 @@ export function Modal() {
 
   return ReactDOM.createPortal(
     <div id="modal" className={modalClass.container || ModalCSS.modal}>
-    {/* {console.log("ModalContext: ", modalClass)} */}
       <div
         id="modal-background"
         className={modalClass.background || ModalCSS.background}
-        onClick={closeModel}
+        onClick={() => {
+          closeModel()
+        }
+          }
       />
       <div id="modal-content" className={modalClass.content || ModalCSS.content}>
         {modalContent}
