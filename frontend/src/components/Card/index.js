@@ -1,19 +1,15 @@
+import { NavLink } from "react-router-dom";
+
 const Card = ({
-  imageUrl,
-  altText,
-  imageHeight,
-  imageWidth,
   titleText,
+  linkTo,
   textContent,
+  isLoggedIn,
+  children
 }) => (
   <div>
-    <img
-      width={imageWidth}
-      height={imageHeight}
-      src={imageUrl}
-      alt={altText}
-    ></img>
-    <h3>{titleText}</h3>
+    {children}
+    <NavLink to={linkTo || "/"} disabled={isLoggedIn}>{titleText}</NavLink>
     <p>{textContent}</p>
   </div>
 );
