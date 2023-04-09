@@ -18,8 +18,11 @@ function App() {
         <Navigation isLoaded={isLoaded} />
       </Header>
       {isLoaded && <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <LandingPage />
+        </Route>
+        <Route path="/test">
+          <div>Test</div>
         </Route>
       </Switch>}
     </>

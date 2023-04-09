@@ -4,15 +4,18 @@ import OpenModelButton from "../OpenModalButton";
 import ProfileButtonCSS from "./ProfileButton.module.css";
 import { useSetModalClass } from "../../../hooks";
 import { useModal } from "../../../context/Modal";
+import {useHistory} from "react-router-dom"
 
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory()
   const { setModalContent } = useModal();
 
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     setModalContent(null);
+    history.push("/")
   };
 
   const UserIcon = () => <i className="fa-solid fa-user"></i>;
@@ -22,7 +25,7 @@ export default function ProfileButton({ user }) {
     useSetModalClass({ container, background, content });
     return (
       <>
-        <div>
+        <div onClick={() => setModalContent(null)}>
           <UserIcon />
           <i className="fa-solid fa-caret-up"></i>
         </div>
