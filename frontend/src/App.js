@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import { Navigation } from "./components";
 import { Header, LandingPage } from "./layouts";
+import GroupsListPage from "./layouts/GroupsListPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,9 @@ function App() {
         </Route>
         <Route path="/test">
           <div>Test</div>
+        </Route>
+        <Route path="/groups">
+          <GroupsListPage />
         </Route>
       </Switch>}
     </>
