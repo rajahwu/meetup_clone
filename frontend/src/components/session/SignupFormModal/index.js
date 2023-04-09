@@ -17,7 +17,6 @@ export default function SignupFormModal() {
   const { closeModal } = useModal();
   useSetModalClass()
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
