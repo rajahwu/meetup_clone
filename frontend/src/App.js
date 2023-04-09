@@ -9,6 +9,7 @@ import {
   EventGroupHeader,
   GroupsListPage,
   EventsListPage,
+  CreateGroupPage,
 } from "./layouts";
 
 function App() {
@@ -36,6 +37,9 @@ function App() {
               <EventsListPage />
             </Route>
           </EventGroupHeader>
+          <Route exact path="/groups/new">
+            <CreateGroupPage />
+          </Route>
         </Switch>
       )}
     </>

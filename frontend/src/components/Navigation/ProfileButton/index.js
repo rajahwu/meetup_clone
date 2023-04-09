@@ -19,6 +19,10 @@ export default function ProfileButton({ user }) {
     history.push("/");
   };
 
+  const handleClick = () => {
+    setModalContent(null);
+  };
+
   const UserIcon = () => <i className="fa-solid fa-user"></i>;
 
   const UserMenu = ({ user }) => {
@@ -37,7 +41,14 @@ export default function ProfileButton({ user }) {
               <li>{user.firstname}</li>
               <li>{user.email}</li>
               <li>
-                <NavLink to="/groups" onClick={() => setModalContent(null)}>View Groups</NavLink>
+                <NavLink to="/groups" onClick={handleClick}>
+                  View Groups
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/events" onClick={handleClick}>
+                  View Events
+                </NavLink>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>
