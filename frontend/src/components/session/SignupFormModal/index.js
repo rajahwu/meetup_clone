@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
 import * as sessionActions from "../../../store/session";
+import { useSetModalClass } from "../../../hooks";
 import ModalFormCSS from "../ModalForm.module.css"
 
 export default function SignupFormModal() {
@@ -14,6 +15,7 @@ export default function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  useSetModalClass()
 
   const handleSubmit = (e) => {
     e.preventDefault();
