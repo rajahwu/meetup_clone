@@ -2,7 +2,7 @@ import { useState } from "react";
 import * as sessionActions from "../../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
-import {useSetModalClass} from "../../../hooks"
+import { useSetModalClass } from "../../../hooks";
 import ModalFormCSS from "../ModalForm.module.css";
 
 export default function LoginFormModel() {
@@ -10,14 +10,15 @@ export default function LoginFormModel() {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const { closeModal } = useModal();
-  useSetModalClass()
+  const { setModalContent } = useModal();
+
+  useSetModalClass();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+      .then(() => setModalContent(null))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
@@ -65,6 +66,7 @@ export default function LoginFormModel() {
               password: "password",
             };
             dispatch(sessionActions.login(demoUser));
+            setModalContent(null);
           }}
         >
           Demo User
