@@ -42,7 +42,7 @@ export default function LandingPage() {
 
         <Card
           titleText="Find an event"
-          linkTo="/test"
+          linkTo="/events"
           textContent="
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco"
