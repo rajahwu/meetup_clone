@@ -9,15 +9,13 @@ import {
 import LandingPageCSS from "./LandingPage.module.css";
 
 const LandingPageCardContainer = ({ styleClassName, children }) => (
-  <>
-    <section className={LandingPageCSS[styleClassName]}>{children}</section>
-  </>
+  <section className={LandingPageCSS[styleClassName]}>{children}</section>
 );
 
 export default function LandingPage() {
-  const sessionUser = useSelector((state) => state.session.user)
-  const isLoggedIn = () => sessionUser ? true : false
-  
+  const sessionUser = useSelector((state) => state.session.user);
+  const isLoggedIn = () => (sessionUser ? true : false);
+
   return (
     <>
       <TitleSection styleClassName="title-container" />
