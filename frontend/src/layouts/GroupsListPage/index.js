@@ -4,6 +4,13 @@ import { useGetAll } from "../../hooks";
 export default function GroupsListPage() {
   const groups = useGetAll("groups");
 
+  const testText = [
+    'background: yellow',
+    'font-size: 16px',
+    'color: blue'
+  ].join(';')
+  console.log("%cGroup List group", testText, groups["1"])
+ 
   return (
     <div>
       {Object.values(groups).map((group) => {
