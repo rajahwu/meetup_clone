@@ -11,10 +11,10 @@ export const loadGroups = (groups) => ({
   payload: groups,
 });
 
-// export const receiveGroup = (group) => ({
-//   type: RECEIVE_GROUP,
-//   payload: group
-// })
+export const receiveGroup = (group) => ({
+  type: RECEIVE_GROUP,
+  payload: group,
+});
 
 export const createGroupAction = (group) => ({
   type: CREATE_GROUP,
@@ -27,17 +27,16 @@ export const getAllGroups = () => async (dispatch) => {
   if (response.ok) {
     dispatch(loadGroups(allGroups));
   }
-  return allGroups
+  return allGroups;
 };
 
-// export const getGroup = (groupId) => async (dispatch) => {
-//   const response = await csrfFetch(`/api/groups/${groupId}`)
-//   const group = await response.json()
-//     if(response.ok) {
-//       dispatch(receiveGroup(group))
-//     }
-//     return group
-// }
+export const getGroup = (groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}`);
+  const group = await response.json();
+  if (response.ok) {
+    dispatch(receiveGroup(group));
+  }
+};
 
 export const createGroupThunk = (group) => async (dispatch) => {
   const { name, about, type, isPrivate, city, state } = group;
@@ -57,7 +56,7 @@ export const createGroupThunk = (group) => async (dispatch) => {
   const newGroup = await response.json();
 
   if (response.ok) {
-   return await dispatch(createGroupAction(newGroup));
+    return await dispatch(createGroupAction(newGroup));
   }
 };
 
@@ -71,6 +70,12 @@ const groupsReducer = (state = {}, action) => {
       return groupState;
     }
     case CREATE_GROUP: {
+      const groupState = { ...state.groups };
+      groupState[action.payload.id] = action.payload;
+      return groupState;
+    }
+
+    case RECEIVE_GROUP: {
       const groupState = { ...state.groups };
       groupState[action.payload.id] = action.payload;
       return groupState;
