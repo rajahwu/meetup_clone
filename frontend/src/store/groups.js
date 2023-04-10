@@ -21,6 +21,11 @@ export const createGroupAction = (group) => ({
   payload: group,
 });
 
+export const removeGroupAction = (groupId) => ({
+  type: REMOVE_GROUP,
+  payload: groupId,
+});
+
 export const getAllGroups = () => async (dispatch) => {
   const response = await csrfFetch("/api/groups");
   const allGroups = await response.json();
@@ -60,6 +65,15 @@ export const createGroupThunk = (group) => async (dispatch) => {
   }
 };
 
+export const removeGroupThunk = (groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    dispatch(removeGroupAction(groupId));
+  }
+};
+
 const groupsReducer = (state = {}, action) => {
   switch (action.type) {
     case LOAD_GROUPS: {
@@ -78,6 +92,12 @@ const groupsReducer = (state = {}, action) => {
     case RECEIVE_GROUP: {
       const groupState = { ...state.groups };
       groupState[action.payload.id] = action.payload;
+      return groupState;
+    }
+
+    case REMOVE_GROUP: {
+      const groupState = { ...state.groups };
+      delete groupState[action.payload];
       return groupState;
     }
 
