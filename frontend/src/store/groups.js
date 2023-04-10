@@ -26,6 +26,11 @@ export const removeGroupAction = (groupId) => ({
   payload: groupId,
 });
 
+export const updateGroupAction = (groupUpdate) => ({
+  type: UPDATE_GROUP,
+  payload: groupUpdate,
+});
+
 export const getAllGroups = () => async (dispatch) => {
   const response = await csrfFetch("/api/groups");
   const allGroups = await response.json();
@@ -39,7 +44,7 @@ export const getGroup = (groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}`);
   const group = await response.json();
   if (response.ok) {
-    dispatch(receiveGroup(group));
+   return dispatch(receiveGroup(group));
   }
 };
 
@@ -74,6 +79,18 @@ export const removeGroupThunk = (groupId) => async (dispatch) => {
   }
 };
 
+export const updateGroupThunk = (groupUpdate) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupUpdate.id}`, {
+    method: "PUT",
+  });
+
+  const updatedGroup = await response.json();
+
+  if (response.ok) {
+    dispatch(updateGroupAction(updatedGroup));
+  }
+};
+
 const groupsReducer = (state = {}, action) => {
   switch (action.type) {
     case LOAD_GROUPS: {
@@ -99,6 +116,11 @@ const groupsReducer = (state = {}, action) => {
       const groupState = { ...state.groups };
       delete groupState[action.payload];
       return groupState;
+    }
+
+    case UPDATE_GROUP: {
+      const groupState = { ...state.groups, ...action.payload }
+      return groupState
     }
 
     default:

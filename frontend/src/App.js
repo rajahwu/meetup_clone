@@ -30,12 +30,19 @@ function App() {
           <Route exact path="/">
             <LandingPage />
           </Route>
+
+          <Route exact path="/groups/update/:groupId">
+            <CreateGroupPage />
+          </Route>
+
           <Route exact path="/groups/new">
             <CreateGroupPage />
           </Route>
+
           <Route exact path="/groups/:groupId">
             <GroupDetailsPage />
           </Route>
+
           <EventGroupHeader>
             <Route exact path="/groups">
               <GroupsListPage />

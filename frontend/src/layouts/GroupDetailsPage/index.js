@@ -9,7 +9,7 @@ export default function GroupDetailsPage() {
   const { groupId } = useParams();
   const dispatch = useDispatch();
   const group = useSelector((state) => state.groups)[groupId];
-  console.log("group detial useSelector group", group);
+  // console.log("group detial useSelector group", group);
 
   useEffect(() => {
     dispatch(groupActions.getGroup(groupId));

@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import * as groupActions from "../../store/groups";
 
 import CreateGroupCSS from "./CreateGroupPage.module.css";
@@ -8,6 +8,7 @@ import CreateGroupCSS from "./CreateGroupPage.module.css";
 export default function CreateGroupPage() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { groupId } = useParams();
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -15,6 +16,29 @@ export default function CreateGroupPage() {
   const [visibilityType, setVisibilityType] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [errors, setErrors] = useState({});
+
+  const group = useSelector((state) => state.groups)[groupId];
+
+  useEffect(() => {
+    setLocation("");
+    setName("");
+    setDescription("");
+    setGroupType("");
+    setGroupType("");
+    setVisibilityType("");
+    setImageUrl("");
+    if (groupId) dispatch(groupActions.getGroup(groupId));
+  }, [groupId, dispatch]);
+
+  useEffect(() => {
+    if (!group) return;
+    setLocation(`${group.city}, ${group.state}`);
+    setName(group.name);
+    setDescription(group.about);
+    setGroupType(group.type);
+    setVisibilityType(group.private ? "Privite" : "Public");
+    setImageUrl(group.imageUrl);
+  }, [group]);
 
   const validateForm = () => {
     const errors = {};
@@ -83,7 +107,7 @@ export default function CreateGroupPage() {
               type="text"
               name="group-location"
               id="groupLocation"
-              placeholder="City, STATE"
+              placeholder={"City, STATE"}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
@@ -128,8 +152,12 @@ export default function CreateGroupPage() {
                 onChange={(e) => setGroupType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="In person">In Person</option>
-                <option value="Online">Online</option>
+                <option value="In person" selected={groupType === "In person"}>
+                  In Person
+                </option>
+                <option value="Online" selected={groupType === "Online"}>
+                  Online
+                </option>
               </select>
             </label>
             {errors.groupType && <p>{errors.groupType}</p>}
@@ -145,8 +173,12 @@ export default function CreateGroupPage() {
                 onChange={(e) => setVisibilityType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="private">Private</option>
-                <option value="public">Public</option>
+                <option value="private" selected={visibilityType === "private"}>
+                  Private
+                </option>
+                <option value="public" selected={visibilityType === "public"}>
+                  Public
+                </option>
               </select>
             </label>
             {errors.visibilityType && <p>{errors.visibilityType}</p>}

@@ -8,7 +8,7 @@ export default function GroupActionButtons({ groupId }) {
   return (
     <div>
       <button>One</button>
-      <button>Update</button>
+      <button onClick={() => history.push(`/groups/update/${groupId}`)}>Update</button>
       <button
         onClick={() => {
           history.push("/groups");
