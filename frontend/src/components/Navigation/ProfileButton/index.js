@@ -1,11 +1,12 @@
 import { useDispatch } from "react-redux";
-import * as sessionActions from "../../../store/session";
-import OpenModelButton from "../OpenModalButton";
-import ProfileButtonCSS from "./ProfileButton.module.css";
-import { useSetModalClass } from "../../../hooks";
-import { useModal } from "../../../context/Modal";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { useModal } from "../../../context/Modal";
+import { useSetModalClass } from "../../../hooks";
+import OpenModelButton from "../OpenModalButton";
+import ProfileButtonCSS from "./ProfileButton.module.css";
+
+import * as sessionActions from "../../../store/session";
 
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -17,6 +18,10 @@ export default function ProfileButton({ user }) {
     dispatch(sessionActions.logout());
     setModalContent(null);
     history.push("/");
+  };
+
+  const handleClick = () => {
+    setModalContent(null);
   };
 
   const UserIcon = () => <i className="fa-solid fa-user"></i>;
@@ -37,7 +42,14 @@ export default function ProfileButton({ user }) {
               <li>{user.firstname}</li>
               <li>{user.email}</li>
               <li>
-                <NavLink to="/groups" onClick={() => setModalContent(null)}>View Groups</NavLink>
+                <NavLink to="/groups" onClick={handleClick}>
+                  View Groups
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/events" onClick={handleClick}>
+                  View Events
+                </NavLink>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>

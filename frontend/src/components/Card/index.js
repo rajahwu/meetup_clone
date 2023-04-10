@@ -9,7 +9,7 @@ const Card = ({
 }) => (
   <div>
     {children}
-    <NavLink to={linkTo || "/"} disabled={isLoggedIn}>{titleText}</NavLink>
+    <NavLink exact to={linkTo || "/"} disabled={isLoggedIn}>{titleText}</NavLink>
     <p>{textContent}</p>
   </div>
 );

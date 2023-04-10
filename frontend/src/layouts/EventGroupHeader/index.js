@@ -4,12 +4,7 @@ import { useHistory } from "react-router-dom";
 export default function EventGroupHeader({ children }) {
   const history = useHistory();
   const location = history.location;
-  // const testText = "color: green; background: yellow; font-size: 10px";
-  // console.log(
-  //   "%cEventGroupPage Locaiton,",
-  //   testText,
-  //   location.pathname.includes("groups")
-  // );
+
   return (
     <div>
       <div>
