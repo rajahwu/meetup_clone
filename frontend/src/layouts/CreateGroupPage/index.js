@@ -9,6 +9,7 @@ export default function CreateGroupPage() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { groupId } = useParams();
+  
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
