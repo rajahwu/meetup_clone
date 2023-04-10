@@ -6,7 +6,6 @@
     bottom: 0;
     display: flex;
     justify-content: flex-end;
-    /* align-items: center; */
   }
   
   .background {
@@ -15,16 +14,17 @@
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: transparent;
   }
   
   .content {
     position: absolute;
     background-color: white;
     top: 0;
+    right: 0;
     border-radius: 15px;
-    height: 100px;
-    padding: 10px 5px;
+    height: fit-content;
+    padding: 15px 15px;
     box-shadow: 5px 5px 5px rgb(5, 0, 5, 0.9);
   }
   

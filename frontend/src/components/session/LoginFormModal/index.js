@@ -1,12 +1,14 @@
 import { useState } from "react";
 import * as sessionActions from "../../../store/session";
 import { useDispatch } from "react-redux";
+import {useHistory} from "react-router-dom"
 import { useModal } from "../../../context/Modal";
 import { useSetModalClass } from "../../../hooks";
 import ModalFormCSS from "../ModalForm.module.css";
 
 export default function LoginFormModel() {
   const dispatch = useDispatch();
+  const history = useHistory()
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -19,6 +21,7 @@ export default function LoginFormModel() {
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
       .then(() => setModalContent(null))
+      .then(() => history.push("/"))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
@@ -67,6 +70,7 @@ export default function LoginFormModel() {
             };
             dispatch(sessionActions.login(demoUser));
             setModalContent(null);
+            history.push("/")
           }}
         >
           Demo User
