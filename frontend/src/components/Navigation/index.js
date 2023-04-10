@@ -10,7 +10,7 @@ export default function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <li style={{marginBottom: "10px", marginRight: "5px"}}>
         <ProfileButton user={sessionUser} />
       </li>
     );
