@@ -6,12 +6,12 @@ export default function GroupsListPage() {
   const groups = useGetAll("groups");
   const history = useHistory()
 
-  const testText = [
-    'background: yellow',
-    'font-size: 16px',
-    'color: blue'
-  ].join(';')
-  console.log("%cGroup List group", testText, groups["1"])
+  // const testText = [
+  //   'background: yellow',
+  //   'font-size: 16px',
+  //   'color: blue'
+  // ].join(';')
+  // console.log("%cGroup List group", testText, groups["1"])
 
   return (
     <div>
