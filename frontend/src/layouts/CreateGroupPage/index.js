@@ -9,7 +9,7 @@ export default function CreateGroupPage() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { groupId } = useParams();
-  
+
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -37,8 +37,8 @@ export default function CreateGroupPage() {
     setName(group.name);
     setDescription(group.about);
     setGroupType(group.type);
-    setVisibilityType(group.private ? "Privite" : "Public");
-    setImageUrl(group.imageUrl);
+    setVisibilityType(group.private ? "private" : "public");
+    setImageUrl(group.imageUrl || "");
   }, [group]);
 
   const validateForm = () => {
@@ -88,14 +88,28 @@ export default function CreateGroupPage() {
       imageUrl,
     };
 
-    return dispatch(groupActions.createGroupThunk(formData))
-      .then(async (res) => history.push(`/groups/${res.payload.id}`))
-      .catch(async (res) => {
-        const data = res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
-      });
+    if (groupId === undefined) {
+      return dispatch(groupActions.createGroupThunk(formData))
+        .then(async (res) => history.push(`/groups/${res.payload.id}`))
+        .catch(async (res) => {
+          const data = res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
+    }
+
+    if (groupId) {
+      formData.id = groupId;
+      return dispatch(groupActions.updateGroupThunk(formData))
+        .then(async (res) => history.push(`/groups/${res.payload.id}`))
+        .catch(async (res) => {
+          const data = res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
+    }
   };
 
   return (
@@ -153,10 +167,10 @@ export default function CreateGroupPage() {
                 onChange={(e) => setGroupType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="In person" selected={groupType === "In person"}>
+                <option value="In person" defaultValue={groupType === "In person"}>
                   In Person
                 </option>
-                <option value="Online" selected={groupType === "Online"}>
+                <option value="Online" defaultValue={groupType === "Online"}>
                   Online
                 </option>
               </select>
@@ -174,10 +188,10 @@ export default function CreateGroupPage() {
                 onChange={(e) => setVisibilityType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="private" selected={visibilityType === "private"}>
+                <option value="private" defaultValue={visibilityType === "private"}>
                   Private
                 </option>
-                <option value="public" selected={visibilityType === "public"}>
+                <option value="public" defaultValue={visibilityType === "public"}>
                   Public
                 </option>
               </select>
@@ -197,7 +211,9 @@ export default function CreateGroupPage() {
             {errors.imageUrl && <p>{errors.imageUrl}</p>}
           </div>
         </section>
-        <button type="submit">Create a Group</button>
+        <button type="submit">
+          {groupId ? "Update Group" : "Create a Group"}
+        </button>
       </form>
     </div>
   );
