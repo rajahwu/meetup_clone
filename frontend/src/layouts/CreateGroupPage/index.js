@@ -1,8 +1,13 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import * as groupActions from "../../store/groups";
 
 import CreateGroupCSS from "./CreateGroupPage.module.css";
 
 export default function CreateGroupPage() {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -49,12 +54,11 @@ export default function CreateGroupPage() {
     setErrors({});
     if (!validateForm()) return;
     const [city, state] = location.split(",");
-
     const formData = {
       name,
       about: description,
       type: groupType,
-      privite: visibilityType.toLocaleLowerCase() === "private",
+      isPrivate: visibilityType.toLocaleLowerCase() === "private",
       city: city,
       state: state?.trim(),
       imageUrl,
@@ -66,7 +70,18 @@ export default function CreateGroupPage() {
       "color: white",
     ].join(";");
 
-    console.log("%ccreate a group", testText, formData);
+    // console.log("%ccreate a group", testText, formData);
+
+    return dispatch(groupActions.createGroupThunk(formData))
+      .then((res) => console.log("create group dispatch", res))
+      // .then(() => history.push("/groups"))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+          console.log("create group dispatch errors", errors)
+        }
+      });
   };
 
   return (
@@ -115,8 +130,8 @@ export default function CreateGroupPage() {
               onChange={(e) => setGroupType(e.target.value)}
             >
               <option value="">(Select one)</option>
-              <option value="inPerson">In Person</option>
-              <option value="online">Online</option>
+              <option value="In person">In Person</option>
+              <option value="Online">Online</option>
             </select>
           </label>
           <br />
@@ -143,7 +158,10 @@ export default function CreateGroupPage() {
             onChange={(e) => setImageUrl(e.target.value)}
           />
         </section>
-        <button type="submit">Create a Group</button>
+        {console.log(errors)}
+        <button type="submit">
+          Create a Group
+        </button>
       </form>
     </div>
   );
