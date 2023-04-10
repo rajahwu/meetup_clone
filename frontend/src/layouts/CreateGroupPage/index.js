@@ -64,50 +64,58 @@ export default function CreateGroupPage() {
       imageUrl,
     };
 
-    const testText = [
-      "background: blue",
-      "font-size: 16px",
-      "color: white",
-    ].join(";");
+    // const testText = [
+    //   "background: blue",
+    //   "font-size: 16px",
+    //   "color: white",
+    // ].join(";");
 
     // console.log("%ccreate a group", testText, formData);
 
-    return dispatch(groupActions.createGroupThunk(formData))
-      .then((res) => console.log("create group dispatch", res))
-      // .then(() => history.push("/groups"))
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-          console.log("create group dispatch errors", errors)
-        }
-      });
+    return (
+      dispatch(groupActions.createGroupThunk(formData))
+        .then((res) => console.log("create group dispatch", res))
+        // .then(() => history.push("/groups"))
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+            console.log("create group dispatch errors", errors);
+          }
+        })
+    );
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <section>
-          <input
-            className={CreateGroupCSS["input"]}
-            type="text"
-            name="group-location"
-            id="groupLocation"
-            placeholder="City, STATE"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
+          <div>
+            <input
+              className={CreateGroupCSS["input"]}
+              type="text"
+              name="group-location"
+              id="groupLocation"
+              placeholder="City, STATE"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+            {errors.location && <p>{errors.location}</p>}
+          </div>
         </section>
         <section>
-          <input
-            className={CreateGroupCSS["input"]}
-            type="text"
-            name="group-name"
-            id="name"
-            placeholder="What is your group name?"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <div>
+            <input
+              className={CreateGroupCSS["input"]}
+              type="text"
+              name="group-name"
+              id="name"
+              placeholder="What is your group name?"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            {errors.name && <p>{errors.name}</p>}
+          </div>
         </section>
         <section>
           <textarea
@@ -121,47 +129,54 @@ export default function CreateGroupPage() {
           ></textarea>
         </section>
         <section>
-          <label htmlFor="group-type">
-            Online or In Person
-            <select
-              name="group-type"
-              id="groupType"
-              value={groupType}
-              onChange={(e) => setGroupType(e.target.value)}
-            >
-              <option value="">(Select one)</option>
-              <option value="In person">In Person</option>
-              <option value="Online">Online</option>
-            </select>
-          </label>
+          <div>
+            <label htmlFor="group-type">
+              Online or In Person
+              <select
+                name="group-type"
+                id="groupType"
+                value={groupType}
+                onChange={(e) => setGroupType(e.target.value)}
+              >
+                <option value="">(Select one)</option>
+                <option value="In person">In Person</option>
+                <option value="Online">Online</option>
+              </select>
+            </label>
+            {errors.groupType && <p>{errors.groupType}</p>}
+          </div>
           <br />
-          <label htmlFor="group-status-type">
-            Public or Privite
-            <select
-              name="group-status-type"
-              id="visibilityTypeType"
-              value={visibilityType}
-              onChange={(e) => setVisibilityType(e.target.value)}
-            >
-              <option value="">(Select one)</option>
-              <option value="private">Private</option>
-              <option value="public">Public</option>
-            </select>
-          </label>
-          <input
-            className={CreateGroupCSS["input"]}
-            type="text"
-            name="imageUrl"
-            id="imageUrl"
-            placeholder="Image Url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
+          <div>
+            <label htmlFor="group-status-type">
+              Public or Privite
+              <select
+                name="group-status-type"
+                id="visibilityTypeType"
+                value={visibilityType}
+                onChange={(e) => setVisibilityType(e.target.value)}
+              >
+                <option value="">(Select one)</option>
+                <option value="private">Private</option>
+                <option value="public">Public</option>
+              </select>
+            </label>
+            {errors.visibilityType && <p>{errors.visibilityType}</p>}
+          </div>
+          <div>
+            <input
+              className={CreateGroupCSS["input"]}
+              type="text"
+              name="imageUrl"
+              id="imageUrl"
+              placeholder="Image Url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+            {errors.imageUrl && <p>{errors.imageUrl}</p>}
+          </div>
         </section>
         {console.log(errors)}
-        <button type="submit">
-          Create a Group
-        </button>
+        <button type="submit">Create a Group</button>
       </form>
     </div>
   );
