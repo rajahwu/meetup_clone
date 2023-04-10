@@ -7,7 +7,7 @@ import * as groupActions  from "../../store/groups";
 export default function GroupDetailsPage() {
     const {groupId} = useParams()
     const dispatch = useDispatch()
-    const group = useSelector(state => state.groups)[1]
+    const group = useSelector(state => state.groups)[groupId]
     console.log("group detial useSelector group", group)
 
     useEffect(() => {
