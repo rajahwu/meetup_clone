@@ -45,7 +45,6 @@ export default function CreateGroupPage() {
         errors.imageUrl = "Image URL must end in .png, .jpg, or .jpeg";
     }
     setErrors(errors);
-    console.log("Validate Form Errors", errors);
     return Object.values(errors).length > 0 ? false : true;
   };
 
@@ -64,26 +63,14 @@ export default function CreateGroupPage() {
       imageUrl,
     };
 
-    // const testText = [
-    //   "background: blue",
-    //   "font-size: 16px",
-    //   "color: white",
-    // ].join(";");
-
-    // console.log("%ccreate a group", testText, formData);
-
-    return (
-      dispatch(groupActions.createGroupThunk(formData))
-        .then((res) => console.log("create group dispatch", res))
-        // .then(() => history.push("/groups"))
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data && data.errors) {
-            setErrors(data.errors);
-            console.log("create group dispatch errors", errors);
-          }
-        })
-    );
+    return dispatch(groupActions.createGroupThunk(formData))
+      .then(async (res) => history.push(`/groups/${res.payload.id}`))
+      .catch(async (res) => {
+        const data = res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
   };
 
   return (
@@ -127,6 +114,8 @@ export default function CreateGroupPage() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
+          {errors.description && errors.description}
+          {errors.about && errors.about}
         </section>
         <section>
           <div>
@@ -175,7 +164,6 @@ export default function CreateGroupPage() {
             {errors.imageUrl && <p>{errors.imageUrl}</p>}
           </div>
         </section>
-        {console.log(errors)}
         <button type="submit">Create a Group</button>
       </form>
     </div>
