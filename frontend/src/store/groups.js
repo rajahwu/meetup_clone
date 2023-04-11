@@ -108,26 +108,26 @@ const groupsReducer = (
       return groupState;
     }
     case CREATE_GROUP: {
-      const groupState = { ...state };
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
       groupState.allGroups[action.payload.id] = action.payload;
       return groupState;
     }
 
     case RECEIVE_GROUP: {
-      const groupState = { ...state };
+      const groupState = { ...state, allGroups: state.allGroups, customElements: {} };
       groupState.currentGroup = action.payload;
       return groupState;
     }
 
     case REMOVE_GROUP: {
-      const groupState = { ...state };
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
       delete groupState.allGroups[action.payload];
       getAllGroups.currentGroup = {}
       return groupState;
     }
 
     case UPDATE_GROUP: {
-      const groupState = { ...state };
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
       Object.assign(groupState.allGroups, {
         [action.payload.id]: action.payload,
       });

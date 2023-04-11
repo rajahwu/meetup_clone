@@ -56,14 +56,14 @@ const eventsReducer = (
 ) => {
   switch (action.type) {
     case LOAD_EVENTS: {
-      const eventState = { ...state };
+      const eventState = { ...state, allEvents: state.allEvents, currentGroupEvents: {}, currentEvent: {} };
       action.payload.Events.forEach((event) => {
         eventState.allEvents[event.id] = event;
       });
       return eventState;
     }
     case RECEIVE_EVENT: {
-      const eventState = { ...state };
+      const eventState = { ...state, currentEvent: {}, currentGroupEvents: {} };
       eventState.currentEvent = action.payload;
       return eventState;
     }
@@ -71,13 +71,12 @@ const eventsReducer = (
     case RECEIVE_EVENTS: {
       const eventState = {
         ...state,
-        currentEvent: { ...state },
+        currentEvent: state.currentEvent,
         currentGroupEvents: {},
       };
       action.payload.Events.forEach((event) => {
         eventState.currentGroupEvents[event.id] = event;
       });
-      console.log("receive events event state", eventState);
       return eventState;
     }
 
