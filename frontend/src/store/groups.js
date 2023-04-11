@@ -125,14 +125,16 @@ const groupsReducer = (
       const groupState = { ...state };
       console.log("Remove group group state", groupState);
       delete groupState.allGroups[action.payload];
+      getAllGroups.currentGroup = {}
       return groupState;
     }
 
     case UPDATE_GROUP: {
       const groupState = { ...state };
-      Object.assign(state.currentGroup, {
+      Object.assign(groupState.allGroups, {
         [action.payload.id]: action.payload,
       });
+      groupState.currentGroup = groupState.allGroups[action.payload.id]
       return groupState;
     }
 
