@@ -18,7 +18,7 @@ export default function CreateGroupPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [errors, setErrors] = useState({});
 
-  const group = useSelector((state) => state.groups)[groupId];
+  const group = useSelector((state) => state.groups.currentGroup);
 
   useEffect(() => {
     setLocation("");

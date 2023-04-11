@@ -92,38 +92,46 @@ export const updateGroupThunk = (groupUpdate) => async (dispatch) => {
   }
 };
 
-const groupsReducer = (state = {}, action) => {
+const groupsReducer = (
+  state = {
+    allGroups: {},
+    currentGroup: {},
+  },
+  action
+) => {
   switch (action.type) {
     case LOAD_GROUPS: {
-      const groupState = {};
+      const groupState = { ...state };
       action.payload.Groups.forEach((group) => {
-        groupState[group.id] = group;
+        groupState.allGroups[group.id] = group;
       });
       return groupState;
     }
     case CREATE_GROUP: {
-      const groupState = { ...state.groups };
-      groupState[action.payload.id] = action.payload;
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
+      groupState.allGroups[action.payload.id] = action.payload;
       return groupState;
     }
 
     case RECEIVE_GROUP: {
-      const groupState = { ...state.groups };
-      groupState[action.payload.id] = action.payload;
+      const groupState = { ...state, allGroups: state.allGroups, customElements: {} };
+      groupState.currentGroup = action.payload;
       return groupState;
     }
 
     case REMOVE_GROUP: {
-      const groupState = { ...state.groups };
-      delete groupState[action.payload];
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
+      delete groupState.allGroups[action.payload];
+      getAllGroups.currentGroup = {}
       return groupState;
     }
 
     case UPDATE_GROUP: {
-      const groupState = {
-        ...state.groups,
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
+      Object.assign(groupState.allGroups, {
         [action.payload.id]: action.payload,
-      };
+      });
+      groupState.currentGroup = groupState.allGroups[action.payload.id]
       return groupState;
     }
 

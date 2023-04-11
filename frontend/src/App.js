@@ -16,6 +16,7 @@ import {
 } from "./pages"
 
 import * as sessionActions from "./store/session";
+import EventDetailsPage from "./pages/EventDetailsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +47,10 @@ function App() {
 
           <Route exact path="/groups/:groupId">
             <GroupDetailsPage />
+          </Route>
+
+          <Route exact path="/events/:eventId">
+            <EventDetailsPage />
           </Route>
 
           <EventGroupHeader>

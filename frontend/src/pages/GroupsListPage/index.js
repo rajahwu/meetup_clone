@@ -3,15 +3,16 @@ import { useGetAll } from "../../hooks";
 import { CardImage, GroupEventCard } from "../../components";
 
 export default function GroupsListPage() {
-  const groups = useGetAll("groups");
+  const groups = useGetAll("groups").allGroups;
   const history = useHistory()
 
-  const testText = [
-    'background: yellow',
-    'font-size: 16px',
-    'color: blue'
-  ].join(';')
-  console.log("%cGroup List group", testText, groups["1"])
+  // const testText = [
+  //   'background: yellow',
+  //   'font-size: 16px',
+  //   'color: blue'
+  // ].join(';')
+  // console.log("%cGroup List group", testText)
+  // console.dir(groups)
 
   return (
     <div>
