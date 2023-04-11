@@ -5,8 +5,8 @@ import { getAllEvents } from "../store/events";
 
 export default function useGetAll(type) {
     const dispatch = useDispatch();
-    const groups = useSelector((state) => state?.groups)
-    const events = useSelector((state) => state?.events);
+    const groups = useSelector((state) => state.groups)
+    const events = useSelector((state) => state.events);
   
     useEffect(() => {
         if(type === "groups") dispatch(getAllGroups());

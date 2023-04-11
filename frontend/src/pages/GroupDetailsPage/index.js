@@ -8,7 +8,7 @@ import * as groupActions from "../../store/groups";
 export default function GroupDetailsPage() {
   const { groupId } = useParams();
   const dispatch = useDispatch();
-  const group = useSelector((state) => state.groups)[groupId];
+  const group = useSelector((state) => state.groups.currentGroup);
 
   useEffect(() => {
     dispatch(groupActions.getGroup(groupId));
