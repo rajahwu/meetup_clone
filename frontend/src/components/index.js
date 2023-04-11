@@ -5,6 +5,8 @@ import CardImage from "./CardImage";
 import CallToAction from "./CallToAction";
 import GroupDetailCard from "./GroupDetailCard";
 import GroupActionButtons from "./GroupActionButtons";
+import EventDetailCard from "./EventDetailCard";
+import EventActionButtons from "./EventActionButtons";
 
 export {
   Navigation,
@@ -12,6 +14,8 @@ export {
   CardImage,
   GroupEventCard,
   GroupDetailCard,
+  GroupActionButtons,
+  EventDetailCard,
+  EventActionButtons,
   CallToAction,
-  GroupActionButtons
 };

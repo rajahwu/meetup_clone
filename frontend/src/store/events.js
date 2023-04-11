@@ -23,6 +23,7 @@ export const recieveEvent = (event) => ({
   type: RECEIVE_EVENT,
   payload: event,
 });
+
 export const getEvent = (eventId) => async (dispatch) => {
   const response = await csrfFetch(`/api/events/${eventId}`);
   const event = await response.json();
@@ -55,7 +56,7 @@ const eventsReducer = (
 ) => {
   switch (action.type) {
     case LOAD_EVENTS: {
-      const eventState = { ...state, };
+      const eventState = { ...state };
       action.payload.Events.forEach((event) => {
         eventState.allEvents[event.id] = event;
       });
@@ -70,10 +71,9 @@ const eventsReducer = (
     case RECEIVE_EVENTS: {
       const eventState = {
         ...state,
-        currentEvent: { ...state.currentEvent },
+        currentEvent: { ...state },
         currentGroupEvents: {},
       };
-      console.log("Receive events payload", action.payload.Events);
       action.payload.Events.forEach((event) => {
         eventState.currentGroupEvents[event.id] = event;
       });
