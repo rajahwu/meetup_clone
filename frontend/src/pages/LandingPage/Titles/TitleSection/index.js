@@ -1,4 +1,4 @@
-import LandingPageCSS from "../../layouts/LandingPage/LandingPage.module.css"
+import LandingPageCSS from "../../LandingPage.module.css"
 
 const LandingPageTitle = ({ styleClassName }) => (
     <section className={LandingPageCSS[styleClassName]}>

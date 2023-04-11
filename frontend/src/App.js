@@ -5,13 +5,16 @@ import * as sessionActions from "./store/session";
 import { Navigation } from "./components";
 import {
   Header,
-  LandingPage,
   EventGroupHeader,
+} from "./layouts";
+
+import {
+  LandingPage,
   GroupsListPage,
-  EventsListPage,
   CreateGroupPage,
   GroupDetailsPage,
-} from "./layouts";
+  EventsListPage,
+} from "./pages"
 
 function App() {
   const dispatch = useDispatch();

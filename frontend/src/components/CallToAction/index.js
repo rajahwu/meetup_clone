@@ -1,4 +1,4 @@
-import LandingPageCSS from "../../layouts/LandingPage/LandingPage.module.css";
+import LandingPageCSS from "../../pages/LandingPage/LandingPage.module.css";
 
 const CallToAction = ({ styleClassName }) => (
     <section className={LandingPageCSS[styleClassName]}>
