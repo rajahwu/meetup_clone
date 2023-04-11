@@ -33,12 +33,15 @@ export const getGroupEvents = (groupId) => async (dispatch) => {
   }
 }
 
-const eventsReducer = (state = {}, action) => {
+const eventsReducer = (state = {
+  allEvents: {},
+  event: {}
+}, action) => {
   switch (action.type) {
     case LOAD_EVENTS: {
       const eventState = { ...state };
       action.payload.Events.forEach((event) => {
-        eventState[event.id] = event;
+        eventState.allEvents[event.id] = event;
       });
       return eventState;
     }

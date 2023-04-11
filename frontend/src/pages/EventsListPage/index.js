@@ -2,7 +2,7 @@ import { CardImage, GroupEventCard } from "../../components";
 import { useGetAll } from "../../hooks";
 
 export default function EventsListPage() {
-  const events = useGetAll("events");
+  const events = useGetAll("events").allEvents;
 
   return (
     <div>

@@ -7,9 +7,10 @@ import { getGroupEvents } from "../../store/events";
 
 export default function GroupDetailCard({ group, children }) {
   const dispatch = useDispatch();
-  const events = useSelector((state) => state.events);
+  const events = useSelector((state) => state.events.allEvents);
   console.log(events);
   useEffect(() => {
+    if(group)
     dispatch(getGroupEvents(group?.id));
   }, [dispatch, group?.id]);
 

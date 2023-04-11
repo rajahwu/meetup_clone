@@ -1,19 +1,11 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { GroupActionButtons as ActionButtons, GroupDetailCard } from "../../components";
 
-import * as groupActions from "../../store/groups";
 
 export default function GroupDetailsPage() {
   const { groupId } = useParams();
-  const dispatch = useDispatch();
-  const group = useSelector((state) => state.groups.currentGroup);
-
-  useEffect(() => {
-    dispatch(groupActions.getGroup(groupId));
-  }, [dispatch, groupId]);
-
+  const group = useSelector((state) => state.groups.allGroups)[groupId];
   return (
     <div>
       <GroupDetailCard group={group}>

@@ -117,7 +117,7 @@ const groupsReducer = (
     case RECEIVE_GROUP: {
       const groupState = { ...state };
       console.log("Receive group group state", groupState);
-      groupState.currentGroup = action.payload;
+      Object.assign(groupState.currentGroup, action.payload);
       return groupState;
     }
 
