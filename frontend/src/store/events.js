@@ -19,46 +19,68 @@ export const getAllEvents = () => async (dispatch) => {
   }
 };
 
-
 export const recieveEvent = (event) => ({
-  type: RECEIVE_EVENTS,
-  payload: event
-
-})
+  type: RECEIVE_EVENT,
+  payload: event,
+});
 export const getEvent = (eventId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/events/${eventId}`)
-  const event = await response.json()
-  if(response.ok) {
-    return dispatch(recieveEvent(event))
+  const response = await csrfFetch(`/api/events/${eventId}`);
+  const event = await response.json();
+  if (response.ok) {
+    return dispatch(recieveEvent(event));
   }
-}
+};
+
+const recieveEvents = (events) => ({
+  type: RECEIVE_EVENTS,
+  payload: events,
+});
 
 export const getGroupEvents = (groupId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}/events`)
-  const events = await response.json()
+  const response = await csrfFetch(`/api/groups/${groupId}/events`);
+  const events = await response.json();
+  console.log("get group events", events);
   if (response.ok) {
-    return dispatch(loadEvents(events))
+    return dispatch(recieveEvents(events));
   }
-}
+};
 
-const eventsReducer = (state = {
-  allEvents: {},
-  event: {}
-}, action) => {
+const eventsReducer = (
+  state = {
+    allEvents: {},
+    currentGroupEvents: {},
+    currentEvent: {},
+  },
+  action
+) => {
   switch (action.type) {
     case LOAD_EVENTS: {
-      const eventState = { ...state };
+      const eventState = { ...state, };
       action.payload.Events.forEach((event) => {
         eventState.allEvents[event.id] = event;
       });
       return eventState;
     }
-   case RECEIVE_EVENT: {
-    const eventState = {...state}
-    eventState.currentEvent = action.payload
-    return eventState
-   }
-   
+    case RECEIVE_EVENT: {
+      const eventState = { ...state };
+      eventState.currentEvent = action.payload;
+      return eventState;
+    }
+
+    case RECEIVE_EVENTS: {
+      const eventState = {
+        ...state,
+        currentEvent: { ...state.currentEvent },
+        currentGroupEvents: {},
+      };
+      console.log("Receive events payload", action.payload.Events);
+      action.payload.Events.forEach((event) => {
+        eventState.currentGroupEvents[event.id] = event;
+      });
+      console.log("receive events event state", eventState);
+      return eventState;
+    }
+
     default:
       return state;
   }

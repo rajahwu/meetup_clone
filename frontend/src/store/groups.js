@@ -109,21 +109,18 @@ const groupsReducer = (
     }
     case CREATE_GROUP: {
       const groupState = { ...state };
-      console.log("Create group group state", groupState);
       groupState.allGroups[action.payload.id] = action.payload;
       return groupState;
     }
 
     case RECEIVE_GROUP: {
       const groupState = { ...state };
-      console.log("Receive group group state", groupState);
-      Object.assign(groupState.currentGroup, action.payload);
+      groupState.currentGroup = action.payload;
       return groupState;
     }
 
     case REMOVE_GROUP: {
       const groupState = { ...state };
-      console.log("Remove group group state", groupState);
       delete groupState.allGroups[action.payload];
       getAllGroups.currentGroup = {}
       return groupState;

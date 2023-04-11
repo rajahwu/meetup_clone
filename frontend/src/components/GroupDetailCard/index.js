@@ -1,20 +1,20 @@
-import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import CardImage from "../CardImage";
 import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 
+
 export default function GroupDetailCard({ group, children }) {
   const dispatch = useDispatch();
-  const events = useSelector((state) => state.events.allEvents);
-  console.log(events);
-  useEffect(() => {
-    if(group)
-    dispatch(getGroupEvents(group?.id));
-  }, [dispatch, group?.id]);
+  const events = useSelector((state) => state.events.currentGroupEvents  );
 
-  if (group)
+  useEffect(() => {
+    if(group.id)
+    dispatch(getGroupEvents(group.id));
+  }, [dispatch, group.id]);
+
     return (
       <>
         <NavLink to="/groups">Groups</NavLink>
@@ -40,7 +40,8 @@ export default function GroupDetailCard({ group, children }) {
           <h2>What we're about</h2>
           <p>{group.about}</p>
         </div>
-        {events && Object.values(events).map(event => (
+        {console.dir(events)}
+        {Object.values(events).length > 0 && Object.values(events).map(event => (
           <GroupEventCard 
             key={event.id}
             name={event.name}

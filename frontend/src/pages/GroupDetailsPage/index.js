@@ -4,7 +4,6 @@ import { GroupActionButtons as ActionButtons, GroupDetailCard } from "../../comp
 import { useEffect } from "react";
 import { getGroup } from "../../store/groups";
 
-
 export default function GroupDetailsPage() {
   const { groupId } = useParams();
   const dispatch = useDispatch()
@@ -13,10 +12,12 @@ export default function GroupDetailsPage() {
 
   useEffect(() => {
     dispatch(getGroup(groupId))
+
   }, [dispatch, groupId])
+
   return (
     <div>
-      <GroupDetailCard group={group}>
+      <GroupDetailCard  group={group}>
         <ActionButtons groupId={groupId} />
       </GroupDetailCard>
     </div>
