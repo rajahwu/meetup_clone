@@ -1,7 +1,6 @@
-import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
-import * as sessionActions from "./store/session";
 import { Navigation } from "./components";
 import {
   Header,
@@ -16,6 +15,8 @@ import {
   EventsListPage,
 } from "./pages"
 
+import * as sessionActions from "./store/session";
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,6 +24,7 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
+  
   return (
     <>
       <Header>
