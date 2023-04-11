@@ -19,7 +19,7 @@ const landingPage_card_3 = {
     "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
 };
 
-export function landingPageCardContent(cardContent) {
+export function parseContent(cardContent) {
   const content = {};
   cardContent.forEach((card, index) => {
     Object.assign(content, {
@@ -34,7 +34,7 @@ export function landingPageCardContent(cardContent) {
 }
 
 export {
-  landingPageCardContent as getCardContent,
+  parseContent as getCardContent,
   landingPage_card_1 as card1,
   landingPage_card_2 as card2,
   landingPage_card_3 as card3,

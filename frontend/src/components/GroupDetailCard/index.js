@@ -11,12 +11,12 @@ export default function GroupDetailCard({ group, children }) {
   console.log(events);
   useEffect(() => {
     dispatch(getGroupEvents(group?.id));
-  }, [dispatch]);
+  }, [dispatch, group?.id]);
 
   if (group)
     return (
       <>
-        <NavLink to="/group">Groups</NavLink>
+        <NavLink to="/groups">Groups</NavLink>
         <div style={{ display: "flex" }}>
           <CardImage imageWidth="300px" imageHeight="250px" />
           <div>

@@ -1,22 +1,31 @@
 import { TitleSection, SubTitleSection } from "./Titles";
 import { CardContainer } from "./CardContainer";
-
 import { CardImage, CallToAction } from "../../components";
-import { getCardContent, card1, card2, card3 } from "./CardContainer/content";
 import LandingPageCSS from "./LandingPage.module.css";
 
+import { getCardContent, card1, card2, card3 } from "./content";
 const cardContent = Object.values(getCardContent([card1, card2, card3]));
 
 export default function LandingPage() {
+  const css = LandingPageCSS;
+  const classNames = [
+    {
+      title: "title-container",
+      subTitle: "subtitle-container",
+      card: "card-container",
+    },
+  ];
+  const [container] = classNames;
+  
   return (
     <>
-      <TitleSection styleClassName="title-container" />
+      <TitleSection styleSheet={css} styleClassName={container.title} />
 
-      <SubTitleSection styleClassName="subtitle-container" />
+      <SubTitleSection styleSheet={css} styleClassName={container.subTitle} />
 
       <CardContainer
-        styleSheet={LandingPageCSS}
-        styleClassName="card-container"
+        styleSheet={css}
+        styleClassName={container.card}
         cardContent={cardContent}
       >
         <CardImage
@@ -25,7 +34,6 @@ export default function LandingPage() {
           imageUrl="../../../assets/group_selfie.png"
           altText="group"
         />
-
       </CardContainer>
 
       <CallToAction styleClassName="cta-container" />
