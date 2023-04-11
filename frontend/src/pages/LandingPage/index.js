@@ -25,7 +25,6 @@ export default function LandingPage() {
           imageUrl="../../../assets/group_selfie.png"
           altText="group"
         />
-
       </CardContainer>
 
       <CallToAction styleClassName="cta-container" />
