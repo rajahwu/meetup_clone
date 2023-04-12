@@ -13,6 +13,7 @@ import {
   CreateGroupPage,
   GroupDetailsPage,
   EventsListPage,
+  CreateEventPage,
 } from "./pages"
 
 import * as sessionActions from "./store/session";
@@ -45,13 +46,18 @@ function App() {
             <CreateGroupPage />
           </Route>
 
+          <Route exact path={"/groups/:groupId/events/new"}>
+            <CreateEventPage />
+          </Route>
+
           <Route exact path="/groups/:groupId">
             <GroupDetailsPage />
           </Route>
-
+          
           <Route exact path="/events/:eventId">
             <EventDetailsPage />
           </Route>
+
 
           <EventGroupHeader>
             <Route exact path="/groups">

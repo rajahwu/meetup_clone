@@ -2,6 +2,7 @@ import LandingPage from "./LandingPage";
 import GroupsListPage from "./GroupsListPage";
 import CreateGroupPage from "./CreateGroupPage";
 import GroupDetailsPage from "./GroupDetailsPage";
+import CreateEventPage from "./CreateEventPage";
 import EventsListPage from "./EventsListPage";
 
 export {
@@ -10,4 +11,5 @@ export {
   EventsListPage,
   CreateGroupPage,
   GroupDetailsPage,
+  CreateEventPage
 };

@@ -108,13 +108,13 @@ const groupsReducer = (
       return groupState;
     }
     case CREATE_GROUP: {
-      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: {} };
       groupState.allGroups[action.payload.id] = action.payload;
       return groupState;
     }
 
     case RECEIVE_GROUP: {
-      const groupState = { ...state, allGroups: state.allGroups, customElements: {} };
+      const groupState = { ...state, allGroups: state.allGroups, currentGroup: {} };
       groupState.currentGroup = action.payload;
       return groupState;
     }

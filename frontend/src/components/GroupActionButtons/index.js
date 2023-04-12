@@ -7,7 +7,7 @@ export default function GroupActionButtons({ groupId }) {
   const history = useHistory();
   return (
     <div>
-      <button>One</button>
+      <button onClick={() => history.push(`/groups/${groupId}/events/new`)}>Create event</button>
       <button onClick={() => history.push(`/groups/update/${groupId}`)}>Update</button>
       <button
         onClick={() => {

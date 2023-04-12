@@ -82,7 +82,7 @@ export default function CreateGroupPage() {
       name,
       about: description,
       type: groupType,
-      isPrivate: visibilityType.toLocaleLowerCase() === "private",
+      isPrivate: visibilityType.toLowerCase() === "private",
       city: city,
       state: state?.trim(),
       imageUrl,
@@ -182,8 +182,8 @@ export default function CreateGroupPage() {
             <label htmlFor="group-status-type">
               Public or Privite
               <select
-                name="group-status-type"
-                id="visibilityTypeType"
+                name="group-visibility-type"
+                id="groupVisibilityType"
                 value={visibilityType}
                 onChange={(e) => setVisibilityType(e.target.value)}
               >
