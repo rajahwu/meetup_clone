@@ -101,7 +101,7 @@ const groupsReducer = (
 ) => {
   switch (action.type) {
     case LOAD_GROUPS: {
-      const groupState = { ...state };
+      const groupState = { ...state, allGroups: {}, currentGroup: {} };
       action.payload.Groups.forEach((group) => {
         groupState.allGroups[group.id] = group;
       });

@@ -9,6 +9,7 @@ export default function EventDetailsPage() {
   const { eventId } = useParams();
   const dispatch = useDispatch();
   const event = useSelector((state) => state.events.currentEvent);
+  console.log("Event details state event", )
 
   useEffect(() => {
     dispatch(eventAction.getEvent(eventId));
