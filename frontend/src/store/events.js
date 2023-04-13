@@ -40,7 +40,6 @@ const recieveEvents = (events) => ({
 export const getGroupEvents = (groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}/events`);
   const events = await response.json();
-  console.log("get group events", events);
   if (response.ok) {
     return dispatch(recieveEvents(events));
   }

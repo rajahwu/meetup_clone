@@ -100,6 +100,7 @@ export default function CreateGroupPage() {
     }
 
     if (groupId) {
+      console.log("Updating:", formData)
       formData.id = groupId;
       return dispatch(groupActions.updateGroupThunk(formData))
         .then(async (res) => history.push(`/groups/${res.payload.id}`))

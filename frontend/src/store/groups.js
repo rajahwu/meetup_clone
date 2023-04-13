@@ -103,12 +103,31 @@ export const removeGroupThunk = (groupId) => async (dispatch) => {
 };
 
 export const updateGroupThunk = (groupUpdate) => async (dispatch) => {
+  const { name, about, type, isPrivate, city, state, imageUrl } = groupUpdate;
   const response = await csrfFetch(`/api/groups/${groupUpdate.id}`, {
     method: "PUT",
-    body: JSON.stringify(groupUpdate),
+    body: JSON.stringify({
+      name,
+      about,
+      type,
+      private: isPrivate,
+      city,
+      state,
+    }),
   });
 
   const updatedGroup = await response.json();
+  console.log(updatedGroup.id)
+  
+  if (imageUrl) {
+    await csrfFetch(`/api/groups/${updatedGroup.id}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url: imageUrl,
+        preview: true,
+      }),
+    });
+  }
 
   if (response.ok) {
     return await dispatch(updateGroupAction(updatedGroup));
