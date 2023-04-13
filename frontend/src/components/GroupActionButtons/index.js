@@ -23,7 +23,7 @@ export default function GroupActionButtons({ groupId }) {
       </button>
     </div>
     ) : (
-      <button>Join the Group</button>
+      <button>Join this Group</button>
     )
   );
 }
