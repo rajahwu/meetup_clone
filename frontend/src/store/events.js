@@ -65,7 +65,7 @@ export const getGroupEvents = (groupId) => async (dispatch) => {
   }
 };
 
-export const createEventThunk = (event, groupId) => async (dispatch) => {
+export const createEventThunk = (event) => async (dispatch) => {
   const {
     venueId,
     name,
@@ -76,6 +76,7 @@ export const createEventThunk = (event, groupId) => async (dispatch) => {
     endDate,
     capacity,
     imageUrl,
+    groupId,
   } = event;
 
   const response = await csrfFetch(`/api/groups/${groupId}/events`, {
@@ -92,7 +93,7 @@ export const createEventThunk = (event, groupId) => async (dispatch) => {
     }),
   });
 
-  const newEvent = response.json();
+  const newEvent = await response.json();
 
   if (imageUrl) {
     await csrfFetch(`/api/events/${newEvent.id}/images`, {
@@ -102,10 +103,11 @@ export const createEventThunk = (event, groupId) => async (dispatch) => {
         preview: true,
       }),
     });
-    if (response.ok) {
-      return await dispatch(createEventAction(newEvent));
-    }
   }
+  if (response.ok) {
+    return dispatch(createEventAction(newEvent));
+  }
+  return newEvent
 };
 
 const eventsReducer = (
@@ -157,7 +159,7 @@ const eventsReducer = (
       const eventState = {
         ...state,
         allEvents: state.allEvents,
-        currentEvent: action.payload,
+        currentEvent: {...action.payload},
         currentGroupEvents: {},
       };
       eventState.allEvents[action.payload.id] = action.payload;
@@ -168,11 +170,11 @@ const eventsReducer = (
       const eventState = {
         ...state,
         allEvents: state.allEvents,
-        currentEvent : {},
-        currentGroupEvents: state.currentGroupEvents
-      }
-      delete eventState[action.payload]
-      return eventState
+        currentEvent: {},
+        currentGroupEvents: state.currentGroupEvents,
+      };
+      delete eventState[action.payload];
+      return eventState;
     }
 
     default:

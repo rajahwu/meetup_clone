@@ -6,7 +6,7 @@ export default function EventActionButtons() {
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const groupId = useSelector(state => state.events.currentEvent.Group.id)
+    const groupId = useSelector(state => state.events.currentEvent.Group?.id)
     const {eventId} = useParams()
 
     const handleClick = () => {

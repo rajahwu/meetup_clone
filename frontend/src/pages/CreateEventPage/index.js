@@ -78,14 +78,15 @@ export default function CreateEventPage() {
     };
 
     if(!validateForm(formData)) return
-    return dispatch(eventActions.createEventThunk(formData, groupId))
+    formData.groupId = groupId
+    return dispatch(eventActions.createEventThunk(formData))
     .then(async (res) => history.push(`/events/${res.payload.id}`))
     .catch(async (res) => {
       const data = res;
       if (data && data.errors) {
         setErrors(data.errors);
       }
-    });
+    })
   };
 
   return (
