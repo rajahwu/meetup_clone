@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { GroupActionButtons as ActionButtons, GroupDetailCard } from "../../components";
-import GroupDetailsCSS from "./GroupDetailsPage.module.css"
+import GroupDetailsPageCSS from "./GroupDetailsPage.module.css"
 
 import { getGroup } from "../../store/groups";
 
 export default function GroupDetailsPage() {
-  const css = GroupDetailsCSS
+  const css = GroupDetailsPageCSS
 
   const { groupId } = useParams();
   const dispatch = useDispatch()
