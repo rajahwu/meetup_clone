@@ -45,11 +45,11 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
             {group.city}, {group.state}
           </p>
           <div>
-            <p>## events</p>
+            <p>{Object.values.length} event{Object.values.length === 1 ? "" : "s"}</p>
             <p>{group.private ? "Private" : "Public"}</p>
           </div>
           <p>
-            Organized by {group.Organizer?.firstName} {group.Orginzer?.lastName}
+            Organized by {group.Organizer?.firstName} {group.Organizer?.lastName}
           </p>
           {children}
         </div>
@@ -58,10 +58,9 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
         <h2>What we're about</h2>
         <p>{group.about}</p>
       </div>
-      {console.dir(events)}
       {Object.values(events).length > 0 &&
         Object.values(events).map((event) => (
-          <div onClick={() => history.push(`/events/${event.id}`)}>
+          <div key={event.id} onClick={() => history.push(`/events/${event.id}`)}>
             <GroupEventCard
               key={event.id}
               name={event.name}
