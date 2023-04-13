@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { getGroup } from "../../store/groups";
+import * as eventActions from "../../store/events"
 
 export default function CreateEventPage() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const currentDate = new Date().toISOString().split("T")[0]
+  const currentDate = new Date().toISOString().split("T")[0];
   const [name, setName] = useState("");
   const [eventType, setEventType] = useState("");
   const [visibilityType, setVisibilityType] = useState("");
@@ -14,35 +16,93 @@ export default function CreateEventPage() {
   const [endDate, setEndDate] = useState(currentDate);
   const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const { groupId } = useParams();
+
+  useEffect(() => {
+    dispatch(getGroup(groupId));
+  }, [dispatch, groupId]);
 
   const group = useSelector((state) => state.groups.currentGroup);
-  console.log(group)
 
-const handleSubmit = (e) => {
-    e.preventDefault()
-    const formData = {
-        name,
-        type: eventType,
-        visibilityType,
-        price,
-        description,
-        startDate,
-        endDate,
-        imageUrl
+  const validateForm = (formData) => {
+    const errors = {};
+
+    const {
+      name,
+      type,
+      visibilityType,
+      price,
+      description,
+      startDate,
+      endDate,
+      imageUrl,
+    } = formData;
+
+    if (!name["length"]) errors.name = "name is required";
+    if (!type) errors["type"] = "Event Type is required";
+    if (!visibilityType) errors["visibilityType"] = "Visibility is requried";
+    if (!String(price).length) errors["price"] = "Price is requried";
+    if (!startDate) errors["startDate"] = "Event start is required";
+    if (!endDate) errors["endDate"] = "Event end is required";
+    if (description.length < 30)
+      errors["description"] = "Description must be at least 30 characters long";
+    if (imageUrl) {
+      if (
+        !imageUrl?.split(".").includes("unsplash") &&
+        !["png", "jpg", "jpeg"].includes(
+          imageUrl?.split(".")[imageUrl.split(".").length - 1].trim()
+        )
+      )
+        errors.imageUrl = "Image URL must end in .png, .jpg, or .jpeg";
     }
-}
+    setErrors(errors);
+    return Object.values(errors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors({})
+    const formData = {
+      venueId: group.Venues[0].id,
+      name,
+      type: eventType,
+      visibilityType,
+      price: +price,
+      description,
+      startDate,
+      endDate,
+      capacity: [10, 20, 30, 40, 50][Math.floor(Math.random() * 5)],
+      imageUrl,
+    };
+
+    if(!validateForm(formData)) return
+    formData.groupId = groupId
+    return dispatch(eventActions.createEventThunk(formData))
+    .then(async (res) => history.push(`/events/${res.payload.id}`))
+    .catch(async (res) => {
+      const data = res;
+      if (data && data.errors) {
+        setErrors(data.errors);
+      }
+    })
+  };
 
   return (
     <div>
       <h3>Create an event for {group.name}</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">What is the name of your event</label>
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <label htmlFor="name">
+          What is the name of your event
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          {errors.name && <p>{errors.name}</p>}
+        </label>
         <hr />
         <label htmlFor="event-type">
           Is this in person or online
@@ -53,13 +113,14 @@ const handleSubmit = (e) => {
             onChange={(e) => setEventType(e.target.value)}
           >
             <option value="">(select one)</option>
-            <option value="online" defaultValue={eventType === "online"}>
+            <option value="Online" defaultValue={eventType === "online"}>
               Online
             </option>
-            <option value="in person" defaultValue={eventType === "in person"}>
+            <option value="In person" defaultValue={eventType === "in person"}>
               In persion
             </option>
           </select>
+          {errors.type && <p>{errors.type}</p>}
         </label>
 
         <label htmlFor="event-visibility-type">
@@ -78,14 +139,17 @@ const handleSubmit = (e) => {
               Public
             </option>
           </select>
+          {errors.visibilityType && <p>{errors.visibilityType}</p>}
         </label>
 
         <label htmlFor="price">
           <input
-            type="text"
+            type="number"
+            placeholder="0"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
+          {errors.price && <p>{errors.price}</p>}
         </label>
         <hr />
         <label htmlFor="start-date">
@@ -93,9 +157,11 @@ const handleSubmit = (e) => {
           <input
             name="start-date"
             type="date"
+            placeholder="MM/DD/YYYY"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
+          {errors.startDate && <p>{errors.startDate}</p>}
         </label>
 
         <label htmlFor="end-date">
@@ -103,9 +169,11 @@ const handleSubmit = (e) => {
           <input
             name="start-date"
             type="date"
+            placeholder="MM/DD/YYYY"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
+          {errors.endDate && <p>{errors.endDate}</p>}
         </label>
         <hr />
         <label htmlFor="imageUrl">
@@ -114,8 +182,9 @@ const handleSubmit = (e) => {
             type="text"
             placeholder="imageURL"
             value={imageUrl}
-            onChange={(e) => setImageUrl( e.target.value)}
+            onChange={(e) => setImageUrl(e.target.value)}
           />
+          {errors.imageUrl && <p>{errors.imageUrl}</p>}
         </label>
         <hr />
 
@@ -126,6 +195,7 @@ const handleSubmit = (e) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
+          {errors.description && <p>{errors.description}</p>}
         </label>
         <button type="submit">Create Event</button>
       </form>
