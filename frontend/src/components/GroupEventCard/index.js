@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import GroupEventCardCSS from "./GroupEventCard.module.css";
+import { useEffect, useState } from "react";
 
 const GroupEventCard = ({
   name,
@@ -13,12 +14,23 @@ const GroupEventCard = ({
   children,
 }) => {
   const css = GroupEventCardCSS;
-  const isGroupList = !Boolean(useParams().groupId);
-  
-  const events = useSelector((state) => state.events.currentGroupEvents);
+  const history = useHistory();
+  const [isGroupDetails, setIsGroupDetails] = useState(
+    history.location.pathname === `groups/${useParams().groupId}`
+  );
+  console.log(isGroupDetails, useParams().groupId, history.location.pathname);
 
-  const numEvents = Object.values(events).length
+  useEffect(() => {
+    setIsGroupDetails(
+      history.location.pathname === `/groups/${useParams.groupId}`
+    );
+  }, [history.location.pathname]);
 
+  const events = useSelector((state) => state.events.allEvents);
+
+  const numEvents = Object.values(events).filter(
+    (event) => +event.groupId === +groupId
+  ).length;
   return (
     <div className={css.container}>
       {children}
@@ -29,9 +41,12 @@ const GroupEventCard = ({
         </p>
         <p>{description}</p>
         <div style={{ display: "flex" }}>
-          {isGroupList ? (
+          {useParams().groupId === undefined &&
+          history.location.pathname !== "/events" ? (
             <>
-              <p>{numEvents} events</p>
+              <p>
+                {numEvents} event{numEvents === 1 ? "" : "s"}
+              </p>
               <p>&#183;</p>
               <p>{visibility}</p>
             </>
