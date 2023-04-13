@@ -1,5 +1,11 @@
-const GroupEventCard = ({ name, description, city, state, type, children }) => (
-    <div style={{ display: "flex" }}>
+import { useSelector } from "react-redux";
+
+const GroupEventCard = ({ name, description, city, state, groupId, visibility, children }) => {
+  const events = useSelector(state => state.events.allEvents)
+  const numEvents = Object.values(events).filter((event) => event.id === groupId ).length
+
+  return (
+    <div style={{ display: "flex", cursor: "pointer" }}>
       {children}
       <div>
         <h2>{name}</h2>
@@ -8,12 +14,13 @@ const GroupEventCard = ({ name, description, city, state, type, children }) => (
         </p>
         <p>{description}</p>
         <div style={{ display: "flex" }}>
-          <p>## events</p>
+          <p>{numEvents} events</p>
           <p>&#183;</p>
-          <p>public or privite, {type}</p>
+          <p>{visibility}</p>
         </div>
       </div>
     </div>
   );
+};
 
-  export default GroupEventCard
+export default GroupEventCard;

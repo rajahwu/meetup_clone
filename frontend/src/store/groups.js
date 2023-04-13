@@ -5,7 +5,6 @@ import { csrfFetch } from "./csrf";
 const LOAD_GROUPS = "groups/loadGroups";
 const CREATE_GROUP = "groups/createGroup";
 const RECEIVE_GROUP = "groups/receiveGroup";
-const CLEAR_GROUP =  "groups/clearGroup"
 const UPDATE_GROUP = "groups/updateGroup";
 const REMOVE_GROUP = "groups/removeGroup";
 
@@ -18,10 +17,6 @@ export const receiveGroup = (group) => ({
   type: RECEIVE_GROUP,
   payload: group,
 });
-
-export const clearCurrentGroup = () => ({
-  type: CLEAR_GROUP
-})
 
 export const createGroupAction = (group) => ({
   type: CREATE_GROUP,
@@ -79,18 +74,18 @@ export const createGroupThunk = (group) => async (dispatch) => {
       city: newGroup.city,
       state: newGroup.state,
       lat: faker.address.latitude(),
-      lng: faker.address.longitude()
-    })
-  })
+      lng: faker.address.longitude(),
+    }),
+  });
 
-  if(imageUrl) {
+  if (imageUrl) {
     await csrfFetch(`/api/groups/${newGroup.id}/images`, {
       method: "POST",
       body: JSON.stringify({
         url: imageUrl,
-        preview: true
-      })
-    })
+        preview: true,
+      }),
+    });
   }
 
   if (response.ok) {
@@ -154,7 +149,7 @@ const groupsReducer = (
       groupState.currentGroup = action.payload;
       return groupState;
     }
-  
+
     case REMOVE_GROUP: {
       const groupState = {
         ...state,

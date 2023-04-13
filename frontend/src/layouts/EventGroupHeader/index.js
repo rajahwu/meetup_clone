@@ -1,9 +1,18 @@
-import { NavLink } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
+import { getAllGroups } from "../../store/groups";
+import { getAllEvents } from "../../store/events";
 
 export default function EventGroupHeader({ children }) {
+  const dispatch = useDispatch()
   const history = useHistory();
   const location = history.location;
+
+  useEffect(() => {
+    dispatch(getAllGroups())
+    dispatch(getAllEvents())
+  }, [dispatch])
 
   return (
     <div>

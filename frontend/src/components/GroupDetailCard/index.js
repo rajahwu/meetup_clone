@@ -13,7 +13,7 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
 
   const groupImages = group.GroupImages || [];
   const defaultImages = ["../../../assets/no-image.jpg"];
- 
+
   useEffect(() => {
     if (group.id) dispatch(getGroupEvents(group.id));
   }, [dispatch, group.id]);
@@ -32,12 +32,17 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
           <p>
             {group.city}, {group.state}
           </p>
-          <div>
-            <p>{Object.values.length} event{Object.values.length === 1 ? "" : "s"}</p>
+          <div style={{ display: "flex" }}>
+            <p>
+              {Object.values.length} event
+              {Object.values.length === 1 ? "" : "s"}
+            </p>
+            <p>&#183;</p>
             <p>{group.private ? "Private" : "Public"}</p>
           </div>
           <p>
-            Organized by {group.Organizer?.firstName} {group.Organizer?.lastName}
+            Organized by {group.Organizer?.firstName}{" "}
+            {group.Organizer?.lastName}
           </p>
           {children}
         </div>
@@ -48,7 +53,10 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
       </div>
       {Object.values(events).length > 0 &&
         Object.values(events).map((event) => (
-          <div key={event.id} onClick={() => history.push(`/events/${event.id}`)}>
+          <div
+            key={event.id}
+            onClick={() => history.push(`/events/${event.id}`)}
+          >
             <GroupEventCard
               key={event.id}
               name={event.name}

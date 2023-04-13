@@ -1,5 +1,3 @@
-import { useEffect, useState, useMemo } from "react";
-
 import { useHistory } from "react-router-dom";
 import { useGetAll } from "../../hooks";
 import { CardImage, GroupEventCard } from "../../components";
@@ -9,7 +7,7 @@ import { checkForImage } from "../../utils/checkForImage";
 export default function GroupsListPage() {
   const groups = useGetAll("groups").allGroups;
   const history = useHistory();
-  const defaultImages = useMemo(() => ["../../../assets/no-image.jpg"], []);
+  const defaultImages = ["../../../assets/no-image.jpg"]
  
   return (
     <div>
@@ -20,11 +18,12 @@ export default function GroupsListPage() {
             onClick={() => history.push(`/groups/${group.id}`)}
           >
             <GroupEventCard
+              groupId = {group.id}
               name={group.name}
               description={group.about}
               city={group.city}
               state={group.state}
-              type={group.type}
+              visibility ={group.private ? "Private" : "Public"}
             >
               <CardImage
                 imageWidth="200px"
