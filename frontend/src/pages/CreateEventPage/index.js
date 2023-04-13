@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { getGroup } from "../../store/groups";
+import * as eventActions from "../../store/events"
 
 export default function CreateEventPage() {
   const dispatch = useDispatch();
@@ -15,6 +17,12 @@ export default function CreateEventPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({});
+
+  const { groupId } = useParams();
+
+  useEffect(() => {
+    dispatch(getGroup(groupId));
+  }, [dispatch, groupId]);
 
   const group = useSelector((state) => state.groups.currentGroup);
 
@@ -40,24 +48,44 @@ export default function CreateEventPage() {
     if (!endDate) errors["endDate"] = "Event end is required";
     if (description.length < 30)
       errors["description"] = "Description must be at least 30 characters long";
+    if (imageUrl) {
+      if (
+        !imageUrl?.split(".").includes("unsplash") &&
+        !["png", "jpg", "jpeg"].includes(
+          imageUrl?.split(".")[imageUrl.split(".").length - 1].trim()
+        )
+      )
+        errors.imageUrl = "Image URL must end in .png, .jpg, or .jpeg";
+    }
     setErrors(errors);
     return Object.values(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrors({})
     const formData = {
-      venueId: group.venueId,
+      venueId: group.Venues[0].id,
       name,
       type: eventType,
       visibilityType,
-      price,
+      price: +price,
       description,
       startDate,
       endDate,
+      capacity: [10, 20, 30, 40, 50][Math.floor(Math.random() * 5)],
       imageUrl,
     };
-    validateForm(formData) ? console.log(formData) : console.log(errors);
+
+    if(!validateForm(formData)) return
+    return dispatch(eventActions.createEventThunk(formData, groupId))
+    .then(async (res) => history.push(`/events/${res.payload.id}`))
+    .catch(async (res) => {
+      const data = res;
+      if (data && data.errors) {
+        setErrors(data.errors);
+      }
+    });
   };
 
   return (
@@ -84,10 +112,10 @@ export default function CreateEventPage() {
             onChange={(e) => setEventType(e.target.value)}
           >
             <option value="">(select one)</option>
-            <option value="online" defaultValue={eventType === "online"}>
+            <option value="Online" defaultValue={eventType === "online"}>
               Online
             </option>
-            <option value="in person" defaultValue={eventType === "in person"}>
+            <option value="In person" defaultValue={eventType === "in person"}>
               In persion
             </option>
           </select>
