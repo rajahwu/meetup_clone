@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-image {
+    border: 3px solid pink;
+}
+
+.card {
+    display: flex;
+}

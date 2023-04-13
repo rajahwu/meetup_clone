@@ -32,7 +32,7 @@ export default function CreateGroupPage() {
   }, [groupId, dispatch]);
 
   useEffect(() => {
-    if (!(Object.values(group).length)) return;
+    if (!Object.values(group).length) return;
     setLocation(`${group.city}, ${group.state}`);
     setName(group.name);
     setDescription(group.about);
@@ -62,8 +62,7 @@ export default function CreateGroupPage() {
     if (!visibilityType) errors.visibilityType = "Visibility Type is required";
 
     if (imageUrl) {
-      if (
-        !["png", "jpg", "jpeg"].includes(
+      if (!imageUrl?.split(".").includes("unsplash") && !["png", "jpg", "jpeg"].includes(
           imageUrl?.split(".")[imageUrl.split(".").length - 1].trim()
         )
       )
@@ -82,7 +81,7 @@ export default function CreateGroupPage() {
       name,
       about: description,
       type: groupType,
-      isPrivate: visibilityType.toLocaleLowerCase() === "private",
+      isPrivate: visibilityType.toLowerCase() === "private",
       city: city,
       state: state?.trim(),
       imageUrl,
@@ -167,7 +166,10 @@ export default function CreateGroupPage() {
                 onChange={(e) => setGroupType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="In person" defaultValue={groupType === "In person"}>
+                <option
+                  value="In person"
+                  defaultValue={groupType === "In person"}
+                >
                   In Person
                 </option>
                 <option value="Online" defaultValue={groupType === "Online"}>
@@ -182,16 +184,22 @@ export default function CreateGroupPage() {
             <label htmlFor="group-status-type">
               Public or Privite
               <select
-                name="group-status-type"
-                id="visibilityTypeType"
+                name="group-visibility-type"
+                id="groupVisibilityType"
                 value={visibilityType}
                 onChange={(e) => setVisibilityType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="private" defaultValue={visibilityType === "private"}>
+                <option
+                  value="private"
+                  defaultValue={visibilityType === "private"}
+                >
                   Private
                 </option>
-                <option value="public" defaultValue={visibilityType === "public"}>
+                <option
+                  value="public"
+                  defaultValue={visibilityType === "public"}
+                >
                   Public
                 </option>
               </select>
