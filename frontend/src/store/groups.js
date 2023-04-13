@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker";
+
 import { csrfFetch } from "./csrf";
 
 const LOAD_GROUPS = "groups/loadGroups";
@@ -49,7 +51,7 @@ export const getGroup = (groupId) => async (dispatch) => {
 };
 
 export const createGroupThunk = (group) => async (dispatch) => {
-  const { name, about, type, isPrivate, city, state } = group;
+  const { name, about, type, isPrivate, city, state, imageUrl } = group;
   const response = await csrfFetch("/api/groups", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -64,6 +66,27 @@ export const createGroupThunk = (group) => async (dispatch) => {
   });
 
   const newGroup = await response.json();
+
+  await csrfFetch(`/api/groups/${newGroup.id}/venues`, {
+    method: "POST",
+    body: JSON.stringify({
+      address: faker.address.streetAddress(),
+      city: newGroup.city,
+      state: newGroup.state,
+      lat: faker.address.latitude(),
+      lng: faker.address.longitude()
+    })
+  })
+
+  if(imageUrl) {
+    await csrfFetch(`/api/groups/${newGroup.id}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url: imageUrl,
+        preview: true
+      })
+    })
+  }
 
   if (response.ok) {
     return await dispatch(createGroupAction(newGroup));
@@ -108,30 +131,46 @@ const groupsReducer = (
       return groupState;
     }
     case CREATE_GROUP: {
-      const groupState = { ...state, allGroups: state.allGroups, currentGroup: {} };
+      const groupState = {
+        ...state,
+        allGroups: state.allGroups,
+        currentGroup: {},
+      };
       groupState.allGroups[action.payload.id] = action.payload;
       return groupState;
     }
 
     case RECEIVE_GROUP: {
-      const groupState = { ...state, allGroups: state.allGroups, currentGroup: {} };
+      const groupState = {
+        ...state,
+        allGroups: state.allGroups,
+        currentGroup: {},
+      };
       groupState.currentGroup = action.payload;
       return groupState;
     }
 
     case REMOVE_GROUP: {
-      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
+      const groupState = {
+        ...state,
+        allGroups: state.allGroups,
+        currentGroup: state.currentGroup,
+      };
       delete groupState.allGroups[action.payload];
-      getAllGroups.currentGroup = {}
+      getAllGroups.currentGroup = {};
       return groupState;
     }
 
     case UPDATE_GROUP: {
-      const groupState = { ...state, allGroups: state.allGroups, currentGroup: state.currentGroup };
+      const groupState = {
+        ...state,
+        allGroups: state.allGroups,
+        currentGroup: state.currentGroup,
+      };
       Object.assign(groupState.allGroups, {
         [action.payload.id]: action.payload,
       });
-      groupState.currentGroup = groupState.allGroups[action.payload.id]
+      groupState.currentGroup = groupState.allGroups[action.payload.id];
       return groupState;
     }
 

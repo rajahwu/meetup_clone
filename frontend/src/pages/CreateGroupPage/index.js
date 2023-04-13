@@ -32,7 +32,7 @@ export default function CreateGroupPage() {
   }, [groupId, dispatch]);
 
   useEffect(() => {
-    if (!(Object.values(group).length)) return;
+    if (!Object.values(group).length) return;
     setLocation(`${group.city}, ${group.state}`);
     setName(group.name);
     setDescription(group.about);
@@ -63,6 +63,7 @@ export default function CreateGroupPage() {
 
     if (imageUrl) {
       if (
+        !imageUrl?.split(".").includes("unsplash") &&
         !["png", "jpg", "jpeg"].includes(
           imageUrl?.split(".")[imageUrl.split(".").length - 1].trim()
         )
@@ -167,7 +168,10 @@ export default function CreateGroupPage() {
                 onChange={(e) => setGroupType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="In person" defaultValue={groupType === "In person"}>
+                <option
+                  value="In person"
+                  defaultValue={groupType === "In person"}
+                >
                   In Person
                 </option>
                 <option value="Online" defaultValue={groupType === "Online"}>
@@ -188,10 +192,16 @@ export default function CreateGroupPage() {
                 onChange={(e) => setVisibilityType(e.target.value)}
               >
                 <option value="">(Select one)</option>
-                <option value="private" defaultValue={visibilityType === "private"}>
+                <option
+                  value="private"
+                  defaultValue={visibilityType === "private"}
+                >
                   Private
                 </option>
-                <option value="public" defaultValue={visibilityType === "public"}>
+                <option
+                  value="public"
+                  defaultValue={visibilityType === "public"}
+                >
                   Public
                 </option>
               </select>

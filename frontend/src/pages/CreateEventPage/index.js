@@ -5,21 +5,37 @@ import { useHistory } from "react-router-dom";
 export default function CreateEventPage() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const currentDate = new Date().toISOString().split("T")[0]
   const [name, setName] = useState("");
   const [eventType, setEventType] = useState("");
   const [visibilityType, setVisibilityType] = useState("");
   const [price, setPrice] = useState(0);
-  const [startDate, setStartDate] = useState(Date.now());
-  const [endDate, setEndDate] = useState(Date.now());
+  const [startDate, setStartDate] = useState(currentDate);
+  const [endDate, setEndDate] = useState(currentDate);
   const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
 
   const group = useSelector((state) => state.groups.currentGroup);
+  console.log(group)
+
+const handleSubmit = (e) => {
+    e.preventDefault()
+    const formData = {
+        name,
+        type: eventType,
+        visibilityType,
+        price,
+        description,
+        startDate,
+        endDate,
+        imageUrl
+    }
+}
 
   return (
     <div>
       <h3>Create an event for {group.name}</h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="name">What is the name of your event</label>
         <input
           type="text"
@@ -67,7 +83,7 @@ export default function CreateEventPage() {
         <label htmlFor="price">
           <input
             type="text"
-            value={`$ ${price}`}
+            value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
         </label>
@@ -98,7 +114,7 @@ export default function CreateEventPage() {
             type="text"
             placeholder="imageURL"
             value={imageUrl}
-            onChange={(e) => e.target.value}
+            onChange={(e) => setImageUrl( e.target.value)}
           />
         </label>
         <hr />

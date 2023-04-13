@@ -10,6 +10,9 @@ export default function GroupDetailCard({ group, children }) {
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
 
+  const groupImages = group.GroupImages
+  console.log(groupImages[0].url)
+
   useEffect(() => {
     if (group.id) dispatch(getGroupEvents(group.id));
   }, [dispatch, group.id]);
@@ -18,7 +21,7 @@ export default function GroupDetailCard({ group, children }) {
     <>
       <NavLink to="/groups">Groups</NavLink>
       <div style={{ display: "flex" }}>
-        <CardImage imageWidth="300px" imageHeight="250px" />
+        <CardImage imageWidth="300px" imageHeight="250px" imageUrl={groupImages[0].url}/>
         <div>
           <h2>{group.name}</h2>
           <p>
