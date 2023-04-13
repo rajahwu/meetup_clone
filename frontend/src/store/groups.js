@@ -5,6 +5,7 @@ import { csrfFetch } from "./csrf";
 const LOAD_GROUPS = "groups/loadGroups";
 const CREATE_GROUP = "groups/createGroup";
 const RECEIVE_GROUP = "groups/receiveGroup";
+const CLEAR_GROUP =  "groups/clearGroup"
 const UPDATE_GROUP = "groups/updateGroup";
 const REMOVE_GROUP = "groups/removeGroup";
 
@@ -17,6 +18,10 @@ export const receiveGroup = (group) => ({
   type: RECEIVE_GROUP,
   payload: group,
 });
+
+export const clearCurrentGroup = () => ({
+  type: CLEAR_GROUP
+})
 
 export const createGroupAction = (group) => ({
   type: CREATE_GROUP,
@@ -149,7 +154,7 @@ const groupsReducer = (
       groupState.currentGroup = action.payload;
       return groupState;
     }
-
+  
     case REMOVE_GROUP: {
       const groupState = {
         ...state,

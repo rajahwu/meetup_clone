@@ -4,6 +4,7 @@ import { NavLink, useHistory } from "react-router-dom";
 import CardImage from "../CardImage";
 import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
+import { checkForImage } from "../../utils/checkForImage";
 
 export default function GroupDetailCard({ group, children, styleSheet }) {
   const dispatch = useDispatch();
@@ -11,21 +12,8 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
   const events = useSelector((state) => state.events.currentGroupEvents);
 
   const groupImages = group.GroupImages || [];
-  const defalultImages = ["../../../assets/no-image.jpg"];
-
-  const checkForImage = () => {
-    if (
-      !groupImages[0]?.url?.split(".").includes("unsplash") &&
-      !["png", "jpg", "jpeg"].includes(
-        groupImages[0]?.url
-          ?.split(".")
-          [groupImages[0]?.url.split(".").length - 1].trim()
-      )
-    ) {
-      return defalultImages[0];
-    } else return groupImages[0]?.url;
-  };
-
+  const defaultImages = ["../../../assets/no-image.jpg"];
+ 
   useEffect(() => {
     if (group.id) dispatch(getGroupEvents(group.id));
   }, [dispatch, group.id]);
@@ -37,7 +25,7 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
         <CardImage
           imageWidth="300px"
           imageHeight="250px"
-          imageUrl={checkForImage()}
+          imageUrl={checkForImage(groupImages, defaultImages)}
         />
         <div>
           <h2>{group.name}</h2>
@@ -45,11 +33,11 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
             {group.city}, {group.state}
           </p>
           <div>
-            <p>## events</p>
+            <p>{Object.values.length} event{Object.values.length === 1 ? "" : "s"}</p>
             <p>{group.private ? "Private" : "Public"}</p>
           </div>
           <p>
-            Organized by {group.Organizer?.firstName} {group.Orginzer?.lastName}
+            Organized by {group.Organizer?.firstName} {group.Organizer?.lastName}
           </p>
           {children}
         </div>
@@ -58,10 +46,9 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
         <h2>What we're about</h2>
         <p>{group.about}</p>
       </div>
-      {console.dir(events)}
       {Object.values(events).length > 0 &&
         Object.values(events).map((event) => (
-          <div onClick={() => history.push(`/events/${event.id}`)}>
+          <div key={event.id} onClick={() => history.push(`/events/${event.id}`)}>
             <GroupEventCard
               key={event.id}
               name={event.name}
