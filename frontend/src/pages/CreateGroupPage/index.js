@@ -32,7 +32,7 @@ export default function CreateGroupPage() {
   }, [groupId, dispatch]);
 
   useEffect(() => {
-    if (!group) return;
+    if (!(Object.values(group).length)) return;
     setLocation(`${group.city}, ${group.state}`);
     setName(group.name);
     setDescription(group.about);
