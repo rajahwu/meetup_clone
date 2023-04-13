@@ -1,11 +1,26 @@
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-const GroupEventCard = ({ name, description, city, state, groupId, visibility, children }) => {
-  const events = useSelector(state => state.events.allEvents)
-  const numEvents = Object.values(events).filter((event) => event.id === groupId ).length
+import GroupEventCardCSS from "./GroupEventCard.module.css";
+
+const GroupEventCard = ({
+  name,
+  description,
+  city,
+  state,
+  groupId,
+  visibility,
+  children,
+}) => {
+  const css = GroupEventCardCSS;
+  const isGroupList = !Boolean(useParams().groupId);
+  
+  const events = useSelector((state) => state.events.currentGroupEvents);
+
+  const numEvents = Object.values(events).length
 
   return (
-    <div style={{ display: "flex", cursor: "pointer" }}>
+    <div className={css.container}>
       {children}
       <div>
         <h2>{name}</h2>
@@ -14,9 +29,15 @@ const GroupEventCard = ({ name, description, city, state, groupId, visibility, c
         </p>
         <p>{description}</p>
         <div style={{ display: "flex" }}>
-          <p>{numEvents} events</p>
-          <p>&#183;</p>
-          <p>{visibility}</p>
+          {isGroupList ? (
+            <>
+              <p>{numEvents} events</p>
+              <p>&#183;</p>
+              <p>{visibility}</p>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

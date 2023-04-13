@@ -1,7 +1,7 @@
 import { csrfFetch } from "./csrf";
 
 const LOAD_EVENTS = "events/loadEvents";
-const RECEIVE_EVENT = "evemts/receiveEvent";
+const RECEIVE_EVENT = "events/receiveEvent";
 const RECEIVE_EVENTS = "events/receiveEvents";
 const CREATE_EVENT = "events/createEvent";
 const UPDATE_EVENT = "events/updateEvent";
@@ -32,11 +32,12 @@ export const deleteEventThunk = (eventId) => async (dispatch) => {
 };
 
 export const getAllEvents = () => async (dispatch) => {
-  const response = await csrfFetch("/api/events");
+  const response = await csrfFetch("/api/events?page=1&size=500");
   const allEvents = await response.json();
   if (response.ok) {
     dispatch(loadEvents(allEvents));
   }
+  return allEvents
 };
 
 export const recieveEvent = (event) => ({
@@ -81,6 +82,7 @@ export const createEventThunk = (event) => async (dispatch) => {
 
   const response = await csrfFetch(`/api/groups/${groupId}/events`, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       venueId,
       name,
@@ -92,7 +94,7 @@ export const createEventThunk = (event) => async (dispatch) => {
       endDate,
     }),
   });
-
+ 
   const newEvent = await response.json();
 
   if (imageUrl) {
@@ -105,7 +107,8 @@ export const createEventThunk = (event) => async (dispatch) => {
     });
   }
   if (response.ok) {
-    return dispatch(createEventAction(newEvent));
+    dispatch(createEventAction(newEvent));
+    dispatch(getAllEvents())
   }
   return newEvent
 };
@@ -122,10 +125,11 @@ const eventsReducer = (
     case LOAD_EVENTS: {
       const eventState = {
         ...state,
-        allEvents: state.allEvents,
+        allEvents: {},
         currentGroupEvents: {},
         currentEvent: {},
       };
+      console.log(action.payload)
       action.payload.Events.forEach((event) => {
         eventState.allEvents[event.id] = event;
       });
