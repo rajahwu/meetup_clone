@@ -19,6 +19,15 @@ export default function CreateGroupPage() {
   const [errors, setErrors] = useState({});
 
   const group = useSelector((state) => state.groups.currentGroup);
+  useEffect(() => {
+    if (!Object.values(group).length) return;
+    setLocation(`${group.city}, ${group.state}`);
+    setName(group.name);
+    setDescription(group.about);
+    setGroupType(group.type);
+    setVisibilityType(group.private ? "private" : "public");
+    setImageUrl(group.imageUrl || "");
+  }, [group]);
 
   useEffect(() => {
     setLocation("");
@@ -30,16 +39,6 @@ export default function CreateGroupPage() {
     setImageUrl("");
     if (groupId) dispatch(groupActions.getGroup(groupId));
   }, [groupId, dispatch]);
-
-  useEffect(() => {
-    if (!Object.values(group).length) return;
-    setLocation(`${group.city}, ${group.state}`);
-    setName(group.name);
-    setDescription(group.about);
-    setGroupType(group.type);
-    setVisibilityType(group.private ? "private" : "public");
-    setImageUrl(group.imageUrl || "");
-  }, [group]);
 
   const validateForm = () => {
     const errors = {};
@@ -62,7 +61,9 @@ export default function CreateGroupPage() {
     if (!visibilityType) errors.visibilityType = "Visibility Type is required";
 
     if (imageUrl) {
-      if (!imageUrl?.split(".").includes("unsplash") && !["png", "jpg", "jpeg"].includes(
+      if (
+        !imageUrl?.split(".").includes("unsplash") &&
+        !["png", "jpg", "jpeg"].includes(
           imageUrl?.split(".")[imageUrl.split(".").length - 1].trim()
         )
       )

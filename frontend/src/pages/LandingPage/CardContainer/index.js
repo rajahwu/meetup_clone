@@ -6,7 +6,7 @@ const LandingPageCardContainer = ({
   cardContent,
   children,
 }) => {
-  console.log(cardContent)
+  
   return (
   <section className={styleSheet[styleClassName]}>
     <Card
