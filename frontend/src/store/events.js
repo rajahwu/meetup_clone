@@ -63,7 +63,7 @@ const eventsReducer = (
       return eventState;
     }
     case RECEIVE_EVENT: {
-      const eventState = { ...state, currentEvent: {}, currentGroupEvents: {} };
+      const eventState = { ...state, allEvents: state.allEvents, currentEvent: {}, currentGroupEvents: {} };
       eventState.currentEvent = action.payload;
       return eventState;
     }
