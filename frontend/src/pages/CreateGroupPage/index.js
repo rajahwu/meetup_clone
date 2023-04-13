@@ -62,9 +62,7 @@ export default function CreateGroupPage() {
     if (!visibilityType) errors.visibilityType = "Visibility Type is required";
 
     if (imageUrl) {
-      if (
-        !imageUrl?.split(".").includes("unsplash") &&
-        !["png", "jpg", "jpeg"].includes(
+      if (!imageUrl?.split(".").includes("unsplash") && !["png", "jpg", "jpeg"].includes(
           imageUrl?.split(".")[imageUrl.split(".").length - 1].trim()
         )
       )

@@ -5,13 +5,26 @@ import CardImage from "../CardImage";
 import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 
-export default function GroupDetailCard({ group, children }) {
+export default function GroupDetailCard({ group, children, styleSheet }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
 
-  const groupImages = group.GroupImages
-  console.log(groupImages[0].url)
+  const groupImages = group.GroupImages || [];
+  const defalultImages = ["../../../assets/no-image.jpg"];
+
+  const checkForImage = () => {
+    if (
+      !groupImages[0]?.url?.split(".").includes("unsplash") &&
+      !["png", "jpg", "jpeg"].includes(
+        groupImages[0]?.url
+          ?.split(".")
+          [groupImages[0]?.url.split(".").length - 1].trim()
+      )
+    ) {
+      return defalultImages[0];
+    } else return groupImages[0]?.url;
+  };
 
   useEffect(() => {
     if (group.id) dispatch(getGroupEvents(group.id));
@@ -20,8 +33,12 @@ export default function GroupDetailCard({ group, children }) {
   return (
     <>
       <NavLink to="/groups">Groups</NavLink>
-      <div style={{ display: "flex" }}>
-        <CardImage imageWidth="300px" imageHeight="250px" imageUrl={groupImages[0].url}/>
+      <div className={styleSheet.card}>
+        <CardImage
+          imageWidth="300px"
+          imageHeight="250px"
+          imageUrl={checkForImage()}
+        />
         <div>
           <h2>{group.name}</h2>
           <p>
