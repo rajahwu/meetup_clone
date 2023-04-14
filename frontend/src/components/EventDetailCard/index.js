@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import { CardImage } from "../../components";
 
 export default function EventDetailCard({ event, children }) {
-  console.log("event detail card, " ,event)
     if(!event.id) return null
   return (
     <>
@@ -25,6 +24,7 @@ export default function EventDetailCard({ event, children }) {
           </div>
 
           <div>
+          {console.log("event details page event", event)}
             <p>{event.startDate}</p>
             <p>{event.endDate}</p>
             <p>{event.price}</p>

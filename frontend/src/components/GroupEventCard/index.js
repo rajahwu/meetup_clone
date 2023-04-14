@@ -9,6 +9,7 @@ const GroupEventCard = ({
   city,
   state,
   groupId,
+  startDate,
   visibility,
   children,
 }) => {
@@ -24,6 +25,7 @@ const GroupEventCard = ({
     <div className={css.container}>
       {children}
       <div>
+      <p>{startDate}</p>
         <h2>{name}</h2>
         <p>
           {city}, {state}

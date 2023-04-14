@@ -23,6 +23,9 @@
 .cta-btn {
   padding: 1rem;
   border-radius: 15px;
+  background-color: red;
+  color: var(--primary-color);
+  font-size: 2rem;
 }
 
 .card {
