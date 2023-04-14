@@ -4,8 +4,6 @@ import { CardImage } from "../../components";
 import { checkForImage } from "../../utils/checkForImage";
 const defaultImages = ["https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"]
 
-
-
 export default function EventDetailCard({ event, children }) {
   const group = useSelector(state => state.groups.currentGroup)
     if(!event.id) return null
