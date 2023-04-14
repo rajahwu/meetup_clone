@@ -16,8 +16,9 @@
 
 .cta-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   margin-top: 25px;
+  margin-right: 75px;
 }
 
 .cta-btn {
