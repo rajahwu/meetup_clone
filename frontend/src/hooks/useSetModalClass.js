@@ -17,5 +17,5 @@ export default function useSetModalClass(classNames) {
         content: classNames.content
       });
     }
-  }, [setModalClass, classNames]);
+  }, []);
 }

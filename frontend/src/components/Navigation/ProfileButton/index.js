@@ -7,6 +7,7 @@ import OpenModelButton from "../OpenModalButton";
 import ProfileButtonCSS from "./ProfileButton.module.css";
 
 import * as sessionActions from "../../../store/session";
+import { useState } from "react";
 
 export default function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -22,18 +23,35 @@ export default function ProfileButton({ user }) {
 
   const handleClick = () => {
     setModalContent(null);
+    setCaretDown(!caretDown);
   };
+  const [caretDown, setCaretDown] = useState(true);
 
-  const UserIcon = () => <i className="fa-solid fa-user"></i>;
+  const UserIcon = () => {
+    return (
+      <div onClick={() => setCaretDown(!caretDown)}>
+        <i className="fa-solid fa-user"></i>
+        {caretDown ? (
+          <i className="fa-solid fa-caret-down"></i>
+        ) : (
+          <i className="fa-solid fa-caret-up"></i>
+        )}
+      </div>
+    );
+  };
 
   const UserMenu = ({ user }) => {
     const { container, background, content } = ProfileButtonCSS;
     useSetModalClass({ container, background, content });
     return (
       <>
-        <div onClick={() => setModalContent(null)}>
+        <div
+          onClick={() => {
+            setModalContent(null);
+            setCaretDown(!caretDown);
+          }}
+        >
           <UserIcon />
-          <i className="fa-solid fa-caret-up"></i>
         </div>
         <div style={{ display: "flex" }}>
           <ul>
@@ -72,9 +90,6 @@ export default function ProfileButton({ user }) {
         buttonText={<UserIcon />}
         modalComponent={<UserMenu user={user} />}
       />
-      <div>
-        <i className="fa-solid fa-caret-down"></i>
-      </div>
     </div>
   );
 }

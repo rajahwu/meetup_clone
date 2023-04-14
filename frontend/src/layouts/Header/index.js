@@ -38,7 +38,7 @@ export default function Header({ children }) {
             Start a new Group
           </NavLink>
         )}
-        {children}
+        <div style={{ marginRight: "25px" }}>{children}</div>
       </div>
     </div>
   );
