@@ -80,7 +80,7 @@ export default function CreateEventPage() {
     if(!validateForm(formData)) return
     formData.groupId = groupId
     return dispatch(eventActions.createEventThunk(formData))
-    .then(async (res) => history.push(`/events/${res.payload.id}`))
+    .then(async (res) => history.push(`/events/${String(res.id)}`))
     .catch(async (res) => {
       const data = res;
       if (data && data.errors) {

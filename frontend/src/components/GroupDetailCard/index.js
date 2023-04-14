@@ -60,15 +60,20 @@ const css = GroupEventCardCSS
             key={event.id}
             onClick={() => history.push(`/events/${event.id}`)}
           >
+          {console.log("Group details card event:", event)}
             <GroupEventCard
               key={event.id}
               name={event.name}
               description="Not in data"
-              city={event.city}
-              state={event.state}
+              city={event.Venue.city}
+              state={event.Venue.state}
               type={event.type}
+              startDate={event.startDate}
             >
-              <CardImage />
+              <CardImage 
+              imageWidth={100}
+              imageHeight={100}
+               />
             </GroupEventCard>
           </div>
         ))}
