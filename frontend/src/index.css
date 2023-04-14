@@ -2,6 +2,8 @@
   --primary-color: #97978D;
   --secondary-color: #97978d;
   --bg-color: #FFFFFF;
+  --primary-font: 'PT Serif', serif;
+  --title-font: 'Ultra', serif;
 }
 
 * {
@@ -9,6 +11,16 @@
   padding: 0;
   margin: 0;
   font-size: 16px;
+  font-family: var(--primary-font);
+}
+
+h1 {
+  font-family: var(--primary-font);
+}
+
+h2 {
+  font-family: var(--title-font);
+  letter-spacing: 0.05rem;
 }
 
 .hidden {
