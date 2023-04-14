@@ -1,12 +1,16 @@
-const LandingPageTitle = ({styleSheet, styleClassName }) => (
-    <section className={styleSheet[styleClassName]}>
+import TitleSectionCSS from "./TitleSection.module.css"
+
+const LandingPageTitle = () => {
+  const css = TitleSectionCSS
+
+  return (
+    <section className={css["container"]}>
       <div>
-        <h1>Title</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-          veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-          commodo consequat.{" "}
+        <h1 className={css["title"]}>Title</h1>
+        <p className={css["text"]}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          m{" "}
         </p>
       </div>
       <div>
@@ -19,6 +23,6 @@ const LandingPageTitle = ({styleSheet, styleClassName }) => (
       </div>
     </section>
   );
+};
 
-  export default LandingPageTitle
-  
+export default LandingPageTitle;

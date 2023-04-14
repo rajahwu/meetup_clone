@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-container {
+    text-align: left;
+    padding: 0;
+    margin: 0;
+}
+
+.title {
+    font-size:  2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.007;
+    line-height: 0.7;
+
+}
+
+.text {
+font-size: 1.5rem;
+}

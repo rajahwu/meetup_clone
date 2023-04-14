@@ -5,12 +5,13 @@ const Card = ({
   linkTo,
   textContent,
   isLoggedIn,
-  children
+  children,
+  styleSheet
 }) => (
-  <div>
+  <div className={styleSheet["card"]}>
     {children}
-    <NavLink exact to={linkTo || "/"} disabled={isLoggedIn}>{titleText}</NavLink>
-    <p>{textContent}</p>
+    <NavLink className={styleSheet["card-link"]} exact to={linkTo || "/"} disabled={isLoggedIn}>{titleText}</NavLink>
+    <p className={styleSheet["card-text"]}>{textContent}</p>
   </div>
 );
 
