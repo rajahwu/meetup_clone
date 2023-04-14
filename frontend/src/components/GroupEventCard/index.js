@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 
 import GroupEventCardCSS from "./GroupEventCard.module.css";
-import { useEffect, useState } from "react";
 
 const GroupEventCard = ({
   name,
@@ -15,16 +14,6 @@ const GroupEventCard = ({
 }) => {
   const css = GroupEventCardCSS;
   const history = useHistory();
-  const [isGroupDetails, setIsGroupDetails] = useState(
-    history.location.pathname === `groups/${useParams().groupId}`
-  );
-  console.log(isGroupDetails, useParams().groupId, history.location.pathname);
-
-  useEffect(() => {
-    setIsGroupDetails(
-      history.location.pathname === `/groups/${useParams.groupId}`
-    );
-  }, [history.location.pathname]);
 
   const events = useSelector((state) => state.events.allEvents);
 

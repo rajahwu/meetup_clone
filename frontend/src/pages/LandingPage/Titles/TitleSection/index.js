@@ -13,7 +13,7 @@ const LandingPageTitle = ({styleSheet, styleClassName }) => (
         <img
           width="250"
           height="250"
-          src="../../../assets/group_selfie.png"
+          src="../../../assets/images/title-image.png"
           alt="title"
         />
       </div>

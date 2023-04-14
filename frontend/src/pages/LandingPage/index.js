@@ -1,10 +1,16 @@
 import { TitleSection, SubTitleSection } from "./Titles";
 import { CardContainer } from "./CardContainer";
-import { CardImage, CallToAction } from "../../components";
+import { CallToAction } from "../../components";
 import LandingPageCSS from "./LandingPage.module.css";
 
 import { getCardContent, card1, card2, card3 } from "./content";
 const cardContent = Object.values(getCardContent([card1, card2, card3]));
+const imageContent = {
+  width: card1.image.width,
+  height: card1.image.height,
+  src: [card1.image.src, card2.image.src, card3.image.src],
+  alt: [card1.image.alt, card2.image.alt, card3.image.src]
+}
 
 export default function LandingPage() {
   const css = LandingPageCSS;
@@ -27,13 +33,9 @@ export default function LandingPage() {
         styleSheet={css}
         styleClassName={container.card}
         cardContent={cardContent}
+        cardImage={imageContent}
       >
-        <CardImage
-          imageWidth="100"
-          imageHeight="100"
-          imageUrl="../../../assets/group_selfie.png"
-          altText="group"
-        />
+       
       </CardContainer>
 
       <CallToAction styleClassName="cta-container" />

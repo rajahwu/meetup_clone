@@ -3,6 +3,12 @@ const landingPage_card_1 = {
   linkTo: "/groups",
   textContent:
     "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enimad minim veniam, quis nostrud exercitation ullamco",
+  image: {
+    height: 300,
+    width: 300,
+    src: "../../../../assets/images/see-all-groups.png",
+    alt: "see all groups",
+  },
 };
 
 const landingPage_card_2 = {
@@ -10,6 +16,12 @@ const landingPage_card_2 = {
   linkTo: "/events",
   textContent:
     "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
+  image: {
+    height: 300,
+    width: 300,
+    src: "../../../../assets/images/see-all-events.png",
+    alt: "see all groups",
+  },
 };
 
 const landingPage_card_3 = {
@@ -17,6 +29,12 @@ const landingPage_card_3 = {
   linkTo: "/groups/new",
   textContent:
     "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
+  image: {
+    height: 300,
+    width: 300,
+    src: "../../../../assets/images/start-a-group.png",
+    alt: "see all groups",
+  },
 };
 
 export function parseContent(cardContent) {
