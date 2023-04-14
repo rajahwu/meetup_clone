@@ -26,8 +26,16 @@ export default function Header({ children }) {
   return (
     <div id="header" className={HeaderCSS["container"]}>
       <Logo />
-      <div style={{display: "flex", alignItems: "center"}}>
-        {sessionUser && <NavLink style={{margin: "0 2.5px 25px 0"}} to="/groups/new">Start a new Group</NavLink>}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {sessionUser && (
+          <NavLink
+            className={HeaderCSS["nav-link"]}
+            style={{ margin: "0 2.5px 25px 0" }}
+            to="/groups/new"
+          >
+            Start a new Group
+          </NavLink>
+        )}
         {children}
       </div>
     </div>
