@@ -5,6 +5,7 @@ import { GroupActionButtons as ActionButtons, GroupDetailCard } from "../../comp
 import GroupDetailsPageCSS from "./GroupDetailsPage.module.css"
 
 import { getGroup } from "../../store/groups";
+import { getGroupEvents } from "../../store/events";
 
 export default function GroupDetailsPage() {
   const css = GroupDetailsPageCSS
@@ -16,7 +17,7 @@ export default function GroupDetailsPage() {
 
   useEffect(() => {
     dispatch(getGroup(groupId))
-
+    dispatch(getGroupEvents(groupId))
   }, [dispatch, groupId])
 
   return (

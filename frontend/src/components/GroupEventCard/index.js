@@ -1,11 +1,38 @@
 import { useSelector } from "react-redux";
+import { useParams, useHistory } from "react-router-dom";
 
-const GroupEventCard = ({ name, description, city, state, groupId, visibility, children }) => {
-  const events = useSelector(state => state.events.allEvents)
-  const numEvents = Object.values(events).filter((event) => event.id === groupId ).length
+import GroupEventCardCSS from "./GroupEventCard.module.css";
+import { useEffect, useState } from "react";
 
+const GroupEventCard = ({
+  name,
+  description,
+  city,
+  state,
+  groupId,
+  visibility,
+  children,
+}) => {
+  const css = GroupEventCardCSS;
+  const history = useHistory();
+  const [isGroupDetails, setIsGroupDetails] = useState(
+    history.location.pathname === `groups/${useParams().groupId}`
+  );
+  console.log(isGroupDetails, useParams().groupId, history.location.pathname);
+
+  useEffect(() => {
+    setIsGroupDetails(
+      history.location.pathname === `/groups/${useParams.groupId}`
+    );
+  }, [history.location.pathname]);
+
+  const events = useSelector((state) => state.events.allEvents);
+
+  const numEvents = Object.values(events).filter(
+    (event) => +event.groupId === +groupId
+  ).length;
   return (
-    <div style={{ display: "flex", cursor: "pointer" }}>
+    <div className={css.container}>
       {children}
       <div>
         <h2>{name}</h2>
@@ -14,9 +41,18 @@ const GroupEventCard = ({ name, description, city, state, groupId, visibility, c
         </p>
         <p>{description}</p>
         <div style={{ display: "flex" }}>
-          <p>{numEvents} events</p>
-          <p>&#183;</p>
-          <p>{visibility}</p>
+          {useParams().groupId === undefined &&
+          history.location.pathname !== "/events" ? (
+            <>
+              <p>
+                {numEvents} event{numEvents === 1 ? "" : "s"}
+              </p>
+              <p>&#183;</p>
+              <p>{visibility}</p>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

@@ -5,8 +5,11 @@ import CardImage from "../CardImage";
 import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 import { checkForImage } from "../../utils/checkForImage";
+import GroupEventCardCSS from "./GroupDetailCard.module.css";
 
 export default function GroupDetailCard({ group, children, styleSheet }) {
+const css = GroupEventCardCSS
+
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
@@ -34,8 +37,8 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
           </p>
           <div style={{ display: "flex" }}>
             <p>
-              {Object.values.length} event
-              {Object.values.length === 1 ? "" : "s"}
+              {Object.values(events).length} event
+              {Object.values(events).length === 1 ? "" : "s"}
             </p>
             <p>&#183;</p>
             <p>{group.private ? "Private" : "Public"}</p>
