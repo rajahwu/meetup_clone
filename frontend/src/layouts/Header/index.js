@@ -12,14 +12,16 @@ export default function Header({ children }) {
       history.push("/");
     };
     return (
-      <img
-        className={HeaderCSS["logo"]}
-        src="../../../assets/hiwdt-logo.png"
-        alt="logo"
-        width="100"
-        height="100"
-        onClick={handleClick}
-      />
+      <div className={HeaderCSS["logo-container"]}>
+        <img
+          className={HeaderCSS["logo"]}
+          src="../../../assets/hiwdt-logo.png"
+          alt="logo"
+          width="100"
+          height="100"
+          onClick={handleClick}
+        />
+      </div>
     );
   };
 
