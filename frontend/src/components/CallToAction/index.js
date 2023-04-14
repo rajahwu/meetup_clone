@@ -1,8 +1,6 @@
-import LandingPageCSS from "../../pages/LandingPage/LandingPage.module.css";
-
-const CallToAction = ({ styleClassName }) => (
-    <section className={LandingPageCSS[styleClassName]}>
-      <button>Join Meetup</button>
+const CallToAction = ({ StyleSheet }) => (
+    <section className={StyleSheet["cta-container"]}>
+      <button className={StyleSheet["cta-btn"]}>Join Meetup</button>
     </section>
   );
 

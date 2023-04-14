@@ -13,8 +13,8 @@ export default function EventsListPage() {
             <GroupEventCard
               name={event.name}
               description={event.about}
-              city={event.city}
-              state={event.state}
+              city={event.Venue?.city}
+              state={event.Venue?.state}
               type={event.type}
             >
               <CardImage />
