@@ -82,7 +82,7 @@ export default function CreateEventPage() {
     return dispatch(eventActions.createEventThunk(formData))
     .then(async (res) => history.push(`/events/${String(res.id)}`))
     .catch(async (res) => {
-      const data = res;
+      const data = await res.json();
       if (data && data.errors) {
         setErrors(data.errors);
       }

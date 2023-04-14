@@ -125,9 +125,9 @@ const eventsReducer = (
     case LOAD_EVENTS: {
       const eventState = {
         ...state,
-        allEvents: {},
-        currentGroupEvents: {},
-        currentEvent: {},
+        allEvents: {...state.allEvents},
+        currentGroupEvents: {...state.currentGroupEvents},
+        currentEvent: {...state.currentEvent},
       };
       console.log(action.payload)
       action.payload.Events.forEach((event) => {

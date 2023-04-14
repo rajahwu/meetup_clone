@@ -4,8 +4,8 @@ const landingPage_card_1 = {
   textContent:
     "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enimad minim veniam, quis nostrud exercitation ullamco",
   image: {
-    height: 300,
-    width: 300,
+    height: 150,
+    width: 150,
     src: "../../../../assets/images/see-all-groups.png",
     alt: "see all groups",
   },

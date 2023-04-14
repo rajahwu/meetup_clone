@@ -73,6 +73,7 @@ const css = GroupEventCardCSS
               <CardImage 
               imageWidth={100}
               imageHeight={100}
+              imageUrl={checkForImage(event.previewImage, defaultImages)}
                />
             </GroupEventCard>
           </div>
