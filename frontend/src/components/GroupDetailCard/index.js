@@ -8,14 +8,24 @@ import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
 import GroupEventCardCSS from "./GroupDetailCard.module.css";
 
+import moment from "moment";
+
 export default function GroupDetailCard({ group, children, styleSheet }) {
 const css = GroupEventCardCSS
 
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
+  const eventList = Object.values(events)
 
   const groupImages = group.GroupImages || [];
+
+    
+  const sortedEventList = eventList.sort(function(a,b) {
+    return new moment(b.startDate) - new moment(a.startDate)
+  })
+
+  console.log(eventList, sortedEventList)
 
 
 
@@ -39,8 +49,8 @@ const css = GroupEventCardCSS
           </p>
           <div style={{ display: "flex" }}>
             <p>
-              {Object.values(events).length} event
-              {Object.values(events).length === 1 ? "" : "s"}
+              {eventList.length} event
+              {eventList.length === 1 ? "" : "s"}
             </p>
             <p>&#183;</p>
             <p>{group.private ? "Private" : "Public"}</p>
@@ -56,8 +66,8 @@ const css = GroupEventCardCSS
         <h2>What we're about</h2>
         <p>{group.about}</p>
       </div>
-      {Object.values(events).length > 0 &&
-        Object.values(events).map((event) => (
+      {eventList.length > 0 &&
+        eventList.map((event) => (
           <div
             key={event.id}
             onClick={() => history.push(`/events/${event.id}`)}
