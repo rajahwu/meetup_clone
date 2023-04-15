@@ -5,7 +5,7 @@ const checkForImage = (images, defaultImages, key = "url") => {
       images[0]?.[key]?.split(".")[images[0]?.[key].split(".").length - 1].trim()
     )
   ) {
-    return defaultImages[0];
+    return defaultImages[Math.floor(Math.random() * defaultImages.length)];
   } else return images[0]?.[key];
 };
 

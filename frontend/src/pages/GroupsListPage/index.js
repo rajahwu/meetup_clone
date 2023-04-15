@@ -3,11 +3,11 @@ import { useGetAll } from "../../hooks";
 import { CardImage, GroupEventCard } from "../../components";
 
 import { checkForImage } from "../../utils/checkForImage";
+import { defaultImages } from "../../utils/defaultImages";
 
 export default function GroupsListPage() {
   const groups = useGetAll("groups").allGroups;
   const history = useHistory();
-  const defaultImages = ["../../../assets/no-image.jpg"]
  
   return (
     <div>
@@ -28,7 +28,7 @@ export default function GroupsListPage() {
               <CardImage
                 imageWidth="200px"
                 imageHeight="200px"
-                imageUrl={checkForImage([group], defaultImages, "previewImage")}
+                imageUrl={checkForImage([group.previewImage], defaultImages.groups, "previewImage")}
               />
             </GroupEventCard>
             <hr />
