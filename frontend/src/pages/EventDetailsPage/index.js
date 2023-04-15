@@ -15,7 +15,7 @@ export default function EventDetailsPage() {
   }, [dispatch, eventId]);
 
   return (
-    <div>
+    <div style={{marginTop: "125px"}}>
       <EventDetailCard event={event}> 
       <EventActionButtons eventId={eventId} />
       </EventDetailCard>

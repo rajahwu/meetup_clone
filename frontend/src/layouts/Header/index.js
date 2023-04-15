@@ -13,15 +13,15 @@ export default function Header({ children }) {
     };
     return (
       <div className={HeaderCSS["logo-container"]}>
-        <img
-          className={HeaderCSS["logo"]}
-          src="../../../assets/hiwdt-logo.png"
-          alt="logo"
-          width="100"
-          height="100"
-          onClick={handleClick}
-        />
-      </div>
+          <img
+            className={HeaderCSS["logo"]}
+            src="../../../assets/hiwdt-logo.png"
+            alt="logo"
+            width="100"
+            height="100"
+            onClick={handleClick}
+          />
+        </div>
     );
   };
 
