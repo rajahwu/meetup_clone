@@ -12,6 +12,7 @@ const GroupEventCard = ({
   startDate,
   visibility,
   children,
+  styleSheet,
 }) => {
   const css = GroupEventCardCSS;
   const history = useHistory();
@@ -21,16 +22,20 @@ const GroupEventCard = ({
   const numEvents = Object.values(events).filter(
     (event) => +event.groupId === +groupId
   ).length;
+
   return (
     <div className={css.container}>
       {children}
       <div>
-      <p>{startDate}</p>
-        <h2>{name}</h2>
-        <p>
-          {city}, {state}
-        </p>
-        <p>{description}</p>
+
+        <div className={styleSheet?.["text-container"]}>
+          <p>{startDate}</p>
+          <h2 className={styleSheet?.["card-title"]}>{name}</h2>
+          <p className={styleSheet?.["card-location"]}>
+            {city}, {state}
+          </p>
+          <p className={styleSheet?.["card-description"]}>{description}</p>
+
         <div style={{ display: "flex" }}>
           {useParams().groupId === undefined &&
           history.location.pathname !== "/events" ? (
@@ -45,6 +50,8 @@ const GroupEventCard = ({
             ""
           )}
         </div>
+        </div>
+
       </div>
     </div>
   );
