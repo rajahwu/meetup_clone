@@ -90,7 +90,7 @@ export default function CreateEventPage() {
   };
 
   return (
-    <div>
+    <div style={{marginTop: "150px"}}>
       <h3>Create an event for {group.name}</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">

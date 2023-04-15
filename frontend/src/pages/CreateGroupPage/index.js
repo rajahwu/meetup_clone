@@ -113,7 +113,7 @@ export default function CreateGroupPage() {
   };
 
   return (
-    <div>
+    <div style={{marginTop: "150px"}}>
       <form onSubmit={handleSubmit}>
         <section>
           <div>
