@@ -7,27 +7,19 @@ import { getGroupEvents } from "../../store/events";
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
 import GroupEventCardCSS from "./GroupDetailCard.module.css";
+import { sortDate } from "../../utils";
 
-import moment from "moment";
 
 export default function GroupDetailCard({ group, children, styleSheet }) {
-const css = GroupEventCardCSS
+  const css = GroupEventCardCSS;
 
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
-  const eventList = Object.values(events)
+  const eventList = Object.values(events);
+  sortDate(eventList, "startDate")
 
   const groupImages = group.GroupImages || [];
-
-    
-  const sortedEventList = eventList.sort(function(a,b) {
-    return new moment(b.startDate) - new moment(a.startDate)
-  })
-
-  console.log(eventList, sortedEventList)
-
-
 
   useEffect(() => {
     if (group.id) dispatch(getGroupEvents(group.id));
@@ -81,11 +73,14 @@ const css = GroupEventCardCSS
               type={event.type}
               startDate={event.startDate}
             >
-              <CardImage 
-              imageWidth={100}
-              imageHeight={100}
-              imageUrl={checkForImage(event.previewImage, defaultImages.events)}
-               />
+              <CardImage
+                imageWidth={100}
+                imageHeight={100}
+                imageUrl={checkForImage(
+                  event.previewImage,
+                  defaultImages.events
+                )}
+              />
             </GroupEventCard>
           </div>
         ))}
