@@ -6,18 +6,17 @@ import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
-import GroupEventCardCSS from "./GroupDetailCard.module.css";
+import GroupDetailCardCSS from "./GroupDetailCard.module.css";
 import { sortDate } from "../../utils";
 
-
 export default function GroupDetailCard({ group, children, styleSheet }) {
-  const css = GroupEventCardCSS;
+  const css = GroupDetailCardCSS;
 
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
   const eventList = Object.values(events);
-  sortDate(eventList, "startDate")
+  sortDate(eventList, "startDate");
 
   const groupImages = group.GroupImages || [];
 
@@ -27,8 +26,10 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
 
   return (
     <>
-      <NavLink to="/groups">Groups</NavLink>
-      <div className={styleSheet.card}>
+    <div className={css["container"]}>
+
+      <NavLink className={css["title-link"]} to="/groups">Groups</NavLink>
+      <div className={css["card-container"]}>
         <CardImage
           imageWidth="300px"
           imageHeight="250px"
@@ -58,32 +59,36 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
         <h2>What we're about</h2>
         <p>{group.about}</p>
       </div>
-      {eventList.length > 0 &&
-        eventList.map((event) => (
-          <div
-            key={event.id}
-            onClick={() => history.push(`/events/${event.id}`)}
-          >
-            <GroupEventCard
+    </div>
+
+      <div className={css["events-container"]}>
+        {eventList.length > 0 &&
+          eventList.map((event) => (
+            <div
               key={event.id}
-              name={event.name}
-              description="Not in data"
-              city={event.Venue.city}
-              state={event.Venue.state}
-              type={event.type}
-              startDate={event.startDate}
+              onClick={() => history.push(`/events/${event.id}`)}
             >
-              <CardImage
-                imageWidth={100}
-                imageHeight={100}
-                imageUrl={checkForImage(
-                  event.previewImage,
-                  defaultImages.events
-                )}
-              />
-            </GroupEventCard>
-          </div>
-        ))}
+              <GroupEventCard
+                key={event.id}
+                name={event.name}
+                description="Not in data"
+                city={event.Venue.city}
+                state={event.Venue.state}
+                type={event.type}
+                startDate={event.startDate}
+              >
+                <CardImage
+                  imageWidth={100}
+                  imageHeight={100}
+                  imageUrl={checkForImage(
+                    event.previewImage,
+                    defaultImages.events
+                  )}
+                />
+              </GroupEventCard>
+            </div>
+          ))}
+      </div>
     </>
   );
 }

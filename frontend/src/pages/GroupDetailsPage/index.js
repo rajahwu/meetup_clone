@@ -21,7 +21,7 @@ export default function GroupDetailsPage() {
   }, [dispatch, groupId])
 
   return (
-    <div className={css.container} style={{marginTop: "200px"}}>
+    <div className={css.container} style={{marginTop: "115px"}}>
       <GroupDetailCard group={group} styleSheet={css}>
         <ActionButtons groupId={groupId} />
       </GroupDetailCard>

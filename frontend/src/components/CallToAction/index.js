@@ -4,7 +4,6 @@ import { SignupFormModal } from "../session";
 
 const CallToAction = ({ StyleSheet }) => {
   const sessisonUser = useSelector((state) => state.session.user);
-  console.log(!sessisonUser);
   return (
     !sessisonUser && (
       <section className={StyleSheet["cta-container"]}>
