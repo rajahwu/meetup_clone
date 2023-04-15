@@ -5,13 +5,13 @@
 .title {
     font-size: 3.5rem;
     line-height: 3.5rem;
-    padding-bottom: 5rem;
 }
 
 .text {
     font-size: 1.3rem;
     line-height: 1.5rem;
     width: 65%;
+    padding: 3rem 0;
 }
 
 .image-container {

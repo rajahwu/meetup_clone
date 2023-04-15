@@ -5,6 +5,7 @@ import CardImage from "../CardImage";
 import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 import { checkForImage } from "../../utils/checkForImage";
+import { defaultImages } from "../../utils/defaultImages";
 import GroupEventCardCSS from "./GroupDetailCard.module.css";
 
 export default function GroupDetailCard({ group, children, styleSheet }) {
@@ -15,7 +16,8 @@ const css = GroupEventCardCSS
   const events = useSelector((state) => state.events.currentGroupEvents);
 
   const groupImages = group.GroupImages || [];
-  const defaultImages = ["../../../assets/no-image.jpg"];
+
+
 
   useEffect(() => {
     if (group.id) dispatch(getGroupEvents(group.id));
@@ -28,7 +30,7 @@ const css = GroupEventCardCSS
         <CardImage
           imageWidth="300px"
           imageHeight="250px"
-          imageUrl={checkForImage(groupImages, defaultImages)}
+          imageUrl={checkForImage(groupImages, defaultImages.groups)}
         />
         <div>
           <h2>{group.name}</h2>
@@ -60,7 +62,6 @@ const css = GroupEventCardCSS
             key={event.id}
             onClick={() => history.push(`/events/${event.id}`)}
           >
-          {console.log("Group details card event:", event)}
             <GroupEventCard
               key={event.id}
               name={event.name}
@@ -73,7 +74,7 @@ const css = GroupEventCardCSS
               <CardImage 
               imageWidth={100}
               imageHeight={100}
-              imageUrl={checkForImage(event.previewImage, defaultImages)}
+              imageUrl={checkForImage(event.previewImage, defaultImages.events)}
                />
             </GroupEventCard>
           </div>
