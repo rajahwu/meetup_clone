@@ -8,7 +8,7 @@ const Card = ({ titleText, linkTo, textContent, children, styleSheet }) => {
     <div className={styleSheet["card"]}>
       {children}
       {linkTo === "/groups/new" && !sessionUser ? (
-        <p>Start a group</p>
+        <p className={styleSheet["card-link"]}>Start a group</p>
       ) : (
         <NavLink className={styleSheet["card-link"]} exact to={linkTo || "/"}>
           {titleText}

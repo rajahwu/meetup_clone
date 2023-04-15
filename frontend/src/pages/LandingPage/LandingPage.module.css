@@ -1,3 +1,8 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 .title-container {
   display: flex;
 }
@@ -12,6 +17,7 @@
 .card-container {
   display: flex;
   flex-direction: row;
+  justify-self: center;
 }
 
 .cta-container {
