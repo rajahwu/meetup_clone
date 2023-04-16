@@ -1,4 +1,20 @@
 .container {
-    display: flex;
-    cursor: pointer;
+ display: flex;
+}
+
+.image {
+ 
+}
+
+.title {
+}
+
+.location {
+
+}
+
+.description {
+}
+
+.visibility {
 }

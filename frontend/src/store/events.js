@@ -37,7 +37,7 @@ export const getAllEvents = () => async (dispatch) => {
   if (response.ok) {
     dispatch(loadEvents(allEvents));
   }
-  return allEvents
+  return allEvents;
 };
 
 export const recieveEvent = (event) => ({
@@ -64,6 +64,12 @@ export const getGroupEvents = (groupId) => async (dispatch) => {
   if (response.ok) {
     return dispatch(recieveEvents(events));
   }
+};
+
+const fetchCurrentEventData = async (event) => {
+  const response = await csrfFetch(`/api/events/${event.id}`);
+  const currentEvent = await response.json();
+  return currentEvent;
 };
 
 export const createEventThunk = (event) => async (dispatch) => {
@@ -94,7 +100,7 @@ export const createEventThunk = (event) => async (dispatch) => {
       endDate,
     }),
   });
- 
+
   const newEvent = await response.json();
 
   if (imageUrl) {
@@ -108,9 +114,9 @@ export const createEventThunk = (event) => async (dispatch) => {
   }
   if (response.ok) {
     dispatch(createEventAction(newEvent));
-    dispatch(getAllEvents())
+    dispatch(getAllEvents());
   }
-  return newEvent
+  return newEvent;
 };
 
 const eventsReducer = (
@@ -118,6 +124,7 @@ const eventsReducer = (
     allEvents: {},
     currentGroupEvents: {},
     currentEvent: {},
+    allCurrentEvents: {},
   },
   action
 ) => {
@@ -125,13 +132,15 @@ const eventsReducer = (
     case LOAD_EVENTS: {
       const eventState = {
         ...state,
-        allEvents: {...state.allEvents},
-        currentGroupEvents: {...state.currentGroupEvents},
-        currentEvent: {...state.currentEvent},
+        allEvents: { ...state.allEvents },
+        currentGroupEvents: { ...state.currentGroupEvents },
+        currentEvent: { ...state.currentEvent },
+        allCurrentEvents: { ...state.allCurrentEvents },
       };
-      console.log(action.payload)
-      action.payload.Events.forEach((event) => {
+      action.payload.Events.forEach(async (event) => {
         eventState.allEvents[event.id] = event;
+        const currentEvent = await fetchCurrentEventData(event);
+        eventState.allCurrentEvents[currentEvent.id] = currentEvent;
       });
       return eventState;
     }
@@ -139,6 +148,7 @@ const eventsReducer = (
       const eventState = {
         ...state,
         allEvents: state.allEvents,
+        allCurrentEvents: { ...state.allCurrentEvents },
         currentEvent: {},
         currentGroupEvents: {},
       };
@@ -151,6 +161,7 @@ const eventsReducer = (
         ...state,
         allEvents: state.allEvents,
         currentEvent: state.currentEvent,
+        allCurrentEvents: { ...state.allCurrentEvents },
         currentGroupEvents: {},
       };
       action.payload.Events.forEach((event) => {
@@ -163,7 +174,8 @@ const eventsReducer = (
       const eventState = {
         ...state,
         allEvents: state.allEvents,
-        currentEvent: {...action.payload},
+        currentEvent: { ...action.payload },
+        allCurrentEvents: { ...state.allCurrentEvents },
         currentGroupEvents: {},
       };
       eventState.allEvents[action.payload.id] = action.payload;
@@ -176,6 +188,7 @@ const eventsReducer = (
         allEvents: state.allEvents,
         currentEvent: {},
         currentGroupEvents: state.currentGroupEvents,
+        allCurrentEvents: { ...state.allCurrentEvents },
       };
       delete eventState[action.payload];
       return eventState;

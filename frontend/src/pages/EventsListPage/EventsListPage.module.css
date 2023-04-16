@@ -1,0 +1,29 @@
+.container {
+    margin: 15px;
+}
+
+.image {
+    
+}
+
+.text-container {
+    border: 3px solid pink;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+}
+
+.card-title {
+    font-size: 1.7rem;
+    text-align: "left";
+    padding-bottom: 1rem;
+}
+
+.card-location {
+    padding-bottom: 1rem;
+    
+}
+.card-description {
+    padding-bottom: 1rem;
+} 
+
