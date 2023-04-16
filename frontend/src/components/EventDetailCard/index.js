@@ -45,7 +45,6 @@ export default function EventDetailCard({ event, children }) {
                   </div>
                   <div>
                     <p> {event.Group?.name}</p>
-
                     <p>{event.Group?.private ? "Private" : "Public"}</p>
                   </div>
                 </div>

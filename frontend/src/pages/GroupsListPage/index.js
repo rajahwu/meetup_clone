@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useGetAll } from "../../hooks";
 import { CardImage, GroupEventCard } from "../../components";
@@ -5,10 +6,12 @@ import GroupsListPageCSS from "./GroupsListPage.module.css"
 
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
+import { getGroup } from "../../store/groups";
 
 export default function GroupsListPage() {
   const groups = useGetAll("groups").allGroups;
   const history = useHistory();
+  const dispatch = useDispatch()
 
   return (
     <div style={{display: "flex", flexDirection: "column", margin: "auto"}}>
@@ -16,7 +19,10 @@ export default function GroupsListPage() {
         return (
           <div
             key={group.id}
-            onClick={() => history.push(`/groups/${group.id}`)}
+            onClick={() => {
+              dispatch(getGroup(group.id))
+              history.push(`/groups/${group.id}`)
+              }}
           >
             <GroupEventCard
               groupId={group.id}
