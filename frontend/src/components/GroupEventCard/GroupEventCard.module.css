@@ -1,13 +1,16 @@
 .container {
- 
+ display: flex;
 }
 
 .image {
  
 }
 
-
 .title {
+}
+
+.location {
+
 }
 
 .description {
