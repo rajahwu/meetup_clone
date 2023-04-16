@@ -115,19 +115,21 @@ export default function CreateGroupPage() {
   const css = CreateGroupCSS;
 
   return (
-    <div style={{ marginTop: "150px" }}>
+    <div className={css["container"]}>
       <form onSubmit={handleSubmit}>
         <section>
-          <div className={css["title"]}>
-            <p>become an organizer</p>
-            <p>
+          <div className={css["title-container"]}>
+            <p className={css["title"]}>become an organizer</p>
+            <p className={css["field-heading"]}>
               We'll walk you through a few steps to build your local community
             </p>
           </div>
           <p className={css["hr"]} />
           <div>
-            <p>First, set your group's location.</p>
-            <p>
+            <p className={css["field-heading"]}>
+              First, set your group's location.
+            </p>
+            <p className={css["label-text"]}>
               Meetup groups meet locally, in person and online. We'll connect
               you with people in your area, and more can join you online.
             </p>
@@ -140,14 +142,18 @@ export default function CreateGroupPage() {
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
-            {errors.location && <p>{errors.location}</p>}
+            {errors.location && (
+              <p className={css["error"]}>{errors.location}</p>
+            )}
           </div>
         </section>
         <p className={css["hr"]} />
         <section>
           <div>
-            <p>What will your group's name be?</p>
-            <p>
+            <p className={css["field-heading"]}>
+              What will your group's name be?
+            </p>
+            <p className={css["label-text"]}>
               Choose a name that will give people a clear idea of what the group
               is about. Feel free to get creative! You can edit this later if
               you change your mind.
@@ -161,39 +167,46 @@ export default function CreateGroupPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            {errors.name && <p>{errors.name}</p>}
+            {errors.name && <p className={css["error"]}>{errors.name}</p>}
           </div>
           <p className={css["hr"]} />
         </section>
-        <p>Now describe what your group will be about</p>
-        <p>
+        <p className={css["field-heading"]}>
+          Now describe what your group will be about
+        </p>
+        <p className={css["label-text"]}>
           People will see this when we promote your group, but you'll be able to
           add to it later, too
         </p>
-        <ol>
+        <ol className={css["label-text"]}>
           <li>What's the purpose of the group?</li>
           <li>Who should join?</li>
           <li>What will you do at your events?</li>
         </ol>
         <section>
           <textarea
+            className={css["textarea"]}
             name="group-description"
             id="groupDescription"
-            cols="30"
+            cols="60"
             rows="10"
             placeholder="Please write at least 30 characters"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {errors.description && errors.description}
-          {errors.about && errors.about}
+          {errors.description && (
+            <p className={css["error"]}>{errors.description}</p>
+          )}
+          {errors.about && <p className={css["error"]}>{errors.about}</p>}
         </section>
-          <p className={css["hr"]} />
+        <p className={css["hr"]} />
         <section>
-        <p>Final steps...</p>
-          <div>
+          <p className={css["field-heading"]}>Final steps...</p>
+          <div className={css["dropdown"]}>
             <label htmlFor="group-type">
-              Is this an in person or online group?
+              <p className={css["label-text"]}>
+                Is this an in person or online group?
+              </p>
               <select
                 name="group-type"
                 id="groupType"
@@ -212,12 +225,15 @@ export default function CreateGroupPage() {
                 </option>
               </select>
             </label>
-            {errors.groupType && <p>{errors.groupType}</p>}
+            {errors.groupType && (
+              <p className={css["error"]}>{errors.groupType}</p>
+            )}
           </div>
-          <br />
           <div>
             <label htmlFor="group-status-type">
-              Is this group private or public?
+              <p className={css["label-text"]}>
+                Is this group private or public?
+              </p>
               <select
                 name="group-visibility-type"
                 id="groupVisibilityType"
@@ -239,10 +255,14 @@ export default function CreateGroupPage() {
                 </option>
               </select>
             </label>
-            {errors.visibilityType && <p>{errors.visibilityType}</p>}
+            {errors.visibilityType && (
+              <p className={css["error"]}>{errors.visibilityType}</p>
+            )}
           </div>
           <div>
-          <p>Please add an image url for your group below:</p>
+            <p className={css["label-text"]}>
+              Please add an image url for your group below:
+            </p>
             <input
               className={CreateGroupCSS["input"]}
               type="text"
@@ -252,11 +272,13 @@ export default function CreateGroupPage() {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
             />
-            {errors.imageUrl && <p>{errors.imageUrl}</p>}
+            {errors.imageUrl && (
+              <p className={css["error"]}>{errors.imageUrl}</p>
+            )}
           </div>
         </section>
         <p className={css["hr"]} />
-        <button type="submit">
+        <button className={css["submit-btn"]} type="submit">
           {groupId ? "Update Group" : "Create a Group"}
         </button>
       </form>
