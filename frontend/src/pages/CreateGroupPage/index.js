@@ -112,13 +112,27 @@ export default function CreateGroupPage() {
     }
   };
 
+  const css = CreateGroupCSS;
+
   return (
-    <div style={{marginTop: "150px"}}>
+    <div style={{ marginTop: "150px" }}>
       <form onSubmit={handleSubmit}>
         <section>
+          <div className={css["title"]}>
+            <p>become an organizer</p>
+            <p>
+              We'll walk you through a few steps to build your local community
+            </p>
+          </div>
+          <p className={css["hr"]} />
           <div>
+            <p>First, set your group's location.</p>
+            <p>
+              Meetup groups meet locally, in person and online. We'll connect
+              you with people in your area, and more can join you online.
+            </p>
             <input
-              className={CreateGroupCSS["input"]}
+              className={css["input"]}
               type="text"
               name="group-location"
               id="groupLocation"
@@ -129,10 +143,17 @@ export default function CreateGroupPage() {
             {errors.location && <p>{errors.location}</p>}
           </div>
         </section>
+        <p className={css["hr"]} />
         <section>
           <div>
+            <p>What will your group's name be?</p>
+            <p>
+              Choose a name that will give people a clear idea of what the group
+              is about. Feel free to get creative! You can edit this later if
+              you change your mind.
+            </p>
             <input
-              className={CreateGroupCSS["input"]}
+              className={css["input"]}
               type="text"
               name="group-name"
               id="name"
@@ -142,7 +163,18 @@ export default function CreateGroupPage() {
             />
             {errors.name && <p>{errors.name}</p>}
           </div>
+          <p className={css["hr"]} />
         </section>
+        <p>Now describe what your group will be about</p>
+        <p>
+          People will see this when we promote your group, but you'll be able to
+          add to it later, too
+        </p>
+        <ol>
+          <li>What's the purpose of the group?</li>
+          <li>Who should join?</li>
+          <li>What will you do at your events?</li>
+        </ol>
         <section>
           <textarea
             name="group-description"
@@ -156,10 +188,12 @@ export default function CreateGroupPage() {
           {errors.description && errors.description}
           {errors.about && errors.about}
         </section>
+          <p className={css["hr"]} />
         <section>
+        <p>Final steps...</p>
           <div>
             <label htmlFor="group-type">
-              Online or In Person
+              Is this an in person or online group?
               <select
                 name="group-type"
                 id="groupType"
@@ -183,7 +217,7 @@ export default function CreateGroupPage() {
           <br />
           <div>
             <label htmlFor="group-status-type">
-              Public or Privite
+              Is this group private or public?
               <select
                 name="group-visibility-type"
                 id="groupVisibilityType"
@@ -208,6 +242,7 @@ export default function CreateGroupPage() {
             {errors.visibilityType && <p>{errors.visibilityType}</p>}
           </div>
           <div>
+          <p>Please add an image url for your group below:</p>
             <input
               className={CreateGroupCSS["input"]}
               type="text"
@@ -220,6 +255,7 @@ export default function CreateGroupPage() {
             {errors.imageUrl && <p>{errors.imageUrl}</p>}
           </div>
         </section>
+        <p className={css["hr"]} />
         <button type="submit">
           {groupId ? "Update Group" : "Create a Group"}
         </button>

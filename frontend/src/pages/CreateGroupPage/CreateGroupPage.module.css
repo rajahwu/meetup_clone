@@ -4,3 +4,9 @@ form .input {
     border: 1px solid black;
     width: 100%;
 }
+
+.hr {
+    height: 10px;
+    background-color: black;
+    margin: 15px 0;
+}
