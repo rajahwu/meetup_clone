@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getGroup } from "../../store/groups";
-import * as eventActions from "../../store/events"
+import * as eventActions from "../../store/events";
+import CreateEventPageCSS from "./CreateEventPageCSS.module.css";
 
 export default function CreateEventPage() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const currentDate = new Date().toISOString().split("T")[0];
+  // const currentDate = new Date().toISOString().split("T")[0];
   const [name, setName] = useState("");
   const [eventType, setEventType] = useState("");
   const [visibilityType, setVisibilityType] = useState("");
-  const [price, setPrice] = useState(0);
-  const [startDate, setStartDate] = useState(currentDate);
-  const [endDate, setEndDate] = useState(currentDate);
+  const [price, setPrice] = useState(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({});
@@ -63,7 +64,7 @@ export default function CreateEventPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({})
+    setErrors({});
     const formData = {
       venueId: group.Venues[0].id,
       name,
@@ -77,25 +78,28 @@ export default function CreateEventPage() {
       imageUrl,
     };
 
-    if(!validateForm(formData)) return
-    formData.groupId = groupId
+    if (!validateForm(formData)) return;
+    formData.groupId = groupId;
     return dispatch(eventActions.createEventThunk(formData))
-    .then(async (res) => history.push(`/events/${String(res.id)}`))
-    .catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) {
-        setErrors(data.errors);
-      }
-    })
+      .then(async (res) => history.push(`/events/${String(res.id)}`))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
   };
 
+  const css = CreateEventPageCSS;
+
   return (
-    <div style={{marginTop: "150px"}}>
-      <h3>Create an event for {group.name}</h3>
+    <div className={css["container"]}>
+      <h3 className={css["title"]}>Create an event for {group.name}</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">
-          What is the name of your event
+          <p className={css["label-text"]}>What is the name of your event</p>
           <input
+            className={css["input"]}
             type="text"
             name="name"
             value={name}
@@ -105,7 +109,8 @@ export default function CreateEventPage() {
         </label>
         <hr />
         <label htmlFor="event-type">
-          Is this in person or online
+          <p className={css["label-text"]}>Is this in person or online</p>
+
           <select
             name="event-type"
             id="eventType"
@@ -124,7 +129,7 @@ export default function CreateEventPage() {
         </label>
 
         <label htmlFor="event-visibility-type">
-          Is this event private or public
+          <p className={css["label-text"]}>Is this event private or public</p>
           <select
             name="event-visibility-type"
             id="eventVisibilityType"
@@ -143,9 +148,11 @@ export default function CreateEventPage() {
         </label>
 
         <label htmlFor="price">
+          <p className={css["label-text"]}>What is the price for your event?</p>
           <input
+            className={css["input"]}
             type="number"
-            placeholder="0"
+            placeholder="$"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
@@ -153,11 +160,12 @@ export default function CreateEventPage() {
         </label>
         <hr />
         <label htmlFor="start-date">
-          When does your event start
+          <p className={css["label-text"]}>When does your event start</p>
           <input
+            className={css["input"]}
             name="start-date"
             type="date"
-            placeholder="MM/DD/YYYY"
+            placeholder="MM/DD/YYYY HH:mm:AM"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
@@ -165,11 +173,12 @@ export default function CreateEventPage() {
         </label>
 
         <label htmlFor="end-date">
-          When does your event end
+          <p className={css["label-text"]}>When does your event end</p>
           <input
+            className={css["input"]}
             name="start-date"
             type="date"
-            placeholder="MM/DD/YYYY"
+            placeholder="MM/DD/YYYY HH:mm:AM"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
@@ -179,6 +188,7 @@ export default function CreateEventPage() {
         <label htmlFor="imageUrl">
           Please add in image url for your event
           <input
+            className={css["input"]}
             type="text"
             placeholder="imageURL"
             value={imageUrl}
@@ -191,13 +201,15 @@ export default function CreateEventPage() {
         <label htmlFor="description">
           Please describe your event
           <textarea
+            className={css["textarea"]}
             placeholder="Please include at least 30 characters"
+            rows={10}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           {errors.description && <p>{errors.description}</p>}
         </label>
-        <button type="submit">Create Event</button>
+        <button className={css["submit-btn"]} type="submit">Create Event</button>
       </form>
     </div>
   );
