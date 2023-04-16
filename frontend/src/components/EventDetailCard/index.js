@@ -23,7 +23,7 @@ export default function EventDetailCard({ event, children }) {
 
           <div
             className="main-div"
-            style={{ display: "flex", border: "3px solid pink" }}
+            style={{ display: "flex" }}
           >
             <CardImage
               imageHeight="200px"

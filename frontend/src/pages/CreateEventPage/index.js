@@ -105,7 +105,7 @@ export default function CreateEventPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {errors.name && <p>{errors.name}</p>}
+          {errors.name && <p className={css["error"]}>{errors.name}</p>}
         </label>
         <hr />
         <label htmlFor="event-type">
@@ -125,7 +125,7 @@ export default function CreateEventPage() {
               In persion
             </option>
           </select>
-          {errors.type && <p>{errors.type}</p>}
+          {errors.type && <p className={css["error"]}>{errors.type}</p>}
         </label>
 
         <label htmlFor="event-visibility-type">
@@ -144,7 +144,7 @@ export default function CreateEventPage() {
               Public
             </option>
           </select>
-          {errors.visibilityType && <p>{errors.visibilityType}</p>}
+          {errors.visibilityType && <p className={css["error"]}>{errors.visibilityType}</p>}
         </label>
 
         <label htmlFor="price">
@@ -156,7 +156,7 @@ export default function CreateEventPage() {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
-          {errors.price && <p>{errors.price}</p>}
+          {errors.price && <p className={css["error"]}>{errors.price}</p>}
         </label>
         <hr />
         <label htmlFor="start-date">
@@ -169,7 +169,7 @@ export default function CreateEventPage() {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-          {errors.startDate && <p>{errors.startDate}</p>}
+          {errors.startDate && <p className={css["error"]}>{errors.startDate}</p>}
         </label>
 
         <label htmlFor="end-date">
@@ -182,7 +182,7 @@ export default function CreateEventPage() {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-          {errors.endDate && <p>{errors.endDate}</p>}
+          {errors.endDate && <p className={css["error"]}>{errors.endDate}</p>}
         </label>
         <hr />
         <label htmlFor="imageUrl">
@@ -194,7 +194,7 @@ export default function CreateEventPage() {
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
-          {errors.imageUrl && <p>{errors.imageUrl}</p>}
+          {errors.imageUrl && <p className={css["error"]}>{errors.imageUrl}</p>}
         </label>
         <hr />
 
@@ -207,7 +207,7 @@ export default function CreateEventPage() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {errors.description && <p>{errors.description}</p>}
+          {errors.description && <p className={css["error"]}>{errors.description}</p>}
         </label>
         <button className={css["submit-btn"]} type="submit">Create Event</button>
       </form>

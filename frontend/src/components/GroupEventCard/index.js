@@ -5,9 +5,9 @@ import { parseDate } from "../../utils";
 
 import GroupEventCardCSS from "./GroupEventCard.module.css";
 
-const GroupListCard = () => {};
-const EventListCard = () => {};
-const GroupDetailEventCard = () => {};
+// const GroupListCard = () => {};
+// const EventListCard = () => {};
+// const GroupDetailEventCard = () => {};
 
 const CardDescription = ({ description, styleSheet }) => {
   return (

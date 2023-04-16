@@ -28,7 +28,7 @@ export default function GroupDetailsPage() {
   const group = useSelector((state) => state.groups.currentGroup);
 
   return (
-    <div className={css.container} style={{ marginTop: "115px" }}>
+    <div className={css.container}>
       <GroupDetailCard group={group} styleSheet={css}>
         <ActionButtons groupId={groupId} />
       </GroupDetailCard>
