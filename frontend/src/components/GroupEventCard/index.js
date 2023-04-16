@@ -20,7 +20,7 @@ const GroupEventCard = ({
   const history = useHistory();
 
   const events = useSelector((state) => state.events.allEvents);
-  
+
   const eventList = Object.values(events).filter(
     (event) => +event.groupId === +groupId
   );
@@ -29,36 +29,51 @@ const GroupEventCard = ({
 
   return (
     <div className={css.container}>
-      {children}
       <div>
-        <div className={styleSheet?.["text-container"]}>
-          <p>
-            {startDate
-              ? `${parseDate(startDate)[0]} ${parseDate(startDate)[1]}`
-              : startDate}
-          </p>
-          <h2 className={styleSheet?.["card-title"]}>{name}</h2>
-          <p className={styleSheet?.["card-location"]}>
-            {city}, {state}
-          </p>
-          <p className={styleSheet?.["card-description"]}>{description}</p>
+        {children}
+      </div>
+        <div>
+          <div className={styleSheet?.["text-container"]}>
+            <p className={css[".grid-start-date"]}>
+              {startDate ? (
+                <span>
+                  {parseDate(startDate)[0]}
+                  &#183;
+                  {parseDate(startDate)[1]}
+                </span>
+              ) : (
+                startDate
+              )}
+            </p>
+            <h2>{name}</h2>
+            <p className={styleSheet?.["card-location"]}>
+              {city}, {state}
+            </p>
+          </div>
 
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {description && (
+              <div style={{}}>
+                <p className={styleSheet?.["card-description"]}>
+                  {description}
+                </p>
+              </div>
+            )}
+
             {useParams().groupId === undefined &&
             history.location.pathname !== "/events" ? (
-              <>
+              <div style={{ display: "flex" }}>
                 <p>
                   {numEvents} event{numEvents === 1 ? "" : "s"}
                 </p>
                 <p>&#183;</p>
                 <p>{visibility}</p>
-              </>
-            ) : (
-              ""
-            )}
+              </div>
+            ) : null}
           </div>
         </div>
-      </div>
+
+      {/* </div> */}
     </div>
   );
 };

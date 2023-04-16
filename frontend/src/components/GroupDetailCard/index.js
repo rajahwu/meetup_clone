@@ -15,6 +15,7 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
+  const allCurrentEvents = useSelector(state => state.events.allCurrentEvents)
   const eventList = Object.values(events);
   sortDate(eventList, "startDate");
 
@@ -71,7 +72,7 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
               <GroupEventCard
                 key={event.id}
                 name={event.name}
-                description="Not in data"
+                description={allCurrentEvents[event.id]?.description}
                 city={event.Venue.city}
                 state={event.Venue.state}
                 type={event.type}
