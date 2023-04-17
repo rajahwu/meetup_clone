@@ -5,10 +5,6 @@ import { parseDate } from "../../utils";
 
 import GroupEventCardCSS from "./GroupEventCard.module.css";
 
-// const GroupListCard = () => {};
-// const EventListCard = () => {};
-// const GroupDetailEventCard = () => {};
-
 const CardDescription = ({ description, styleSheet }) => {
   return (
     description && (
@@ -58,7 +54,7 @@ const GroupEventCard = ({
             )}
           </p>
           <h2>{name}</h2>
-          <p className={styleSheet?.["card-location"]}>
+          <p className={styleSheet?.["card-location"]} style={{color: "gray", marginTop: "15px"}}>
             {city}, {state}
           </p>
         </div>
@@ -73,7 +69,7 @@ const GroupEventCard = ({
 
           {useParams().groupId === undefined &&
           history.location.pathname !== "/events" ? (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", color: "grey", letterSpacing: "0.07rem" }}>
               <p>
                 {numEvents} event{numEvents === 1 ? "" : "s"}
               </p>

@@ -1,16 +1,24 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink, Link } from "react-router-dom";
 import { CardImage } from "../../components";
 import { checkForImage, parseDate } from "../../utils";
 // import { defaultImages } from "../../utils";
 import EventDetailCardCSS from "./EventDetailCard.module.css";
+import { getGroup } from "../../store/groups";
 const defaultImages = [
   "https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
 ];
 
 export default function EventDetailCard({ event, children }) {
+  const dispatch = useDispatch();
   const css = EventDetailCardCSS;
   const group = useSelector((state) => state.groups.currentGroup);
+
+  useEffect(() => {
+    dispatch(getGroup(event.groupId));
+  }, [dispatch, event.groupId]);
+
   if (!event.id) return null;
   return (
     <>
@@ -19,7 +27,12 @@ export default function EventDetailCard({ event, children }) {
         <div>
           <div className="title-div">
             <h2>{event.name}</h2>
-            <p>Hosted By</p>
+            <div style={{ display: "flex" }}>
+              <p style={{ marginRight: "5px" }}>Hosted By</p>
+              <p>
+                {group.Organizer?.firstName} {group.Organizer?.lastName}
+              </p>
+            </div>
             <br />
           </div>
 
