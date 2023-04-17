@@ -8,13 +8,13 @@ import CreateEventPageCSS from "./CreateEventPageCSS.module.css";
 export default function CreateEventPage() {
   const dispatch = useDispatch();
   const history = useHistory();
-  // const currentDate = new Date().toISOString().split("T")[0];
+  const currentDate = new Date().toISOString().split("T")[0];
   const [name, setName] = useState("");
   const [eventType, setEventType] = useState("");
   const [visibilityType, setVisibilityType] = useState("");
   const [price, setPrice] = useState(null);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(currentDate);
+  const [endDate, setEndDate] = useState(currentDate);
   const [imageUrl, setImageUrl] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({});
@@ -123,7 +123,7 @@ export default function CreateEventPage() {
               Online
             </option>
             <option value="In person" defaultValue={eventType === "in person"}>
-              In persion
+              In person
             </option>
           </select>
           {errors.type && <p className={css["error"]}>{errors.type}</p>}
@@ -168,8 +168,8 @@ export default function CreateEventPage() {
           <input
             className={css["input"]}
             name="start-date"
-            type="date"
-            placeholder="MM/DD/YYYY HH:mm:AM"
+            type="datetime-local"
+            placeholder="MM/DD/YYYY HH:mm AM"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
@@ -182,9 +182,9 @@ export default function CreateEventPage() {
           <p className={css["label-text"]}>When does your event end</p>
           <input
             className={css["input"]}
-            name="start-date"
-            type="date"
-            placeholder="MM/DD/YYYY HH:mm:AM"
+            name="end-date"
+            type="datetime-local"
+            placeholder="MM/DD/YYYY HH:mm PM"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />

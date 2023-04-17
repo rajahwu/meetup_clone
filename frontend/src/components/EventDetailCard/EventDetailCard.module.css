@@ -15,12 +15,15 @@
 }
 
 .content-container {
-    border: 3px solid pink;
+}
+
+.event-details-container {
+    padding: 10px;
 }
 
 .group-container {
     display: flex;
-    padding: 2rem;
+    padding: 10px;
 
 }
 

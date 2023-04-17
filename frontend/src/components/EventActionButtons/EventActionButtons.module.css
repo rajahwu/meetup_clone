@@ -8,3 +8,10 @@
 .join-btn {
     background-color: red;
 }
+
+input[type="datetime-local"]::after {
+    content: attr(placeholder);
+}
+input[type="datetime-local"]:focus::after {
+    content: "";
+}
