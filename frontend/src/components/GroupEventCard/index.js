@@ -66,7 +66,7 @@ const GroupEventCard = ({
               styleSheet={styleSheet}
             />
           )}
-
+          
           {useParams().groupId === undefined &&
           history.location.pathname !== "/events" ? (
             <div style={{ display: "flex", color: "grey", letterSpacing: "0.07rem" }}>
