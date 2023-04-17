@@ -26,7 +26,7 @@ export default function LandingPage() {
         cardImage={cardImageProps}
       ></CardContainer>
 
-      <CallToAction StyleSheet={LandingPageCSS} />
+      <CallToAction styleSheet={LandingPageCSS} />
     </div>
   );
 }

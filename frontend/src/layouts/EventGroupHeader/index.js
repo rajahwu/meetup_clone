@@ -16,11 +16,9 @@ export default function EventGroupHeader({ children }) {
 
   return (
     <>
-      <div style={{ marginTop: "100px" }}>
+      <div>
         <div
           style={{
-            position: "fixed",
-            top: 120,
             backgroundColor: "#ffffff",
             width: "100%",
           }}
@@ -34,7 +32,7 @@ export default function EventGroupHeader({ children }) {
           </p>
         </div>
       </div>
-      <div style={{ marginTop: "200px" }}>
+      <div>
         <div>{children}</div>
       </div>
     </>

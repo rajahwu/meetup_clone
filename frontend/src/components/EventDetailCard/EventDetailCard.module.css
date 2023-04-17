@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+}
+
+.main-container {
+    display: flex;
+}
+
+.image-container {
+    margin: 5px;
+}
+
+.image {
+    border-radius: 50%;
+}
+
+.content-container {
+    border: 3px solid pink;
+}
+
+.group-container {
+    display: flex;
+    padding: 2rem;
+
+}
+
+.group-image-container {
+    
+}
+
+.group-content-container {
+}
+
+.event-details-container {
+    display: flex;
+    flex-direction: column;
+}

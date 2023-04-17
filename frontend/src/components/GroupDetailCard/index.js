@@ -50,19 +50,19 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
             imageUrl={imageUrl}
           />
           <div className={css["card-content"]}>
-            <h2>{group.name}</h2>
-            <p>
+            <h2 className={css["name"]}>{group.name}</h2>
+            <p className={css["location"]}>
               {group.city}, {group.state}
             </p>
             <div style={{ display: "flex" }}>
-              <p>
+              <p className={css["visibility"]}>
                 {eventList.length} event
                 {eventList.length === 1 ? "" : "s"}
               </p>
-              <p>&#183;</p>
+              <p className={css["dot"]}>&#183;</p>
               <p>{group.private ? "Private" : "Public"}</p>
             </div>
-            <p>
+            <p className={css["organized-by"]}>
               Organized by {group.Organizer?.firstName}{" "}
               {group.Organizer?.lastName}
             </p>
@@ -70,6 +70,10 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
           </div>
         </div>
         <div>
+          <h2>Organizer</h2>
+          <p>
+            {group.Organizer?.firstName} {group.Organizer?.lastName}
+          </p>
           <h2>What we're about</h2>
           <p>{group.about}</p>
         </div>

@@ -1,6 +1,4 @@
 .container {
-    /* display: flex; */
-    position: fixed;
     background-color: white;
     padding: 15px 0;
 }
@@ -18,6 +16,34 @@
     font-size: 1.7rem;
 }
 .events-container {
-   margin-top: 400px;
    margin-bottom: 25px;
+}
+
+.name {
+    font-size: 1.8rem;
+    padding: 0.7rem;
+}
+
+.location {
+    font-size: 1rem;
+    padding: 0.7rem;
+}
+
+.visibility {
+    font-size: 1rem;
+    letter-spacing: 0.005em;
+    padding-left: 0.7rem;
+}
+
+p.dot::before {
+    content: "\00a0";
+}
+
+p.dot::after {
+    content: "\00a0";
+}
+
+.organized-by {
+    font-size: 1rem;
+    padding: 0.7rem;
 }
