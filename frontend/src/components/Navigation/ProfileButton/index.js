@@ -29,7 +29,13 @@ export default function ProfileButton({ user }) {
 
   const UserIcon = () => {
     return (
-      <div onClick={() => setCaretDown(!caretDown)}>
+      <div
+        onClick={() => {
+          setCaretDown(!caretDown);
+          setModalContent(null);
+        }}
+        style={{ backgroundColor: "red", padding: "15px", borderRadius: "50%" }}
+      >
         <i className="fa-solid fa-user"></i>
         {caretDown ? (
           <i className="fa-solid fa-caret-down"></i>
@@ -50,9 +56,7 @@ export default function ProfileButton({ user }) {
             setModalContent(null);
             setCaretDown(!caretDown);
           }}
-        >
-          <UserIcon />
-        </div>
+        ></div>
         <div style={{ display: "flex" }}>
           <ul>
             <div>

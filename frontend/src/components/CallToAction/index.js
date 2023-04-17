@@ -3,7 +3,6 @@ import OpenModelButton from "../Navigation/OpenModalButton";
 import { SignupFormModal } from "../session";
 
 const CallToAction = ({ styleSheet }) => {
-  console.log("cta component", styleSheet)
   const sessisonUser = useSelector((state) => state.session.user);
   return (
     !sessisonUser && (

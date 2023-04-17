@@ -25,6 +25,10 @@ form .textarea {
     width: 100%;
     background-color: rgba(0, 255, 255, 0.359);
 }
+
+.select {
+    background-color: rgba(0, 255, 255, 0.359);
+}
 .title {
     text-transform: uppercase;
     color: rgb(10, 145, 166);
@@ -41,11 +45,6 @@ form .textarea {
     margin: 15px 0;
     width: 45vw;
 }
-
-/* .dropdown {
-    display: flex;
-    flex-direction: column;
-} */
 
 .error {
     color: red;

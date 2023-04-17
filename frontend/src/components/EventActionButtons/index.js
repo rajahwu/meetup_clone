@@ -11,13 +11,14 @@ export default function EventActionButtons() {
   const { setModalContent } = useModal();
 
   const groupId = useSelector((state) => state.events.currentEvent.Group?.id);
-  const { eventId } = useParams();
+  const group = useSelector((state) => state.groups.currentGroup)
+  const userId = useSelector((state) => state.session.user.id)
 
-  const handleClick = () => {
-    dispatch(eventActions.deleteEventThunk(eventId)).then(
-      history.push(`/groups/${groupId}`)
-    );
-  };
+
+  const isHost = group.Organizer?.id === userId
+  console.log("isHost", group.Organizer?.id)
+
+  const { eventId } = useParams();
 
   const ConfirmDelete = () => {
     return (
@@ -54,14 +55,16 @@ export default function EventActionButtons() {
   };
 
   const css = EventActionButtonsCSS;
+  if(!isHost) return
   return (
-    <div>
+   isHost && (<div>
+    <button className={css["btn"]}>Update</button>
       <OpenModelButton
         styleClassNames={"btn"}
         styleSheet={css}
         buttonText="Delete"
         modalComponent={<ConfirmDelete />}
       />
-    </div>
+    </div>)
   );
 }
