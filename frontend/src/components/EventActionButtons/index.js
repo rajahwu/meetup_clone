@@ -16,7 +16,6 @@ export default function EventActionButtons() {
 
 
   const isHost = group.Organizer?.id === userId
-  console.log("isHost", group.Organizer?.id)
 
   const { eventId } = useParams();
 
