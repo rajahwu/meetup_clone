@@ -19,7 +19,7 @@ export default function OpenModelButton({
 
   return (
     <>
-      <button className={OpenModelButtonCSS["button"]} onClick={handlClick}>{buttonText}</button>
+      <button className={styleSheet?.[styleClassNames] || OpenModelButtonCSS["button"]} onClick={handlClick}>{buttonText}</button>
     </>
   );
 }
