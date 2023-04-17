@@ -50,8 +50,8 @@ export default function EventDetailCard({ event, children }) {
                 <div className={css["group-container"]}>
                   <div className={css["group-image-container"]}>
                     <CardImage
-                      imageWidth="50px"
-                      imageHeight="50px"
+                      imageWidth="150px"
+                      imageHeight="150px"
                       imageUrl={checkForImage(
                         [group?.GroupImages],
                         defaultImages
@@ -66,12 +66,27 @@ export default function EventDetailCard({ event, children }) {
               </Link>
 
               <div className={css["event-details-container"]}>
-                <div>
-                  <p>START {parseDate(event.startDate)}</p>
-                  <p>END {parseDate(event.endDate)}</p>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <i class="fa-regular fa-clock"></i>
+                  <div>
+                    <p style={{ marginLeft: "5px" }}>
+                      START {parseDate(event.startDate)[0]} &#183;{" "}
+                      {parseDate(event.startDate[1]).slice(1)}
+                    </p>
+                    <p style={{ marginLeft: "5px" }}>
+                      END {parseDate(event.endDate)[0]} &#183;{" "}
+                      {parseDate(event.endDate[1]).slice(1)}
+                    </p>
+                  </div>
                 </div>
-                <p>{event.price}</p>
-                <p>{event.type}</p>
+                <div style={{ display: "flex" }}>
+                  <i class="fa-solid fa-dollar-sign"></i>
+                  <p style={{ marginLeft: "5px" }}>{event.price}</p>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <i class="fa-solid fa-location-pin"></i>
+                  <p style={{ marginLeft: "5px" }}>{event.type}</p>
+                </div>
               </div>
             </div>
           </div>
