@@ -80,6 +80,7 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
       </div>
 
       <div className={css["events-container"]}>
+      <h2 style={{fontSize: "1.3rem", margin: "10px 0"}}>Events ({eventList.length})</h2>
         {eventList.length > 0 &&
           eventList.map((event) => (
             <div

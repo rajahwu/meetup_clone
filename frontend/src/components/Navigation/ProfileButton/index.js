@@ -59,22 +59,22 @@ export default function ProfileButton({ user }) {
         ></div>
         <div style={{ display: "flex" }}>
           <ul>
-            <div>
-              <li>Hello, {user.username}</li>
-              <li>{user.firstname}</li>
-              <li>{user.email}</li>
-              <li>
-                <NavLink to="/groups" onClick={handleClick}>
+            <div className={ProfileButton["menu"]}>
+              <li className={ProfileButtonCSS["menu-li"]}>Hello, {user.username}</li>
+              <li className={ProfileButtonCSS["menu-li"]}>{user.firstname}</li>
+              <li className={ProfileButtonCSS["menu-li"]}>{user.email}</li>
+              <li className={ProfileButtonCSS["menu-li"]}>
+                <NavLink className={ProfileButtonCSS["nav-link"]} to="/groups" onClick={handleClick}>
                   View Groups
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/events" onClick={handleClick}>
+              <li className={ProfileButtonCSS["menu-li"]}>
+                <NavLink className={ProfileButtonCSS["nav-link"]} to="/events" onClick={handleClick}>
                   View Events
                 </NavLink>
               </li>
               <li>
-                <button onClick={logout}>Logout</button>
+                <button className={ProfileButtonCSS["logout-btn"]} onClick={logout}>Logout</button>
               </li>
             </div>
           </ul>
