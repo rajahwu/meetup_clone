@@ -19,6 +19,7 @@ export default function CreateGroupPage() {
   const [errors, setErrors] = useState({});
 
   const group = useSelector((state) => state.groups.currentGroup);
+  const userId = useSelector((state) => state.session.user.id);
   useEffect(() => {
     if (!Object.values(group).length) return;
     setLocation(`${group.city}, ${group.state}`);
@@ -112,14 +113,24 @@ export default function CreateGroupPage() {
     }
   };
 
+  if (groupId) {
+    if (userId !== group?.Organizer?.id) {
+      console.log("Update miss match");
+      return history.push("/");
+    }
+  }
+  
   const css = CreateGroupCSS;
-
   return (
     <div className={css["container"]}>
       <form onSubmit={handleSubmit}>
         <section>
           <div className={css["title-container"]}>
-            <p className={css["title"]}>become an organizer</p>
+            <p className={css["title"]}>
+              {groupId
+                ? "update your group's information"
+                : "become an organizer"}
+            </p>
             <p className={css["field-heading"]}>
               We'll walk you through a few steps to build your local community
             </p>
@@ -208,6 +219,7 @@ export default function CreateGroupPage() {
                 Is this an in person or online group?
               </p>
               <select
+                className={css["select"]}
                 name="group-type"
                 id="groupType"
                 value={groupType}
@@ -235,6 +247,7 @@ export default function CreateGroupPage() {
                 Is this group private or public?
               </p>
               <select
+                className={css["select"]}
                 name="group-visibility-type"
                 id="groupVisibilityType"
                 value={visibilityType}
@@ -279,7 +292,7 @@ export default function CreateGroupPage() {
         </section>
         <p className={css["hr"]} />
         <button className={css["submit-btn"]} type="submit">
-          {groupId ? "Update Group" : "Create a Group"}
+          {groupId ? "Update Group" : "Create Group"}
         </button>
       </form>
     </div>

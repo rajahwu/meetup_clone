@@ -112,6 +112,7 @@ export default function CreateEventPage() {
           <p className={css["label-text"]}>Is this in person or online</p>
 
           <select
+            className={css["select"]}
             name="event-type"
             id="eventType"
             value={eventType}
@@ -131,6 +132,7 @@ export default function CreateEventPage() {
         <label htmlFor="event-visibility-type">
           <p className={css["label-text"]}>Is this event private or public</p>
           <select
+            className={css["select"]}
             name="event-visibility-type"
             id="eventVisibilityType"
             value={visibilityType}
@@ -144,7 +146,9 @@ export default function CreateEventPage() {
               Public
             </option>
           </select>
-          {errors.visibilityType && <p className={css["error"]}>{errors.visibilityType}</p>}
+          {errors.visibilityType && (
+            <p className={css["error"]}>{errors.visibilityType}</p>
+          )}
         </label>
 
         <label htmlFor="price">
@@ -169,7 +173,9 @@ export default function CreateEventPage() {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-          {errors.startDate && <p className={css["error"]}>{errors.startDate}</p>}
+          {errors.startDate && (
+            <p className={css["error"]}>{errors.startDate}</p>
+          )}
         </label>
 
         <label htmlFor="end-date">
@@ -207,9 +213,13 @@ export default function CreateEventPage() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          {errors.description && <p className={css["error"]}>{errors.description}</p>}
+          {errors.description && (
+            <p className={css["error"]}>{errors.description}</p>
+          )}
         </label>
-        <button className={css["submit-btn"]} type="submit">Create Event</button>
+        <button className={css["submit-btn"]} type="submit">
+          Create Event
+        </button>
       </form>
     </div>
   );
