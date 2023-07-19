@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
 import { Navigation } from "./components";
-import {
-  Header,
-  EventGroupHeader,
-} from "./layouts";
+import { Header, EventGroupHeader } from "./layouts";
 
 import {
   LandingPage,
@@ -14,19 +11,22 @@ import {
   GroupDetailsPage,
   EventsListPage,
   CreateEventPage,
-} from "./pages"
+  PageNotFound,
+} from "./pages";
 
 import * as sessionActions from "./store/session";
 import EventDetailsPage from "./pages/EventDetailsPage";
+// import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
-  
+
   return (
     <>
       <Header>
@@ -53,20 +53,24 @@ function App() {
           <Route exact path="/groups/:groupId">
             <GroupDetailsPage />
           </Route>
-          
+
           <Route exact path="/events/:eventId">
             <EventDetailsPage />
           </Route>
-
-
-          <EventGroupHeader>
-            <Route exact path="/groups">
-              <GroupsListPage />
-            </Route>
-            <Route exact path="/events">
-              <EventsListPage />
-            </Route>
-          </EventGroupHeader>
+          {(location.pathname === "/groups" ||
+            location.pathname === "/events") && (
+            <EventGroupHeader>
+              <Route exact path="/groups">
+                <GroupsListPage />
+              </Route>
+              <Route exact path="/events">
+                <EventsListPage />
+              </Route>
+            </EventGroupHeader>
+          )}
+          <Route path="*">
+            <PageNotFound />
+          </Route>
         </Switch>
       )}
     </>

@@ -4,6 +4,7 @@ import CreateGroupPage from "./CreateGroupPage";
 import GroupDetailsPage from "./GroupDetailsPage";
 import CreateEventPage from "./CreateEventPage";
 import EventsListPage from "./EventsListPage";
+import NotFound from "./404Page";
 
 export {
   LandingPage,
@@ -11,5 +12,6 @@ export {
   EventsListPage,
   CreateGroupPage,
   GroupDetailsPage,
-  CreateEventPage
+  CreateEventPage,
+  NotFound as PageNotFound
 };
