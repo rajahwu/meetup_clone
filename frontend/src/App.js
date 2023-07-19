@@ -22,6 +22,8 @@ function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const location = useLocation();
+  const inEventGroup = () =>
+    location.pathname === "/events" || location.pathname === "/groups";
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
@@ -57,17 +59,18 @@ function App() {
           <Route exact path="/events/:eventId">
             <EventDetailsPage />
           </Route>
-          {(location.pathname === "/groups" ||
-            location.pathname === "/events") && (
+
+          {inEventGroup() && (
             <EventGroupHeader>
-              <Route exact path="/groups">
-                <GroupsListPage />
-              </Route>
               <Route exact path="/events">
                 <EventsListPage />
               </Route>
+              <Route exact path="/groups">
+                <GroupsListPage />
+              </Route>
             </EventGroupHeader>
           )}
+
           <Route path="*">
             <PageNotFound />
           </Route>
