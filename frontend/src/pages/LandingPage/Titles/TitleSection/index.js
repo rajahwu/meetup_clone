@@ -19,7 +19,7 @@ const LandingPageTitle = () => {
         <img
           width="250"
           height="250"
-          src="../../../assets/images/title-image.png"
+          src="../../../assets/images/title-image.jpg"
           alt="title"
         />
       </div>

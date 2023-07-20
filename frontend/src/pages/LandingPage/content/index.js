@@ -5,8 +5,8 @@ const landingPage_card_1 = {
     "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enimad minim veniam, quis nostrud exercitation ullamco",
   image: {
     height: 150,
-    width: 150,
-    src: "../../../../assets/images/see-all-groups.png",
+    width: 250,
+    src: "../../../../assets/images/see-all-groups.jpg",
     alt: "see all groups",
   },
 };
@@ -19,7 +19,7 @@ const landingPage_card_2 = {
   image: {
     height: 300,
     width: 300,
-    src: "../../../../assets/images/see-all-events.png",
+    src: "../../../../assets/images/see-all-events.jpg",
     alt: "see all groups",
   },
 };
@@ -32,7 +32,7 @@ const landingPage_card_3 = {
   image: {
     height: 300,
     width: 300,
-    src: "../../../../assets/images/start-a-group.png",
+    src: "../../../../assets/images/start-a-group.jpg",
     alt: "see all groups",
   },
 };

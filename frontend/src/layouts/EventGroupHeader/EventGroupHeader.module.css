@@ -1,5 +1,6 @@
 .container {
     background-color: #ffffff;
+    background-color: #a68365;
     width: 100%;
     margin-left: 5px;
 }
@@ -18,4 +19,8 @@
 .title {
     margin: 25px 0;
     color: gray;
+}
+
+img {
+    border-radius: 25px;
 }
