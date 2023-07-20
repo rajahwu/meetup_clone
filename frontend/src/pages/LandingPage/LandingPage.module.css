@@ -3,6 +3,7 @@
   flex-direction: column;
   margin-top: 115px;
   background-color: #a68365;
+  filter: contrast(1.45);
   /* position: fixed; */
 }
 

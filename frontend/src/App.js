@@ -11,7 +11,7 @@ import {
   GroupDetailsPage,
   EventsListPage,
   CreateEventPage,
-  PageNotFound,
+  PageNotFound
 } from "./pages";
 
 import * as sessionActions from "./store/session";

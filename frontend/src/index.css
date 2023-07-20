@@ -1,9 +1,10 @@
 :root {
   --primary-color: #97978D;
   --secondary-color: #97978d;
-  --bg-color: #FFFFFF;
+  --bg-color: #573280;
   --primary-font: 'PT Serif', serif;
   --title-font: 'Ultra', serif;
+  --font-color: #EFF8E2;
 }
 
 * {
@@ -12,7 +13,8 @@
   margin: 0;
   font-size: 16px;
   font-family: var(--primary-font);
-  background-color: #a68365;
+  background-color: var(--bg-color);
+  color: var(--font-color);
 }
 
 h1 {
@@ -30,6 +32,10 @@ h2 {
 
 ul {
   list-style: none;
+}
+
+a {
+  color: white;
 }
 
 form {

@@ -17,6 +17,7 @@ const LandingPageTitle = () => {
       </div>
       <div className={css["image-container"]}>
         <img
+        className={css["image"]}
           width="250"
           height="250"
           src="../../../assets/images/title-image.jpg"

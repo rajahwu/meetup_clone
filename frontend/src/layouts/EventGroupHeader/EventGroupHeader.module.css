@@ -1,6 +1,5 @@
 .container {
-    background-color: #ffffff;
-    background-color: #a68365;
+    background-color: var(--bg-color);
     width: 100%;
     margin-left: 5px;
 }

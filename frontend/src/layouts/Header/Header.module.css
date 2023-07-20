@@ -4,7 +4,7 @@
     justify-content: space-between;
     top: 0;
     width: 100%;
-    background-color: #a68365;
+    background-color: var(--bg-color);
     z-index: 2;
 }
 
