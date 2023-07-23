@@ -1,7 +1,9 @@
 :root {
   --primary-color: #97978D;
   --secondary-color: #97978d;
-  --bg-color: #573280;
+  --white: #ffffff;
+  --black: #000000;
+  --bg-color: #f79256;
   --primary-font: 'PT Serif', serif;
   --title-font: 'Ultra', serif;
   --font-color: #EFF8E2;

@@ -17,6 +17,8 @@ export default function LandingPage() {
 
   return (
     <div className={LandingPageCSS["container"]}>
+      <CallToAction styleSheet={LandingPageCSS} />
+      
       <TitleSection />
 
       <SubTitleSection  />
@@ -26,7 +28,6 @@ export default function LandingPage() {
         cardImage={cardImageProps}
       ></CardContainer>
 
-      <CallToAction styleSheet={LandingPageCSS} />
     </div>
   );
 }
