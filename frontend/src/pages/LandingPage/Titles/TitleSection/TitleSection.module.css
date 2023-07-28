@@ -1,8 +1,8 @@
 .container {
     display: flex;
-    /* border: 3px solid pink; */
+    /* border: 3px solid purple; */
     flex-direction: column;
-
+    align-items: center;
 }
 
 .title {
@@ -14,18 +14,23 @@
 .text {
     font-size: 1.3rem;
     line-height: 1.5rem;
-    width: 60vw;
+    color: blue;
+    /* width: 60vw; */
     /* width: 65%; */
-    padding: 3rem 0;
+    /* padding: 3rem 0; */
 }
 
 .image-container {
-    /* margin-right: 25px; */
     /* border: 3px solid blue; */
+    display: flex;
+    justify-content: center;
 }
 
 .image {
+    /* background-color: var(--secondary-bg-color); */
+    /* box-shadow: inset 5px 15px 5px var(--secondary-bg-color); */
+    padding: 0;
     object-fit: fill;
-    height: 400;
-    width: 400;
+    height: 300;
+    width: 300;
 }
