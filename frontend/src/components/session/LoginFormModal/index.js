@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import {useHistory} from "react-router-dom"
 import { useModal } from "../../../context/Modal";
 import { useSetModalClass } from "../../../hooks";
-import ModalFormCSS from "../ModalForm.module.css";
 
 export default function LoginFormModel() {
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export default function LoginFormModel() {
   };
 
   return (
-    <div className={ModalFormCSS["container"]}>
+    <div className="">
       <h1>Log In</h1>
       {errors.credential && <p>{errors.credential}</p>}
       <form onSubmit={handleSubmit}>
@@ -55,7 +54,7 @@ export default function LoginFormModel() {
         </label>
         <button
           type="submit"
-          className={ModalFormCSS["btn"]}
+          className=""
           disabled={credential.length < 4 || password.length < 6}
         >
           Log In

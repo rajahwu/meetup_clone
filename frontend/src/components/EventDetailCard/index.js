@@ -4,7 +4,6 @@ import { NavLink, Link } from "react-router-dom";
 import { CardImage } from "../../components";
 import { checkForImage, parseDate } from "../../utils";
 // import { defaultImages } from "../../utils";
-import EventDetailCardCSS from "./EventDetailCard.module.css";
 import { getGroup } from "../../store/groups";
 const defaultImages = [
   "https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
@@ -12,7 +11,6 @@ const defaultImages = [
 
 export default function EventDetailCard({ event, children }) {
   const dispatch = useDispatch();
-  const css = EventDetailCardCSS;
   const group = useSelector((state) => state.groups.currentGroup);
 
   useEffect(() => {
@@ -23,7 +21,7 @@ export default function EventDetailCard({ event, children }) {
   return (
     <>
       <NavLink to="/events">Events</NavLink>
-      <div className={css["container"]}>
+      <div className="">
         <div>
           <div className="title-div">
             <h2>{event.name}</h2>
@@ -36,8 +34,8 @@ export default function EventDetailCard({ event, children }) {
             <br />
           </div>
 
-          <div className={css["main-container"]}>
-            <div className={css["image-container"]}>
+          <div className="">
+            <div className="">
               <CardImage
                 imageHeight="250px"
                 imageWidth="400px"
@@ -45,10 +43,10 @@ export default function EventDetailCard({ event, children }) {
               />
             </div>
 
-            <div className={css["content-container"]}>
+            <div className="">
               <Link to={`/groups/${event.Group?.id}`}>
-                <div className={css["group-container"]}>
-                  <div className={css["group-image-container"]}>
+                <div className="">
+                  <div className="">
                     <CardImage
                       imageWidth="150px"
                       imageHeight="150px"
@@ -58,14 +56,14 @@ export default function EventDetailCard({ event, children }) {
                       )}
                     />
                   </div>
-                  <div className={css["group-content-container"]}>
+                  <div className="">
                     <p> {event.Group?.name}</p>
                     <p>{event.Group?.private ? "Private" : "Public"}</p>
                   </div>
                 </div>
               </Link>
 
-              <div className={css["event-details-container"]}>
+              <div className="">
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <i class="fa-regular fa-clock"></i>
                   <div>

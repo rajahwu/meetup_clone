@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useGetAll } from "../../hooks";
 import { CardImage, GroupEventCard } from "../../components";
-import GroupsListPageCSS from "./GroupsListPage.module.css"
 
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
@@ -31,7 +30,6 @@ export default function GroupsListPage() {
               city={group.city}
               state={group.state}
               visibility={group.private ? "Private" : "Public"}
-              styleSheet={GroupsListPageCSS}
             >
               <CardImage
                 imageWidth="350px"
@@ -41,7 +39,6 @@ export default function GroupsListPage() {
                   defaultImages.groups,
                   "previewImage"
                 )}
-                styleSheet={GroupsListPageCSS}
               />
             </GroupEventCard>
             <hr />

@@ -4,7 +4,6 @@ import { useModal } from "../../../context/Modal";
 import { useHistory } from "react-router-dom";
 import * as sessionActions from "../../../store/session";
 import { useSetModalClass } from "../../../hooks";
-import ModalFormCSS from "../ModalForm.module.css";
 
 export default function SignupFormModal() {
   const dispatch = useDispatch();
@@ -67,7 +66,7 @@ export default function SignupFormModal() {
   };
 
   return (
-    <div className={ModalFormCSS.container}>
+    <div className="">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -132,7 +131,7 @@ export default function SignupFormModal() {
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <button
           type="submit"
-          className={ModalFormCSS.btn}
+          className=""
           disabled={isDisabled()}
         >
           Sign Up

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import * as groupActions from "../../store/groups";
 
-import CreateGroupCSS from "./CreateGroupPage.module.css";
 
 export default function CreateGroupPage() {
   const dispatch = useDispatch();
@@ -120,32 +119,31 @@ export default function CreateGroupPage() {
     }
   }
   
-  const css = CreateGroupCSS;
   return (
-    <div className={css["container"]}>
+    <div className="">
       <form onSubmit={handleSubmit}>
         <section>
-          <div className={css["title-container"]}>
-            <p className={css["title"]}>
+          <div className="">
+            <p className="">
               {groupId
                 ? "update your group's information"
                 : "become an organizer"}
             </p>
-            <p className={css["field-heading"]}>
+            <p className="">
               We'll walk you through a few steps to build your local community
             </p>
           </div>
-          <p className={css["hr"]} />
+          <p className="" />
           <div>
-            <p className={css["field-heading"]}>
+            <p className="">
               First, set your group's location.
             </p>
-            <p className={css["label-text"]}>
+            <p className="">
               Meetup groups meet locally, in person and online. We'll connect
               you with people in your area, and more can join you online.
             </p>
             <input
-              className={css["input"]}
+              className=""
               type="text"
               name="group-location"
               id="groupLocation"
@@ -154,23 +152,23 @@ export default function CreateGroupPage() {
               onChange={(e) => setLocation(e.target.value)}
             />
             {errors.location && (
-              <p className={css["error"]}>{errors.location}</p>
+              <p className="">{errors.location}</p>
             )}
           </div>
         </section>
-        <p className={css["hr"]} />
+        <p className=""/>
         <section>
           <div>
-            <p className={css["field-heading"]}>
+            <p className="">
               What will your group's name be?
             </p>
-            <p className={css["label-text"]}>
+            <p className="">
               Choose a name that will give people a clear idea of what the group
               is about. Feel free to get creative! You can edit this later if
               you change your mind.
             </p>
             <input
-              className={css["input"]}
+              className=""
               type="text"
               name="group-name"
               id="name"
@@ -178,25 +176,25 @@ export default function CreateGroupPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            {errors.name && <p className={css["error"]}>{errors.name}</p>}
+            {errors.name && <p className="">{errors.name}</p>}
           </div>
-          <p className={css["hr"]} />
+          <p className="" />
         </section>
-        <p className={css["field-heading"]}>
+        <p className="">
           Now describe what your group will be about
         </p>
-        <p className={css["label-text"]}>
+        <p className="">
           People will see this when we promote your group, but you'll be able to
           add to it later, too
         </p>
-        <ol className={css["label-text"]}>
+        <ol className="">
           <li>What's the purpose of the group?</li>
           <li>Who should join?</li>
           <li>What will you do at your events?</li>
         </ol>
         <section>
           <textarea
-            className={css["textarea"]}
+            className=""
             name="group-description"
             id="groupDescription"
             cols="60"
@@ -206,20 +204,20 @@ export default function CreateGroupPage() {
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           {errors.description && (
-            <p className={css["error"]}>{errors.description}</p>
+            <p className="">{errors.description}</p>
           )}
-          {errors.about && <p className={css["error"]}>{errors.about}</p>}
+          {errors.about && <p className="">{errors.about}</p>}
         </section>
-        <p className={css["hr"]} />
+        <p className="" />
         <section>
-          <p className={css["field-heading"]}>Final steps...</p>
-          <div className={css["dropdown"]}>
+          <p className="">Final steps...</p>
+          <div className="">
             <label htmlFor="group-type">
-              <p className={css["label-text"]}>
+              <p className="">
                 Is this an in person or online group?
               </p>
               <select
-                className={css["select"]}
+                className=""
                 name="group-type"
                 id="groupType"
                 value={groupType}
@@ -238,16 +236,16 @@ export default function CreateGroupPage() {
               </select>
             </label>
             {errors.groupType && (
-              <p className={css["error"]}>{errors.groupType}</p>
+              <p className="">{errors.groupType}</p>
             )}
           </div>
           <div>
             <label htmlFor="group-status-type">
-              <p className={css["label-text"]}>
+              <p className="">
                 Is this group private or public?
               </p>
               <select
-                className={css["select"]}
+                className=""
                 name="group-visibility-type"
                 id="groupVisibilityType"
                 value={visibilityType}
@@ -269,15 +267,15 @@ export default function CreateGroupPage() {
               </select>
             </label>
             {errors.visibilityType && (
-              <p className={css["error"]}>{errors.visibilityType}</p>
+              <p className="">{errors.visibilityType}</p>
             )}
           </div>
           <div>
-            <p className={css["label-text"]}>
+            <p className="">
               Please add an image url for your group below:
             </p>
             <input
-              className={CreateGroupCSS["input"]}
+              className=""
               type="text"
               name="imageUrl"
               id="imageUrl"
@@ -286,12 +284,12 @@ export default function CreateGroupPage() {
               onChange={(e) => setImageUrl(e.target.value)}
             />
             {errors.imageUrl && (
-              <p className={css["error"]}>{errors.imageUrl}</p>
+              <p className="">{errors.imageUrl}</p>
             )}
           </div>
         </section>
-        <p className={css["hr"]} />
-        <button className={css["submit-btn"]} type="submit">
+        <p className="" />
+        <button className="" type="submit">
           {groupId ? "Update Group" : "Create Group"}
         </button>
       </form>

@@ -1,11 +1,9 @@
 import { Card, CardImage } from "../../../components";
-import LandingPageCSS from "../LandingPage.module.css";
 
 const LandingPageCardContainer = ({ cardContent, cardImage }) => {
   return (
-    <section className={LandingPageCSS["card-container"]}>
+    <section className="">
       <Card
-        styleSheet={LandingPageCSS}
         titleText={cardContent[0].titleText}
         linkTo={cardContent[0].linkTo}
         textContent={cardContent[0].textContent}
@@ -18,7 +16,6 @@ const LandingPageCardContainer = ({ cardContent, cardImage }) => {
         />
       </Card>
       <Card
-        styleSheet={LandingPageCSS}
         titleText={cardContent[1].titleText}
         linkTo={cardContent[1].linkTo}
         textContent={cardContent[1].textContent}
@@ -31,7 +28,6 @@ const LandingPageCardContainer = ({ cardContent, cardImage }) => {
         />
       </Card>
       <Card
-        styleSheet={LandingPageCSS}
         titleText={cardContent[2].titleText}
         linkTo={cardContent[2].linkTo}
         textContent={cardContent[2].textContent}

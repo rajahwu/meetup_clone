@@ -6,11 +6,9 @@ import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
-import GroupDetailCardCSS from "./GroupDetailCard.module.css";
 import { sortDate } from "../../utils";
 
-export default function GroupDetailCard({ group, children, styleSheet }) {
-  const css = GroupDetailCardCSS;
+export default function GroupDetailCard({ group, children }) {
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -39,30 +37,30 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
 
   return (
     <>
-      <div className={css["container"]}>
-        <NavLink className={css["title-link"]} to="/groups">
+      <div className="">
+        <NavLink className="" to="/groups">
           Groups
         </NavLink>
-        <div className={css["card-container"]}>
+        <div className="">
           <CardImage
             imageWidth="300px"
             imageHeight="250px"
             imageUrl={imageUrl}
           />
-          <div className={css["card-content"]}>
-            <h2 className={css["name"]}>{group.name}</h2>
-            <p className={css["location"]}>
+          <div className="">
+            <h2 className="">{group.name}</h2>
+            <p className="">
               {group.city}, {group.state}
             </p>
             <div style={{ display: "flex" }}>
-              <p className={css["visibility"]}>
+              <p className="">
                 {eventList.length} event
                 {eventList.length === 1 ? "" : "s"}
               </p>
-              <p className={css["dot"]}>&#183;</p>
+              <p className="">&#183;</p>
               <p>{group.private ? "Private" : "Public"}</p>
             </div>
-            <p className={css["organized-by"]}>
+            <p className="">
               Organized by {group.Organizer?.firstName}{" "}
               {group.Organizer?.lastName}
             </p>
@@ -79,7 +77,7 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
         </div>
       </div>
 
-      <div className={css["events-container"]}>
+      <div className="">
       <h2 style={{fontSize: "1.3rem", margin: "10px 0"}}>Events ({eventList.length})</h2>
         {eventList.length > 0 &&
           eventList.map((event) => (

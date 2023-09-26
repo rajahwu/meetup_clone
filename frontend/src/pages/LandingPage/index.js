@@ -1,7 +1,6 @@
 import { TitleSection, SubTitleSection } from "./Titles";
 import { CardContainer } from "./CardContainer";
 import { CallToAction } from "../../components";
-import LandingPageCSS from "./LandingPage.module.css";
 
 import { getCardContent, card1, card2, card3 } from "./content";
 
@@ -16,7 +15,7 @@ export default function LandingPage() {
 
 
   return (
-    <div className={LandingPageCSS["container"]}>
+    <div className="">
       <TitleSection />
 
       <SubTitleSection  />
@@ -26,7 +25,7 @@ export default function LandingPage() {
         cardImage={cardImageProps}
       ></CardContainer>
 
-      <CallToAction styleSheet={LandingPageCSS} />
+      <CallToAction />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { CardImage, GroupEventCard } from "../../components";
 import { Link } from "react-router-dom";
 import { useGetAll } from "../../hooks";
-import EventsListPageCSS from "./EventsListPage.module.css"
 
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
@@ -33,7 +32,6 @@ export default function EventsListPage() {
                 )
               }
               type={event.type}
-              styleSheet={EventsListPageCSS}
             >
               <CardImage
                 imageWidth={100}

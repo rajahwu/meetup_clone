@@ -3,13 +3,12 @@ import { useParams, useHistory } from "react-router-dom";
 
 import { parseDate } from "../../utils";
 
-import GroupEventCardCSS from "./GroupEventCard.module.css";
 
-const CardDescription = ({ description, styleSheet }) => {
+const CardDescription = ({ description}) => {
   return (
     description && (
       <div style={{}}>
-        <p className={styleSheet?.["card-description"]}>{description}</p>
+        <p className="">{description}</p>
       </div>
     )
   );
@@ -26,7 +25,6 @@ const GroupEventCard = ({
   children,
   styleSheet,
 }) => {
-  const css = GroupEventCardCSS;
   const history = useHistory();
 
   const events = useSelector((state) => state.events.allEvents);
@@ -38,11 +36,11 @@ const GroupEventCard = ({
   const numEvents = eventList.length;
 
   return (
-    <div className={css.container}>
+    <div className="">
       <div>{children}</div>
       <div>
         <div className={styleSheet?.["text-container"]}>
-          <p className={css[".start-date"]}>
+          <p className="">
             {startDate ? (
               <span>
                 {parseDate(startDate)[0]}

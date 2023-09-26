@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import HeaderCSS from "./Header.module.css";
 
 export default function Header({ children }) {
   const sessionUser = useSelector((state) => state.session.user);
@@ -12,9 +11,9 @@ export default function Header({ children }) {
       history.push("/");
     };
     return (
-      <div className={HeaderCSS["logo-container"]}>
+      <div className="">
           <img
-            className={HeaderCSS["logo"]}
+            className=""
             src="../../../assets/hiwdt-logo.png"
             alt="logo"
             width="100"
@@ -26,12 +25,12 @@ export default function Header({ children }) {
   };
 
   return (
-    <div id="header" className={HeaderCSS["container"]}>
+    <div id="header" className="">
       <Logo />
       <div style={{ display: "flex", alignItems: "center" }}>
         {sessionUser && (
           <NavLink
-            className={HeaderCSS["nav-link"]}
+            className=""
             style={{ margin: "0 2.5px 25px 0" }}
             to="/groups/new"
           >

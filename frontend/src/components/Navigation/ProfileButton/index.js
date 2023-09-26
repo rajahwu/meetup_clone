@@ -2,9 +2,8 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useModal } from "../../../context/Modal";
-import { useSetModalClass } from "../../../hooks";
+// import { useSetModalClass } from "../../../hooks";
 import OpenModelButton from "../OpenModalButton";
-import ProfileButtonCSS from "./ProfileButton.module.css";
 
 import * as sessionActions from "../../../store/session";
 import { useState } from "react";
@@ -47,8 +46,6 @@ export default function ProfileButton({ user }) {
   };
 
   const UserMenu = ({ user }) => {
-    const { container, background, content } = ProfileButtonCSS;
-    useSetModalClass({ container, background, content });
     return (
       <>
         <div
@@ -59,22 +56,22 @@ export default function ProfileButton({ user }) {
         ></div>
         <div style={{ display: "flex" }}>
           <ul>
-            <div className={ProfileButton["menu"]}>
-              <li className={ProfileButtonCSS["menu-li"]}>Hello, {user.username}</li>
-              <li className={ProfileButtonCSS["menu-li"]}>{user.firstname}</li>
-              <li className={ProfileButtonCSS["menu-li"]}>{user.email}</li>
-              <li className={ProfileButtonCSS["menu-li"]}>
-                <NavLink className={ProfileButtonCSS["nav-link"]} to="/groups" onClick={handleClick}>
+            <div className="">
+              <li className="">Hello, {user.username}</li>
+              <li className="">{user.firstname}</li>
+              <li className="">{user.email}</li>
+              <li className="">
+                <NavLink className="" to="/groups" onClick={handleClick}>
                   View Groups
                 </NavLink>
               </li>
-              <li className={ProfileButtonCSS["menu-li"]}>
-                <NavLink className={ProfileButtonCSS["nav-link"]} to="/events" onClick={handleClick}>
+              <li className="">
+                <NavLink className="" to="/events" onClick={handleClick}>
                   View Events
                 </NavLink>
               </li>
               <li>
-                <button className={ProfileButtonCSS["logout-btn"]} onClick={logout}>Logout</button>
+                <button className="" onClick={logout}>Logout</button>
               </li>
             </div>
           </ul>
@@ -90,7 +87,7 @@ export default function ProfileButton({ user }) {
       }}
     >
       <OpenModelButton
-        className={ProfileButton["modal"]}
+        className=""
         buttonText={<UserIcon />}
         modalComponent={<UserMenu user={user} />}
       />

@@ -1,21 +1,19 @@
 import { useSelector } from "react-redux";
-import TitleSectionCSS from "./TitleSection.module.css";
 
 const LandingPageTitle = () => {
-  const css = TitleSectionCSS;
   const user = useSelector(state => state.session.user)
 
   return (
-    <section className={css["container"]}>
+    <section className="">
       <div>
-        <h1 className={css["title"]}>{user ? `Hey, ${user.firstName} let's do some stuff!` :  "Hey, you wanna do stuff!"}</h1>
-        <p className={css["text"]}>
+        <h1 className="">{user ? `Hey, ${user.firstName} let's do some stuff!` :  "Hey, you wanna do stuff!"}</h1>
+        <p className="">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           m{" "}
         </p>
       </div>
-      <div className={css["image-container"]}>
+      <div className="">
         <img
           width="250"
           height="250"
