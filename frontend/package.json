@@ -23,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "buildcss": " npx tailwindcss -i ./src/input.css -o ./src/index.css"
+    "buildcss": " npx tailwindcss -i ./src/input.css -o ./src/index.css",
+    "watchcss": " npx tailwindcss -i ./src/input.css -o ./src/index.css --watch"
   },
   "eslintConfig": {
     "extends": "react-app"

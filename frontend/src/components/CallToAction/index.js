@@ -6,7 +6,7 @@ const CallToAction = () => {
   const sessisonUser = useSelector((state) => state.session.user);
   return (
     !sessisonUser && (
-      <section className="">
+      <section className="btn btn-primary">
         <OpenModelButton
           buttonText="Join Meetup"
           modalComponent={<SignupFormModal />}

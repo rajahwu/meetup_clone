@@ -1,4 +1,4 @@
-import { TitleSection, SubTitleSection } from "./Titles";
+import { TitleSection } from "./Titles";
 import { CardContainer } from "./CardContainer";
 import { CallToAction } from "../../components";
 
@@ -15,17 +15,16 @@ export default function LandingPage() {
 
 
   return (
-    <div className="">
-      <TitleSection />
+    <div className="text-gray-600 body-font">
+      <div className="container px-5 py-24 mx-auto">
 
-      <SubTitleSection  />
+        <TitleSection />
 
-      <CardContainer
-        cardContent={cardContent}
-        cardImage={cardImageProps}
-      ></CardContainer>
-
-      <CallToAction />
+        <CardContainer
+          cardContent={cardContent}
+          cardImage={cardImageProps}
+        ></CardContainer>
+      </div>
     </div>
   );
 }
