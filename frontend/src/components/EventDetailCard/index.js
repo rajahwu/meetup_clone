@@ -80,13 +80,13 @@ export default function EventDetailCard({ event, children }) {
                 <div style={{ display: "flex" }}>
                 {event.price ? (
                   <>
-                  <i class="fa-solid fa-dollar-sign"></i>
+                  <i className="fa-solid fa-dollar-sign"></i>
                   <p style={{ marginLeft: "5px" }}>{event.price}</p>
                   </>
                 ) : "FREE" }
                 </div>
                 <div style={{ display: "flex" }}>
-                  <i class="fa-solid fa-location-pin"></i>
+                  <i clasNames="fa-solid fa-location-pin"></i>
                   <p style={{ marginLeft: "5px" }}>{event.type}</p>
                 </div>
               </div>
