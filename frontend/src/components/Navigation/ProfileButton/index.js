@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useModal } from "../../../context/Modal";
-// import { useSetModalClass } from "../../../hooks";
 import OpenModelButton from "../OpenModalButton";
 
 import * as sessionActions from "../../../store/session";
@@ -33,7 +32,6 @@ export default function ProfileButton({ user }) {
           setCaretDown(!caretDown);
           setModalContent(null);
         }}
-        style={{ backgroundColor: "red", padding: "15px", borderRadius: "50%" }}
       >
         <i className="fa-solid fa-user"></i>
         {caretDown ? (
@@ -81,11 +79,7 @@ export default function ProfileButton({ user }) {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-      }}
-    >
+    <div>
       <OpenModelButton
         className=""
         buttonText={<UserIcon />}

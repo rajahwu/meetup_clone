@@ -7,37 +7,34 @@ export default function Header({ children }) {
 
   const Logo = () => {
     const history = useHistory();
-    const handleClick = (e) => {
-      history.push("/");
-    };
+    const handleClick = () => history.push("/");
     return (
-      <div className="">
-          <img
-            className=""
-            src="../../../assets/hiwdt-logo.png"
-            alt="logo"
-            width="100"
-            height="100"
-            onClick={handleClick}
-          />
-        </div>
+      <div className="flex-1">
+        <img
+          className=""
+          src="../../../assets/hiwdt-logo.png"
+          alt="logo"
+          width="100"
+          height="100"
+          onClick={handleClick}
+        />
+      </div>
     );
   };
 
   return (
-    <div id="header" className="">
+    <div id="header" className="navbar bg-base-100">
       <Logo />
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div className="">
         {sessionUser && (
           <NavLink
             className=""
-            style={{ margin: "0 2.5px 25px 0" }}
             to="/groups/new"
           >
             Start a new Group
           </NavLink>
         )}
-        <div style={{ marginRight: "25px" }}>{children}</div>
+        <div className="flex-none">{children}</div>
       </div>
     </div>
   );

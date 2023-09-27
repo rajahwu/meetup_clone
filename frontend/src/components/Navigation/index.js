@@ -9,28 +9,30 @@ export default function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li style={{marginBottom: "10px", marginRight: "5px"}}>
+      <li>
         <ProfileButton user={sessionUser} />
       </li>
     );
   } else {
     sessionLinks = (
-      <li>
-        <OpenModelButton
-          buttonText="Log In"
-          modalComponent={<LoginFormModal />}
-        />
-        <OpenModelButton
-          buttonText="Sign Up"
-          modalComponent={<SignupFormModal />}
-        />
-      </li>
+      <ul className="p-2 bg-base-100">
+        <li>
+          <OpenModelButton
+            buttonText="Log In"
+            modalComponent={<LoginFormModal />}
+          />
+          <OpenModelButton
+            buttonText="Sign Up"
+            modalComponent={<SignupFormModal />}
+          />
+        </li>
+      </ul>
     );
   }
 
   return (
-    <nav className="">
-      <ul className="">{isLoaded && sessionLinks}</ul>
-    </nav>
+    <ul className="menu menu-horizontal px-1">
+      {isLoaded && sessionLinks}
+    </ul>
   );
 }

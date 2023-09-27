@@ -1,7 +1,5 @@
 import { TitleSection } from "./Titles";
 import { CardContainer } from "./CardContainer";
-import { CallToAction } from "../../components";
-
 import { getCardContent, card1, card2, card3 } from "./content";
 
 export default function LandingPage() {
@@ -17,9 +15,7 @@ export default function LandingPage() {
   return (
     <div className="text-gray-600 body-font">
       <div className="container px-5 py-24 mx-auto">
-
         <TitleSection />
-
         <CardContainer
           cardContent={cardContent}
           cardImage={cardImageProps}
