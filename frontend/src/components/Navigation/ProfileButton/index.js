@@ -33,12 +33,9 @@ export default function ProfileButton({ user }) {
           setModalContent(null);
         }}
       >
-        <i className="fa-solid fa-user"></i>
-        {caretDown ? (
+          <i className="fa-solid fa-user"></i>
           <i className="fa-solid fa-caret-down"></i>
-        ) : (
-          <i className="fa-solid fa-caret-up"></i>
-        )}
+          {/* <i className="fa-solid fa-caret-up"></i> */}
       </div>
     );
   };
@@ -52,7 +49,7 @@ export default function ProfileButton({ user }) {
             setCaretDown(!caretDown);
           }}
         ></div>
-        <div style={{ display: "flex" }}>
+        <div>
           <ul>
             <div className="">
               <li className="">Hello, {user.username}</li>

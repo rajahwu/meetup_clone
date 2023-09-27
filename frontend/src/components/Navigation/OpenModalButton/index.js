@@ -16,7 +16,10 @@ export default function OpenModelButton({
 
   return (
     <>
-      <button className="" onClick={handlClick}>{buttonText}</button>
+      <button
+        className=""
+        onClick={handlClick}>{buttonText}
+      </button>
     </>
   );
 }
