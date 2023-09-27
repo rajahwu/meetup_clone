@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
-  
+
   return (
     <>
       <Header>
@@ -53,7 +53,7 @@ function App() {
           <Route exact path="/groups/:groupId">
             <GroupDetailsPage />
           </Route>
-          
+
           <Route exact path="/events/:eventId">
             <EventDetailsPage />
           </Route>

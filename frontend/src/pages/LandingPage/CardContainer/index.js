@@ -2,7 +2,7 @@ import { Card, CardImage } from "../../../components";
 
 const LandingPageCardContainer = ({ cardContent, cardImage }) => {
   return (
-    <section className="flex flex-wrap mb-8 sm:-m-4 -mx-4 -mb-10 -mt-4">
+    <section className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
       <Card
         titleText={cardContent[0].titleText}
         linkTo={cardContent[0].linkTo}

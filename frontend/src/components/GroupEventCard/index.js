@@ -23,7 +23,6 @@ const GroupEventCard = ({
   startDate,
   visibility,
   children,
-  styleSheet,
 }) => {
   const history = useHistory();
 
@@ -36,11 +35,11 @@ const GroupEventCard = ({
   const numEvents = eventList.length;
 
   return (
-    <div className="">
+    <div className="card-body">
       <div>{children}</div>
       <div>
-        <div className={styleSheet?.["text-container"]}>
-          <p className="">
+        <div>
+          <p>
             {startDate ? (
               <span>
                 {parseDate(startDate)[0]}
@@ -51,23 +50,22 @@ const GroupEventCard = ({
               startDate
             )}
           </p>
-          <h2>{name}</h2>
-          <p className={styleSheet?.["card-location"]} style={{color: "gray", marginTop: "15px"}}>
+          <h2 className="card-title">{name}</h2>
+          <p>
             {city}, {state}
           </p>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>
           {history.location.pathname !== "/events" && (
             <CardDescription
               description={description}
-              styleSheet={styleSheet}
             />
           )}
           
           {useParams().groupId === undefined &&
           history.location.pathname !== "/events" ? (
-            <div style={{ display: "flex", color: "grey", letterSpacing: "0.07rem" }}>
+            <div className="flex">
               <p>
                 {numEvents} event{numEvents === 1 ? "" : "s"}
               </p>
@@ -77,10 +75,9 @@ const GroupEventCard = ({
           ) : null}
 
           {history.location.pathname === "/events" && (
-            <div style={{display: "flex", justifyContent: "center"}}>
+            <div>
               <CardDescription
                 description={description}
-                styleSheet={StyleSheet}
               />
             </div>
           )}

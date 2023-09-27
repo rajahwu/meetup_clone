@@ -13,7 +13,7 @@ export default function LandingPage() {
 
 
   return (
-    <div className="text-gray-600 body-font">
+    <div className="body-font">
       <div className="container px-5 mx-auto">
         <TitleSection />
         <CardContainer

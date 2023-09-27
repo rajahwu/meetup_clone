@@ -16,9 +16,17 @@ export default function EventsListPage() {
       {Object.values(events).map((event) => {
         return (
           <div
+            className="card card-side bg-base-100 shadow-xl my-5"
             key={event.id}
             onClick={() => history.push(`/events/${event.id}`)}
           >
+          <figure>
+              <CardImage
+                imageWidth={200}
+                imageHeight={200}
+                imageUrl={checkForImage([event.previewImgage], defaultImages.events)}
+              />
+          </figure>
             <GroupEventCard
               startDate={event.startDate}
               name={event.name}
@@ -33,11 +41,6 @@ export default function EventsListPage() {
               }
               type={event.type}
             >
-              <CardImage
-                imageWidth={100}
-                imageHeight={100}
-                imageUrl={checkForImage([event.previewImgage], defaultImages.events)}
-              />
             </GroupEventCard>
             <hr />
           </div>

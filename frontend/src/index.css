@@ -1942,6 +1942,18 @@ html {
   outline-offset: 2px;
 }
 
+.card-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: var(--padding-card, 2rem);
+  gap: 0.5rem;
+}
+
+.card-body :where(p) {
+  flex-grow: 1;
+}
+
 .card figure {
   display: flex;
   align-items: center;
@@ -2584,6 +2596,15 @@ html {
   line-height: 1.25rem;
 }
 
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+}
+
 .card.image-full :where(figure) {
   overflow: hidden;
   border-radius: inherit;
@@ -3207,6 +3228,37 @@ html {
   }
 }
 
+.card-side {
+  align-items: stretch;
+  flex-direction: row;
+}
+
+.card-side :where(figure:first-child) {
+  overflow: hidden;
+  border-start-start-radius: inherit;
+  border-start-end-radius: unset;
+  border-end-start-radius: inherit;
+  border-end-end-radius: unset;
+}
+
+.card-side :where(figure:last-child) {
+  overflow: hidden;
+  border-start-start-radius: unset;
+  border-start-end-radius: inherit;
+  border-end-start-radius: unset;
+  border-end-end-radius: inherit;
+}
+
+.card-side figure > * {
+  max-width: unset;
+}
+
+:where(.card-side figure > *) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .join.join-vertical {
   flex-direction: column;
 }
@@ -3335,6 +3387,26 @@ html {
   border-bottom-right-radius: var(--rounded-btn, 0.5rem);
 }
 
+.card-compact .card-body {
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.card-compact .card-title {
+  margin-bottom: 0.25rem;
+}
+
+.card-normal .card-body {
+  padding: var(--padding-card, 2rem);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.card-normal .card-title {
+  margin-bottom: 0.75rem;
+}
+
 .join.join-vertical > :where(*:not(:first-child)) {
   margin-left: 0px;
   margin-right: 0px;
@@ -3378,19 +3450,19 @@ html {
   margin-right: auto;
 }
 
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
 .my-6 {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.my-3 {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.my-5 {
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .-mb-10 {
@@ -3405,32 +3477,36 @@ html {
   margin-left: auto;
 }
 
-.mb-8 {
-  margin-bottom: 2rem;
-}
-
 .flex {
   display: flex;
 }
 
-.w-64 {
-  width: 16rem;
+.h-screen {
+  height: 100vh;
 }
 
-.w-96 {
-  width: 24rem;
+.h-96 {
+  height: 24rem;
 }
 
-.w-auto {
-  width: auto;
+.h-5 {
+  height: 1.25rem;
 }
 
-.w-3\/6 {
-  width: 50%;
+.max-h-screen {
+  max-height: 100vh;
+}
+
+.min-h-screen {
+  min-height: 100vh;
 }
 
 .w-5\/6 {
   width: 83.333333%;
+}
+
+.w-64 {
+  width: 16rem;
 }
 
 .max-w-sm {
@@ -3457,16 +3533,13 @@ html {
   justify-content: space-between;
 }
 
-.self-end {
-  align-self: flex-end;
-}
-
 .rounded-lg {
   border-radius: 0.5rem;
 }
 
-.rounded {
-  border-radius: 0.25rem;
+.border-red-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(185 28 28 / var(--tw-border-opacity));
 }
 
 .bg-base-100 {
@@ -3479,13 +3552,14 @@ html {
   background-color: hsl(var(--b2) / var(--tw-bg-opacity));
 }
 
-.bg-black {
+.bg-red-700 {
   --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 
-.bg-transparent {
-  background-color: transparent;
+.bg-red-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
 .p-2 {
@@ -3505,6 +3579,11 @@ html {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.py-9 {
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
 }
 
 .text-center {
@@ -3532,10 +3611,6 @@ html {
 
 .underline {
   text-decoration-line: underline;
-}
-
-.opacity-5 {
-  opacity: 0.05;
 }
 
 .shadow-2xl {

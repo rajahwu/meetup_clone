@@ -13,24 +13,18 @@ export default function GroupsListPage() {
   const dispatch = useDispatch()
 
   return (
-    <div style={{display: "flex", flexDirection: "column", margin: "auto"}}>
+    <div >
       {Object.values(groups).map((group) => {
         return (
           <div
+            className="card card-side bg-base-100 shadow-xl my-5"
             key={group.id}
             onClick={() => {
               dispatch(getGroup(group.id))
               history.push(`/groups/${group.id}`)
-              }}
+            }}
           >
-            <GroupEventCard
-              groupId={group.id}
-              name={group.name}
-              description={group.about}
-              city={group.city}
-              state={group.state}
-              visibility={group.private ? "Private" : "Public"}
-            >
+            <figure>
               <CardImage
                 imageWidth="350px"
                 imageHeight="200px"
@@ -40,6 +34,17 @@ export default function GroupsListPage() {
                   "previewImage"
                 )}
               />
+            </figure>
+
+            <GroupEventCard
+              groupId={group.id}
+              name={group.name}
+              description={group.about}
+              city={group.city}
+              state={group.state}
+              visibility={group.private ? "Private" : "Public"}
+            >
+
             </GroupEventCard>
             <hr />
           </div>
