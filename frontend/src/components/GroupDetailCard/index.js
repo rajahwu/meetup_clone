@@ -9,7 +9,7 @@ import { defaultImages } from "../../utils/defaultImages";
 import { sortDate } from "../../utils";
 
 export default function GroupDetailCard({ group, children }) {
-
+  const sessionUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
@@ -83,7 +83,7 @@ export default function GroupDetailCard({ group, children }) {
           eventList.map((event) => (
             <div
               key={event.id}
-              onClick={() => history.push(`/events/${event.id}`)}
+              onClick={() => sessionUser && history.push(`/events/${event.id}`)}
             >
               <GroupEventCard
                 key={event.id}

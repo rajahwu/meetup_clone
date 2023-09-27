@@ -8,6 +8,7 @@ import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
 
 export default function EventsListPage() {
+  const sessionUser = useSelector((state) => state.session.user);
   const events = useGetAll("events").allEvents;
   const allCurrentEvents = useSelector(state => state.events.allCurrentEvents)
   const history = useHistory();
@@ -18,7 +19,7 @@ export default function EventsListPage() {
           <div
             className="card card-side bg-base-100 shadow-xl my-5"
             key={event.id}
-            onClick={() => history.push(`/events/${event.id}`)}
+            onClick={() => sessionUser && history.push(`/events/${event.id}`)}
           >
           <figure>
               <CardImage
