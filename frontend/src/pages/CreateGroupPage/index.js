@@ -118,32 +118,31 @@ export default function CreateGroupPage() {
       return history.push("/");
     }
   }
-  
+
   return (
-    <div className="">
-      <form onSubmit={handleSubmit}>
-        <section>
-          <div className="">
-            <p className="">
+    <div className="w-full prose prose-p:leading-normal prose-p:my-2">
+      <form className=" shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+        <section className="text-gray-600 body-font relative">
+          <div>
+            <h1 className="capitalize">
               {groupId
                 ? "update your group's information"
                 : "become an organizer"}
-            </p>
-            <p className="">
+            </h1>
+            <p>
               We'll walk you through a few steps to build your local community
             </p>
           </div>
-          <p className="" />
           <div>
-            <p className="">
+            <p className="text-accent text-lg">
               First, set your group's location.
             </p>
-            <p className="">
+            <p>
               Meetup groups meet locally, in person and online. We'll connect
               you with people in your area, and more can join you online.
             </p>
             <input
-              className=""
+              className={errors.location ? "border-rose-600" : ""}
               type="text"
               name="group-location"
               id="groupLocation"
@@ -152,23 +151,22 @@ export default function CreateGroupPage() {
               onChange={(e) => setLocation(e.target.value)}
             />
             {errors.location && (
-              <p className="">{errors.location}</p>
+              <p className="text-rose-600">{errors.location}</p>
             )}
           </div>
         </section>
-        <p className=""/>
         <section>
           <div>
-            <p className="">
+            <p className="text-accent text-lg">
               What will your group's name be?
             </p>
-            <p className="">
+            <p>
               Choose a name that will give people a clear idea of what the group
               is about. Feel free to get creative! You can edit this later if
               you change your mind.
             </p>
             <input
-              className=""
+              className={errors.name ? "border-rose-600" : ""}
               type="text"
               name="group-name"
               id="name"
@@ -176,48 +174,46 @@ export default function CreateGroupPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            {errors.name && <p className="">{errors.name}</p>}
+            {errors.name && <p className="text-rose-600">{errors.name}</p>}
           </div>
-          <p className="" />
         </section>
-        <p className="">
+        <p className="text-accent text-lg">
           Now describe what your group will be about
         </p>
-        <p className="">
+        <p>
           People will see this when we promote your group, but you'll be able to
           add to it later, too
         </p>
-        <ol className="">
+        <ol>
           <li>What's the purpose of the group?</li>
           <li>Who should join?</li>
           <li>What will you do at your events?</li>
         </ol>
         <section>
           <textarea
-            className=""
+            className={errors.description ? "border-rose-600" : ""}
             name="group-description"
             id="groupDescription"
-            cols="60"
+            cols="50"
             rows="10"
             placeholder="Please write at least 30 characters"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           {errors.description && (
-            <p className="">{errors.description}</p>
+            <p className="text-rose-600">{errors.description}</p>
           )}
-          {errors.about && <p className="">{errors.about}</p>}
+          {errors.about && <p className="text-rose-600">{errors.about}</p>}
         </section>
-        <p className="" />
         <section>
-          <p className="">Final steps...</p>
-          <div className="">
+          <p>Final steps...</p>
+          <div>
             <label htmlFor="group-type">
-              <p className="">
+              <p className="text-accent text-lg">
                 Is this an in person or online group?
               </p>
               <select
-                className=""
+                className={errors.groupType ? "border-rose-600" : ""}
                 name="group-type"
                 id="groupType"
                 value={groupType}
@@ -236,16 +232,16 @@ export default function CreateGroupPage() {
               </select>
             </label>
             {errors.groupType && (
-              <p className="">{errors.groupType}</p>
+              <p className="text-rose-600">{errors.groupType}</p>
             )}
           </div>
           <div>
             <label htmlFor="group-status-type">
-              <p className="">
+              <p className="text-accent text-lg">
                 Is this group private or public?
               </p>
               <select
-                className=""
+                className={errors.visibilityType ? "border-rose-600" : ""}
                 name="group-visibility-type"
                 id="groupVisibilityType"
                 value={visibilityType}
@@ -267,15 +263,15 @@ export default function CreateGroupPage() {
               </select>
             </label>
             {errors.visibilityType && (
-              <p className="">{errors.visibilityType}</p>
+              <p className="text-rose-600">{errors.visibilityType}</p>
             )}
           </div>
           <div>
-            <p className="">
+            <p className="text-accent text-lg">
               Please add an image url for your group below:
             </p>
             <input
-              className=""
+              className={errors.imageUrl ? "border-rose-600" : ""}
               type="text"
               name="imageUrl"
               id="imageUrl"
@@ -284,12 +280,14 @@ export default function CreateGroupPage() {
               onChange={(e) => setImageUrl(e.target.value)}
             />
             {errors.imageUrl && (
-              <p className="">{errors.imageUrl}</p>
+              <p className="text-rose-600">{errors.imageUrl}</p>
             )}
           </div>
         </section>
-        <p className="" />
-        <button className="" type="submit">
+        <button
+          className="mr-5 bg-primary hover:bg-blue-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+        >
           {groupId ? "Update Group" : "Create Group"}
         </button>
       </form>
