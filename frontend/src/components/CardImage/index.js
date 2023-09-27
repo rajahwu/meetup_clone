@@ -5,14 +5,12 @@ export default function CardImage({
   altText,
 }) {
   return (
-    <div className="">
       <img
-        className=""
+        className="w-56 h-56 rounded-xl m-5"
         width={imageWidth}
         height={imageHeight}
         src={imageUrl}
         alt={altText}
       ></img>
-    </div>
   );
 }

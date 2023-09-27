@@ -35,7 +35,7 @@ const GroupEventCard = ({
   const numEvents = eventList.length;
 
   return (
-    <div className="card card-side bg-base-100 shadow-xl items-start w-full">
+    <div className="card card-side bg-base-100 shadow-xl items-start w-full mx-10 self-center">
       <figure>
         {children}
       </figure>
@@ -71,8 +71,7 @@ const GroupEventCard = ({
               <p>
                 {numEvents} event{numEvents === 1 ? "" : "s"}
               </p>
-              <p>&#183;</p>
-              <p>{visibility}</p>
+              <p className="text-right">{visibility}</p>
             </div>
           ) : null}
 

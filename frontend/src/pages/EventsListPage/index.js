@@ -21,13 +21,13 @@ export default function EventsListPage() {
             key={event.id}
             onClick={() => sessionUser && history.push(`/events/${event.id}`)}
           >
-          <figure>
+            <figure className="w-56 h-56 rounded-xl m-5">
               <CardImage
                 imageWidth={200}
                 imageHeight={200}
                 imageUrl={checkForImage([event.previewImgage], defaultImages.events)}
               />
-          </figure>
+            </figure>
             <GroupEventCard
               startDate={event.startDate}
               name={event.name}

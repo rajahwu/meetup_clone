@@ -3463,6 +3463,10 @@ html {
   border-radius: var(--rounded-box, 1rem);
 }
 
+.m-5 {
+  margin: 1.25rem;
+}
+
 .-mx-4 {
   margin-left: -1rem;
   margin-right: -1rem;
@@ -3514,6 +3518,10 @@ html {
   margin-right: 3rem;
 }
 
+.ml-5 {
+  margin-left: 1.25rem;
+}
+
 .flex {
   display: flex;
 }
@@ -3528,6 +3536,14 @@ html {
 
 .h-5 {
   height: 1.25rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.h-56 {
+  height: 14rem;
 }
 
 .max-h-screen {
@@ -3566,8 +3582,24 @@ html {
   width: 100%;
 }
 
+.w-96 {
+  width: 24rem;
+}
+
+.w-56 {
+  width: 14rem;
+}
+
 .max-w-sm {
   max-width: 24rem;
+}
+
+.max-w-lg {
+  max-width: 32rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
 }
 
 .flex-1 {
@@ -3618,8 +3650,28 @@ html {
   justify-content: space-between;
 }
 
+.self-end {
+  align-self: flex-end;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.self-stretch {
+  align-self: stretch;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
 }
 
 .border-red-700 {
@@ -3682,6 +3734,10 @@ html {
 
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .text-4xl {

@@ -24,7 +24,7 @@ export default function GroupsListPage() {
               history.push(`/groups/${group.id}`)
             }}
           >
-            <figure>
+            <figure className="w-56 h-56 rounded-xl m-5">
               <CardImage
                 imageWidth="350px"
                 imageHeight="200px"
