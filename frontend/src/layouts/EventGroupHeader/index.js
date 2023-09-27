@@ -16,14 +16,14 @@ export default function EventGroupHeader({ children }) {
 
 
   return (
-    <>
-      <div className="">
+    <div>
+      <div>
         <NavLink
           style={(isActive) => ({
             color: isActive ? "teal" : "grey",
             textDecoration: isActive ? "underline" : "none"
           })}
-          className=""
+          className="btn btn-ghost normal-case text-xl"
           exact
           to="/events"
         >
@@ -34,22 +34,17 @@ export default function EventGroupHeader({ children }) {
             color: isActive ? "teal" : "grey",
             textDecoration: isActive ? "underline" : "none"
           })}
-          className=""
+          className="btn btn-ghost normal-case text-xl"
           exact
           to="/groups"
         >
           Groups
         </NavLink>
-        <p className="">
-          {location.pathname.includes("events")
-            ? "Events in HIWDT"
-            : "Groups in HIWDT"}
-        </p>
         <hr />
       </div>
       <div>
         <div>{children}</div>
       </div>
-    </>
+    </div>
   );
 }
