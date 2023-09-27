@@ -66,12 +66,13 @@ export default function SignupFormModal() {
   };
 
   return (
-    <div className="">
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="w-full h-full max-w-xs card flex items-center justify-center my-5">
+      <h1 className="card-title text-center">Sign Up</h1>
+      <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
           Email
           <input
+            id="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -79,9 +80,11 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.email && <p>{errors.email}</p>}
-        <label>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+
           Username
           <input
+            id="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -89,9 +92,11 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.username && <p>{errors.username}</p>}
-        <label>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="first_name">
+
           First Name
           <input
+            id="first_name"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -99,9 +104,11 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="last_name">
+
           Last Name
           <input
+            id="last_name"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -109,9 +116,11 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+
           Password
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -119,9 +128,10 @@ export default function SignupFormModal() {
           />
         </label>
         {errors.password && <p>{errors.password}</p>}
-        <label>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirm">
           Confirm Password
           <input
+            id="confirm"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -130,8 +140,8 @@ export default function SignupFormModal() {
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <button
+          className="mr-5 bg-primary hover:bg-blue-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="submit"
-          className=""
           disabled={isDisabled()}
         >
           Sign Up
