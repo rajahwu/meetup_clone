@@ -3493,6 +3493,11 @@ html {
   margin-right: 1.25rem;
 }
 
+.mx-10 {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+
 .-mb-10 {
   margin-bottom: -2.5rem;
 }
@@ -3503,6 +3508,10 @@ html {
 
 .ml-auto {
   margin-left: auto;
+}
+
+.mr-12 {
+  margin-right: 3rem;
 }
 
 .flex {
@@ -3537,6 +3546,26 @@ html {
   width: 16rem;
 }
 
+.w-36 {
+  width: 9rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
 .max-w-sm {
   max-width: 24rem;
 }
@@ -3549,12 +3578,40 @@ html {
   flex: none;
 }
 
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
 .flex-col {
   flex-direction: column;
 }
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .justify-between {
@@ -3612,6 +3669,15 @@ html {
 .py-9 {
   padding-top: 2.25rem;
   padding-bottom: 2.25rem;
+}
+
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {

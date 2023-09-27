@@ -37,38 +37,39 @@ export default function GroupDetailCard({ group, children }) {
 
   return (
     <>
-      <div className="">
-        <NavLink className="" to="/groups">
-          Groups
-        </NavLink>
-        <div className="">
+      <NavLink to="/groups">
+        Groups
+      </NavLink>
+      <div className="card card-side bg-base-100 shadow-xl items-start">
+        <figure className="mx-5">
           <CardImage
             imageWidth="300px"
             imageHeight="250px"
             imageUrl={imageUrl}
           />
-          <div className="">
-            <h2 className="">{group.name}</h2>
-            <p className="">
+        </figure>
+        <div className="card-body w-16 mx-auto">
+          <div>
+            <h2 className="card-title">{group.name}</h2>
+            <p>
               {group.city}, {group.state}
             </p>
-            <div style={{ display: "flex" }}>
-              <p className="">
+            <div>
+              <p>
                 {eventList.length} event
                 {eventList.length === 1 ? "" : "s"}
               </p>
-              <p className="">&#183;</p>
               <p>{group.private ? "Private" : "Public"}</p>
             </div>
-            <p className="">
+            <p>
               Organized by {group.Organizer?.firstName}{" "}
               {group.Organizer?.lastName}
             </p>
             {children}
           </div>
         </div>
-        <div>
-          <h2>Organizer</h2>
+        <div className="flex-1 mr-12">
+          <h2 className="card-title">Organizer</h2>
           <p>
             {group.Organizer?.firstName} {group.Organizer?.lastName}
           </p>
@@ -77,8 +78,8 @@ export default function GroupDetailCard({ group, children }) {
         </div>
       </div>
 
-      <div className="">
-      <h2 style={{fontSize: "1.3rem", margin: "10px 0"}}>Events ({eventList.length})</h2>
+      <div>
+        <h2 className="card-title">{eventList.length === 1 ? "Event" : "Events"} ({eventList.length})</h2>
         {eventList.length > 0 &&
           eventList.map((event) => (
             <div

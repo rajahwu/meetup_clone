@@ -4,7 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { parseDate } from "../../utils";
 
 
-const CardDescription = ({ description}) => {
+const CardDescription = ({ description }) => {
   return (
     description && (
       <div style={{}}>
@@ -35,9 +35,11 @@ const GroupEventCard = ({
   const numEvents = eventList.length;
 
   return (
-    <div className="card-body">
-      <div>{children}</div>
-      <div>
+    <div className="card card-side bg-base-100 shadow-xl items-start w-full">
+      <figure>
+        {children}
+      </figure>
+      <div className="card-body">
         <div>
           <p>
             {startDate ? (
@@ -62,9 +64,9 @@ const GroupEventCard = ({
               description={description}
             />
           )}
-          
+
           {useParams().groupId === undefined &&
-          history.location.pathname !== "/events" ? (
+            history.location.pathname !== "/events" ? (
             <div className="flex">
               <p>
                 {numEvents} event{numEvents === 1 ? "" : "s"}
