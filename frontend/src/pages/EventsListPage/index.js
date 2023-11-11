@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import { CardImage, GroupEventCard } from "../../components";
 import { Link } from "react-router-dom";
 import { useGetAll } from "../../hooks";
-import EventsListPageCSS from "./EventsListPage.module.css"
 
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
 
 export default function EventsListPage() {
+  const sessionUser = useSelector((state) => state.session.user);
   const events = useGetAll("events").allEvents;
   const allCurrentEvents = useSelector(state => state.events.allCurrentEvents)
   const history = useHistory();
@@ -17,9 +17,17 @@ export default function EventsListPage() {
       {Object.values(events).map((event) => {
         return (
           <div
+            className="card card-side bg-base-100 shadow-xl my-5"
             key={event.id}
-            onClick={() => history.push(`/events/${event.id}`)}
+            onClick={() => sessionUser && history.push(`/events/${event.id}`)}
           >
+            <figure className="w-56 h-56 rounded-xl m-5">
+              <CardImage
+                imageWidth={200}
+                imageHeight={200}
+                imageUrl={checkForImage([event.previewImgage], defaultImages.events)}
+              />
+            </figure>
             <GroupEventCard
               startDate={event.startDate}
               name={event.name}
@@ -33,13 +41,7 @@ export default function EventsListPage() {
                 )
               }
               type={event.type}
-              styleSheet={EventsListPageCSS}
             >
-              <CardImage
-                imageWidth={100}
-                imageHeight={100}
-                imageUrl={checkForImage([event.previewImgage], defaultImages.events)}
-              />
             </GroupEventCard>
             <hr />
           </div>

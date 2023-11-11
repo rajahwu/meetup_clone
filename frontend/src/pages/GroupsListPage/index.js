@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useGetAll } from "../../hooks";
 import { CardImage, GroupEventCard } from "../../components";
-import GroupsListPageCSS from "./GroupsListPage.module.css"
 
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
@@ -14,25 +13,18 @@ export default function GroupsListPage() {
   const dispatch = useDispatch()
 
   return (
-    <div style={{display: "flex", flexDirection: "column", margin: "auto"}}>
+    <div >
       {Object.values(groups).map((group) => {
         return (
           <div
+            className="card card-side bg-base-100 shadow-xl my-5"
             key={group.id}
             onClick={() => {
               dispatch(getGroup(group.id))
               history.push(`/groups/${group.id}`)
-              }}
+            }}
           >
-            <GroupEventCard
-              groupId={group.id}
-              name={group.name}
-              description={group.about}
-              city={group.city}
-              state={group.state}
-              visibility={group.private ? "Private" : "Public"}
-              styleSheet={GroupsListPageCSS}
-            >
+            <figure className="w-56 h-56 rounded-xl m-5">
               <CardImage
                 imageWidth="350px"
                 imageHeight="200px"
@@ -41,8 +33,18 @@ export default function GroupsListPage() {
                   defaultImages.groups,
                   "previewImage"
                 )}
-                styleSheet={GroupsListPageCSS}
               />
+            </figure>
+
+            <GroupEventCard
+              groupId={group.id}
+              name={group.name}
+              description={group.about}
+              city={group.city}
+              state={group.state}
+              visibility={group.private ? "Private" : "Public"}
+            >
+
             </GroupEventCard>
             <hr />
           </div>

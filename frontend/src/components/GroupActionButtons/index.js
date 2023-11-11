@@ -4,10 +4,8 @@ import { removeGroupThunk } from "../../store/groups";
 import OpenModelButton from "../Navigation/OpenModalButton";
 import { useModal } from "../../context/Modal";
 
-import GroupActionButtonsCSS from "./GroupActionButtons.module.css";
 
 export default function GroupActionButtons({ groupId }) {
-  const css = GroupActionButtonsCSS;
   const {setModalContent} = useModal()
 
   const dispatch = useDispatch();
@@ -52,20 +50,18 @@ export default function GroupActionButtons({ groupId }) {
   return isOwner ? (
     <div>
       <button
-        className={css.btn}
+        className=""
         onClick={() => history.push(`/groups/${groupId}/events/new`)}
       >
         Create event
       </button>
       <button
-        className={css.btn}
+        className=""
         onClick={() => history.push(`/groups/update/${groupId}`)}
       >
         Update
       </button>
       <OpenModelButton
-        styleClassNames={"btn"}
-        styleSheet={css}
         buttonText="Delete"
         modalComponent={<ConfirmDelete />}
       />
@@ -73,7 +69,7 @@ export default function GroupActionButtons({ groupId }) {
   ) : (
     userId && (
       <button
-        className={css["join-btn"]}
+        className=""
         onClick={() => alert("Feature comming soon")}
       >
         Join this Group

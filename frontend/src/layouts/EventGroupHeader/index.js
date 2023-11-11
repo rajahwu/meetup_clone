@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import { getAllGroups } from "../../store/groups";
 import { getAllEvents } from "../../store/events";
-import EventGroupHeaderCSS from "./EventGroupHeader.module.css";
 
 export default function EventGroupHeader({ children }) {
   const dispatch = useDispatch();
@@ -15,17 +14,16 @@ export default function EventGroupHeader({ children }) {
     dispatch(getAllEvents());
   }, [dispatch]);
 
-  const css = EventGroupHeaderCSS;
 
   return (
-    <>
-      <div className={css["container"]}>
+    <div>
+      <div>
         <NavLink
           style={(isActive) => ({
             color: isActive ? "teal" : "grey",
             textDecoration: isActive ? "underline" : "none"
           })}
-          className={css["nav-link"]}
+          className="btn btn-ghost normal-case text-xl"
           exact
           to="/events"
         >
@@ -36,22 +34,17 @@ export default function EventGroupHeader({ children }) {
             color: isActive ? "teal" : "grey",
             textDecoration: isActive ? "underline" : "none"
           })}
-          className={css["nav-link"]}
+          className="btn btn-ghost normal-case text-xl"
           exact
           to="/groups"
         >
           Groups
         </NavLink>
-        <p className={css["title"]}>
-          {location.pathname.includes("events")
-            ? "Events in HIWDT"
-            : "Groups in HIWDT"}
-        </p>
         <hr />
       </div>
       <div>
         <div>{children}</div>
       </div>
-    </>
+    </div>
   );
 }

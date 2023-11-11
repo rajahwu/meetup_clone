@@ -3,13 +3,12 @@ import { useParams, useHistory } from "react-router-dom";
 
 import { parseDate } from "../../utils";
 
-import GroupEventCardCSS from "./GroupEventCard.module.css";
 
-const CardDescription = ({ description, styleSheet }) => {
+const CardDescription = ({ description }) => {
   return (
     description && (
       <div style={{}}>
-        <p className={styleSheet?.["card-description"]}>{description}</p>
+        <p className="">{description}</p>
       </div>
     )
   );
@@ -24,9 +23,7 @@ const GroupEventCard = ({
   startDate,
   visibility,
   children,
-  styleSheet,
 }) => {
-  const css = GroupEventCardCSS;
   const history = useHistory();
 
   const events = useSelector((state) => state.events.allEvents);
@@ -38,11 +35,13 @@ const GroupEventCard = ({
   const numEvents = eventList.length;
 
   return (
-    <div className={css.container}>
-      <div>{children}</div>
-      <div>
-        <div className={styleSheet?.["text-container"]}>
-          <p className={css[".start-date"]}>
+    <div className="card card-side bg-base-100 shadow-xl items-start w-full mx-10 self-center">
+      <figure>
+        {children}
+      </figure>
+      <div className="card-body">
+        <div>
+          <p>
             {startDate ? (
               <span>
                 {parseDate(startDate)[0]}
@@ -53,36 +52,33 @@ const GroupEventCard = ({
               startDate
             )}
           </p>
-          <h2>{name}</h2>
-          <p className={styleSheet?.["card-location"]} style={{color: "gray", marginTop: "15px"}}>
+          <h2 className="card-title">{name}</h2>
+          <p>
             {city}, {state}
           </p>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>
           {history.location.pathname !== "/events" && (
             <CardDescription
               description={description}
-              styleSheet={styleSheet}
             />
           )}
-          
+
           {useParams().groupId === undefined &&
-          history.location.pathname !== "/events" ? (
-            <div style={{ display: "flex", color: "grey", letterSpacing: "0.07rem" }}>
+            history.location.pathname !== "/events" ? (
+            <div className="flex">
               <p>
                 {numEvents} event{numEvents === 1 ? "" : "s"}
               </p>
-              <p>&#183;</p>
-              <p>{visibility}</p>
+              <p className="text-right">{visibility}</p>
             </div>
           ) : null}
 
           {history.location.pathname === "/events" && (
-            <div style={{display: "flex", justifyContent: "center"}}>
+            <div>
               <CardDescription
                 description={description}
-                styleSheet={StyleSheet}
               />
             </div>
           )}

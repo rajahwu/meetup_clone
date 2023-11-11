@@ -3,18 +3,14 @@ export default function CardImage({
   imageHeight,
   imageUrl,
   altText,
-  styleSheet,
-  styleClassName
 }) {
   return (
-    <div className={styleSheet?.["container"]}>
       <img
-        className={styleSheet?.["image"]}
+        className="w-56 h-56 rounded-xl m-5"
         width={imageWidth}
         height={imageHeight}
         src={imageUrl}
         alt={altText}
       ></img>
-    </div>
   );
 }
