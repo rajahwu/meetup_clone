@@ -3,7 +3,6 @@ import { useHistory, useParams } from "react-router-dom";
 import * as eventActions from "../../store/events";
 import OpenModelButton from "../Navigation/OpenModalButton";
 import { useModal } from "../../context/Modal";
-import EventActionButtonsCSS from "./EventActionButtons.module.css";
 
 export default function EventActionButtons() {
   const dispatch = useDispatch();
@@ -53,14 +52,11 @@ export default function EventActionButtons() {
     );
   };
 
-  const css = EventActionButtonsCSS;
   if(!isHost) return
   return (
    isHost && (<div>
-    <button className={css["btn"]}>Update</button>
+    <button className="">Update</button>
       <OpenModelButton
-        styleClassNames={"btn"}
-        styleSheet={css}
         buttonText="Delete"
         modalComponent={<ConfirmDelete />}
       />

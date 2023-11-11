@@ -2,19 +2,19 @@ import { useSelector } from "react-redux";
 
 import { NavLink } from "react-router-dom";
 
-const Card = ({ titleText, linkTo, textContent, children, styleSheet }) => {
+const Card = ({ titleText, linkTo, textContent, children }) => {
   const sessionUser = useSelector((state) => state.session.user);
   return (
-    <div className={styleSheet["card"]}>
-      {children}
+    <div className="card w-64 bg-base-100 shadow-xl mx-auto text-center justify-between">
+    <figure>{children}</figure>
+      <p className="my-5">{textContent}</p>
       {linkTo === "/groups/new" && !sessionUser ? (
-        <p className={styleSheet["card-link"]}>Start a group</p>
+        <p className="btn btn-disabled disabled">Start a group</p>
       ) : (
-        <NavLink className={styleSheet["card-link"]} exact to={linkTo || "/"}>
+        <NavLink className="btn btn-primary" exact to={linkTo || "/"}>
           {titleText}
         </NavLink>
       )}
-      <p className={styleSheet["card-text"]}>{textContent}</p>
     </div>
   );
 };

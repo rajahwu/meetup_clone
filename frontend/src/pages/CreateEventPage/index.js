@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getGroup } from "../../store/groups";
 import * as eventActions from "../../store/events";
-import CreateEventPageCSS from "./CreateEventPageCSS.module.css";
 
 export default function CreateEventPage() {
   const dispatch = useDispatch();
@@ -90,29 +89,28 @@ export default function CreateEventPage() {
       });
   };
 
-  const css = CreateEventPageCSS;
 
   return (
-    <div className={css["container"]}>
-      <h3 className={css["title"]}>Create an event for {group.name}</h3>
+    <div className="">
+      <h3 className="">Create an event for {group.name}</h3>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">
-          <p className={css["label-text"]}>What is the name of your event</p>
+          <p className="">What is the name of your event</p>
           <input
-            className={css["input"]}
+            className=""
             type="text"
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {errors.name && <p className={css["error"]}>{errors.name}</p>}
+          {errors.name && <p className="">{errors.name}</p>}
         </label>
         <hr />
         <label htmlFor="event-type">
-          <p className={css["label-text"]}>Is this in person or online</p>
+          <p className="">Is this in person or online</p>
 
           <select
-            className={css["select"]}
+            className=""
             name="event-type"
             id="eventType"
             value={eventType}
@@ -126,13 +124,13 @@ export default function CreateEventPage() {
               In person
             </option>
           </select>
-          {errors.type && <p className={css["error"]}>{errors.type}</p>}
+          {errors.type && <p className="">{errors.type}</p>}
         </label>
 
         <label htmlFor="event-visibility-type">
-          <p className={css["label-text"]}>Is this event private or public</p>
+          <p className="">Is this event private or public</p>
           <select
-            className={css["select"]}
+            className=""
             name="event-visibility-type"
             id="eventVisibilityType"
             value={visibilityType}
@@ -147,26 +145,26 @@ export default function CreateEventPage() {
             </option>
           </select>
           {errors.visibilityType && (
-            <p className={css["error"]}>{errors.visibilityType}</p>
+            <p className="">{errors.visibilityType}</p>
           )}
         </label>
 
         <label htmlFor="price">
-          <p className={css["label-text"]}>What is the price for your event?</p>
+          <p className="">What is the price for your event?</p>
           <input
-            className={css["input"]}
+            className=""
             type="number"
             placeholder="$"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
-          {errors.price && <p className={css["error"]}>{errors.price}</p>}
+          {errors.price && <p className="">{errors.price}</p>}
         </label>
         <hr />
         <label htmlFor="start-date">
-          <p className={css["label-text"]}>When does your event start</p>
+          <p className="">When does your event start</p>
           <input
-            className={css["input"]}
+            className=""
             name="start-date"
             type="datetime-local"
             placeholder="MM/DD/YYYY HH:mm AM"
@@ -174,50 +172,50 @@ export default function CreateEventPage() {
             onChange={(e) => setStartDate(e.target.value)}
           />
           {errors.startDate && (
-            <p className={css["error"]}>{errors.startDate}</p>
+            <p className="">{errors.startDate}</p>
           )}
         </label>
 
         <label htmlFor="end-date">
-          <p className={css["label-text"]}>When does your event end</p>
+          <p className="">When does your event end</p>
           <input
-            className={css["input"]}
+            className=""
             name="end-date"
             type="datetime-local"
             placeholder="MM/DD/YYYY HH:mm PM"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-          {errors.endDate && <p className={css["error"]}>{errors.endDate}</p>}
+          {errors.endDate && <p className="">{errors.endDate}</p>}
         </label>
         <hr />
         <label htmlFor="imageUrl">
           Please add in image url for your event
           <input
-            className={css["input"]}
+            className=""
             type="text"
             placeholder="imageURL"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
-          {errors.imageUrl && <p className={css["error"]}>{errors.imageUrl}</p>}
+          {errors.imageUrl && <p className="">{errors.imageUrl}</p>}
         </label>
         <hr />
 
         <label htmlFor="description">
           Please describe your event
           <textarea
-            className={css["textarea"]}
+            className=""
             placeholder="Please include at least 30 characters"
             rows={10}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           {errors.description && (
-            <p className={css["error"]}>{errors.description}</p>
+            <p className="">{errors.description}</p>
           )}
         </label>
-        <button className={css["submit-btn"]} type="submit">
+        <button className="" type="submit">
           Create Event
         </button>
       </form>

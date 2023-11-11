@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/rajahwu/meetup_clone/issues"
   },
-  "homepage": "https://github.com/rajahwu/meetup_clone#readme"
+  "homepage": "https://github.com/rajahwu/meetup_clone#readme",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.6",
+    "@tailwindcss/typography": "^0.5.10"
+  }
 }

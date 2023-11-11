@@ -6,12 +6,10 @@ import GroupEventCard from "../GroupEventCard";
 import { getGroupEvents } from "../../store/events";
 import { checkForImage } from "../../utils/checkForImage";
 import { defaultImages } from "../../utils/defaultImages";
-import GroupDetailCardCSS from "./GroupDetailCard.module.css";
 import { sortDate } from "../../utils";
 
-export default function GroupDetailCard({ group, children, styleSheet }) {
-  const css = GroupDetailCardCSS;
-
+export default function GroupDetailCard({ group, children }) {
+  const sessionUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const history = useHistory();
   const events = useSelector((state) => state.events.currentGroupEvents);
@@ -39,38 +37,39 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
 
   return (
     <>
-      <div className={css["container"]}>
-        <NavLink className={css["title-link"]} to="/groups">
-          Groups
-        </NavLink>
-        <div className={css["card-container"]}>
+      <NavLink to="/groups">
+        Groups
+      </NavLink>
+      <div className="card card-side bg-base-100 shadow-xl items-start">
+        <figure className="mx-5">
           <CardImage
             imageWidth="300px"
             imageHeight="250px"
             imageUrl={imageUrl}
           />
-          <div className={css["card-content"]}>
-            <h2 className={css["name"]}>{group.name}</h2>
-            <p className={css["location"]}>
+        </figure>
+        <div className="card-body w-16 mx-auto">
+          <div>
+            <h2 className="card-title">{group.name}</h2>
+            <p>
               {group.city}, {group.state}
             </p>
-            <div style={{ display: "flex" }}>
-              <p className={css["visibility"]}>
+            <div>
+              <p>
                 {eventList.length} event
                 {eventList.length === 1 ? "" : "s"}
               </p>
-              <p className={css["dot"]}>&#183;</p>
               <p>{group.private ? "Private" : "Public"}</p>
             </div>
-            <p className={css["organized-by"]}>
+            <p>
               Organized by {group.Organizer?.firstName}{" "}
               {group.Organizer?.lastName}
             </p>
             {children}
           </div>
         </div>
-        <div>
-          <h2>Organizer</h2>
+        <div className="flex-1 mr-12">
+          <h2 className="card-title">Organizer</h2>
           <p>
             {group.Organizer?.firstName} {group.Organizer?.lastName}
           </p>
@@ -79,13 +78,13 @@ export default function GroupDetailCard({ group, children, styleSheet }) {
         </div>
       </div>
 
-      <div className={css["events-container"]}>
-      <h2 style={{fontSize: "1.3rem", margin: "10px 0"}}>Events ({eventList.length})</h2>
+      <div>
+        <h2 className="card-title">{eventList.length === 1 ? "Event" : "Events"} ({eventList.length})</h2>
         {eventList.length > 0 &&
           eventList.map((event) => (
             <div
               key={event.id}
-              onClick={() => history.push(`/events/${event.id}`)}
+              onClick={() => sessionUser && history.push(`/events/${event.id}`)}
             >
               <GroupEventCard
                 key={event.id}

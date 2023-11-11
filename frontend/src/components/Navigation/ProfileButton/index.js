@@ -2,9 +2,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useModal } from "../../../context/Modal";
-import { useSetModalClass } from "../../../hooks";
 import OpenModelButton from "../OpenModalButton";
-import ProfileButtonCSS from "./ProfileButton.module.css";
 
 import * as sessionActions from "../../../store/session";
 import { useState } from "react";
@@ -34,21 +32,15 @@ export default function ProfileButton({ user }) {
           setCaretDown(!caretDown);
           setModalContent(null);
         }}
-        style={{ backgroundColor: "red", padding: "15px", borderRadius: "50%" }}
       >
-        <i className="fa-solid fa-user"></i>
-        {caretDown ? (
+          <i className="fa-solid fa-user"></i>
           <i className="fa-solid fa-caret-down"></i>
-        ) : (
-          <i className="fa-solid fa-caret-up"></i>
-        )}
+          {/* <i className="fa-solid fa-caret-up"></i> */}
       </div>
     );
   };
 
   const UserMenu = ({ user }) => {
-    const { container, background, content } = ProfileButtonCSS;
-    useSetModalClass({ container, background, content });
     return (
       <>
         <div
@@ -57,24 +49,24 @@ export default function ProfileButton({ user }) {
             setCaretDown(!caretDown);
           }}
         ></div>
-        <div style={{ display: "flex" }}>
+        <div>
           <ul>
-            <div className={ProfileButton["menu"]}>
-              <li className={ProfileButtonCSS["menu-li"]}>Hello, {user.username}</li>
-              <li className={ProfileButtonCSS["menu-li"]}>{user.firstname}</li>
-              <li className={ProfileButtonCSS["menu-li"]}>{user.email}</li>
-              <li className={ProfileButtonCSS["menu-li"]}>
-                <NavLink className={ProfileButtonCSS["nav-link"]} to="/groups" onClick={handleClick}>
+            <div className="">
+              <li className="">Hello, {user.username}</li>
+              <li className="">{user.firstname}</li>
+              <li className="">{user.email}</li>
+              <li className="">
+                <NavLink className="" to="/groups" onClick={handleClick}>
                   View Groups
                 </NavLink>
               </li>
-              <li className={ProfileButtonCSS["menu-li"]}>
-                <NavLink className={ProfileButtonCSS["nav-link"]} to="/events" onClick={handleClick}>
+              <li className="">
+                <NavLink className="" to="/events" onClick={handleClick}>
                   View Events
                 </NavLink>
               </li>
               <li>
-                <button className={ProfileButtonCSS["logout-btn"]} onClick={logout}>Logout</button>
+                <button className="" onClick={logout}>Logout</button>
               </li>
             </div>
           </ul>
@@ -84,13 +76,9 @@ export default function ProfileButton({ user }) {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-      }}
-    >
+    <div>
       <OpenModelButton
-        className={ProfileButton["modal"]}
+        className=""
         buttonText={<UserIcon />}
         modalComponent={<UserMenu user={user} />}
       />

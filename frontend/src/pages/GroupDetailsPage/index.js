@@ -5,14 +5,11 @@ import {
   GroupActionButtons as ActionButtons,
   GroupDetailCard,
 } from "../../components";
-import GroupDetailsPageCSS from "./GroupDetailsPage.module.css";
 
 import { getGroup } from "../../store/groups";
 import { getGroupEvents } from "../../store/events";
 
 export default function GroupDetailsPage() {
-  const css = GroupDetailsPageCSS;
-
   const { groupId } = useParams();
   const dispatch = useDispatch();
   
@@ -28,8 +25,8 @@ export default function GroupDetailsPage() {
   const group = useSelector((state) => state.groups.currentGroup);
 
   return (
-    <div className={css.container}>
-      <GroupDetailCard group={group} styleSheet={css}>
+    <div className="">
+      <GroupDetailCard group={group}>
         <ActionButtons groupId={groupId} />
       </GroupDetailCard>
     </div>
