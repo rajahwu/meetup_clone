@@ -21,6 +21,7 @@ module.exports = {
     },
     define: {
       schema: process.env.SCHEMA
-    }
+    },
+    host: process.env.DB_HOST,
   }
 };
